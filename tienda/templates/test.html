@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <link rel="stylesheet" href="{% static 'CSS/header.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/general.css' %}">
+    <title>Florería</title>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <!-- Brand / Logo -->
+            <a class="navbar-brand fw-bold fs-4" href="#">
+                <img src="{% static 'logos/logo-floreria.png' %}" alt="Logo Florería" width="40" height="40"
+                    class="d-inline-block align-text-top me-2" style="object-fit: contain;">
+                <i class="bi bi-bag-check-fill me-2 text-primary"></i>Florería
+            </a>
+
+            <!-- Botón Toggle para Móvil -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEcommerce"
+                aria-controls="navbarEcommerce" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarEcommerce">
+                <!-- Menú de Navegación + Dropdown de Categorías -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Inicio</a>
+                    </li>
+
+                    <!-- Dropdown Categorías -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Categorías
+                        </a>
+                        <ul class="dropdown-menu shadow" aria-labelledby="categoriesDropdown">
+                            <li><a class="dropdown-item fw-semibold" href="#">Todas las categorías</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Electrónica</a></li>
+                            <li><a class="dropdown-item" href="#">Ropa y Calzado</a></li>
+                            <li><a class="dropdown-item" href="#">Hogar y Jardín</a></li>
+                            <li><a class="dropdown-item" href="#">Deportes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ofertas</a>
+                    </li>
+                </ul>
+
+                <!-- Barra de Búsqueda -->
+                <form class="d-flex me-3 my-2 my-lg-0" action="#" method="GET">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="q" placeholder="Buscar productos..."
+                            aria-label="Buscar">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Acciones de Usuario y Carrito -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Dropdown Usuario Autenticado (Ejemplo) -->
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                            id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-4 me-1"></i>
+                            <span class="d-none d-sm-inline me-1">Felipe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenu">
+                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                            <li><a class="dropdown-item" href="#">Mis Pedidos</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Botones de Acceso (Alternativa para usuarios no logueados) -->
+                    <!-- 
+        <a href="#" class="btn btn-outline-light btn-sm">Ingresar</a>
+        <a href="#" class="btn btn-primary btn-sm">Registrarse</a>
+        -->
+
+                    <!-- Icono de Carrito -->
+                    <a href="#" class="btn btn-outline-light position-relative">
+                        <i class="bi bi-cart3"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <main class="container my-4 flex-grow-1">
+        {% block content %}
+
+
+
+        {% endblock %}
+    </main>
+
+    <!-- Footer básico -->
+    <footer class="custom-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5 class="footer-title">🌸 Florería</h5>
+                    <p class="small text-muted">Llevando frescura y elegancia a cada rincón.</p>
+                </div>
+                <div class="col-md-6 mb-3 text-md-end">
+                    <h5 class="footer-title">Enlaces</h5>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'inicio' %}">Inicio</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center pt-3 border-top border-secondary">
+                <p class="mb-0 small text-muted">&copy; 2026 Florería. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

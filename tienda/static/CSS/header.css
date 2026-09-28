@@ -1,0 +1,31 @@
+
+
+.navbar-floreria {
+    background-color: #7dc262 !important;
+    min-height: 85px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.logo-container {
+    position: relative;
+    width: 150px;
+}
+
+.logo-navbar {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    top: 50%;
+    left: -20px;
+    transform: translateY(-50%);
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* El botón móvil queda por encima del logo */
+.navbar-toggler {
+    position: relative;
+    z-index: 20;
+}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container my-4" style="max-width: 700px;">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Agregar Nuevo Producto</h4>
+            <div>
+                <a href="{% url 'crear_categoria' %}" class="btn btn-sm btn-light">+ Nueva Categoría</a>
+                <a href="{% url 'crear_ocasion' %}" class="btn btn-sm btn-light">+ Nueva Ocasión</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label fw-bold">
+                            {{ field.label }}
+                        </label>
+                        
+                        <!-- Si el campo es categoría u ocasión, mostramos una ayuda visual -->
+                        {% if field.name == 'categoria' %}
+                            <div class="input-group">
+                                {{ field }}
+                                <a href="{% url 'crear_categoria' %}" class="btn btn-outline-secondary" type="button" title="Agregar Categoría">+</a>
+                            </div>
+                        {% elif field.name == 'ocasion' %}
+                            <div class="input-group">
+                                {{ field }}
+                                <a href="{% url 'crear_ocasion' %}" class="btn btn-outline-secondary" type="button" title="Agregar Ocasión">+</a>
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'lista_productos' %}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

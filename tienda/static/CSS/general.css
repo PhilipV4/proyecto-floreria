@@ -1,0 +1,78 @@
+:root {
+    --primary-color: #707444;       /* Color principar  */
+    --primary-dark: #4c5115;        /* Color oscuro para hovers */
+    --accent-color: #f2f3eb;        /* Rosa pastel / suave */
+    --bg-light: #edeee8;            /* Fondo */
+    --text-dark: #2d3748;           /* Texto principal */
+    --font-heading: 'Georgia', serif;
+    --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+}
+
+/* Tarjetas de productos personalizadas */
+.card-flower {
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-flower:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Botón principal */
+.btn-primary-custom {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: white;
+}
+
+/* sidebar no implementado */
+.sidebar-card {
+        background: #ffffff;
+        border-radius: 4px;
+        padding: 15px;
+        border: 1px solid #eef0f3;
+    }
+
+.category-list {
+        list-style: none;
+        padding-left: 0;
+    }
+.category-list li a {
+        color: #555;
+        text-decoration: none;
+        display: block;
+        padding: 8px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        font-size: 0.95rem;
+    }
+.category-list li a:hover, .category-list li a.active {
+        color: #ff5252;
+        font-weight: 600;
+    }
