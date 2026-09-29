@@ -1,4 +1,6 @@
 env/
+media/
 .venv/
 __pycache__/
+me
 db.sqlite3
