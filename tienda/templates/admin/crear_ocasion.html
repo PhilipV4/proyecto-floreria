@@ -4,8 +4,8 @@
 <div class="container my-5" style="max-width: 600px;">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-            <h5 class="mb-0 fw-bold">Nueva Categoría</h5>
-            <i class="bi bi-tags-fill"></i>
+            <h5 class="mb-0 fw-bold">Nueva Ocasión</h5>
+            <i class="bi bi-calendar-event-fill"></i>
         </div>
         <div class="card-body p-4">
             <form method="POST">
@@ -27,11 +27,11 @@
                 {% endfor %}
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="{% url 'crear_producto' %}" class="btn btn-outline-secondary">
+                    <a href="{% url 'admin_lista_productos' %}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Volver a Producto
                     </a>
                     <button type="submit" class="btn btn-success px-4">
-                        Guardar Categoría
+                        Guardar Ocasión
                     </button>
                 </div>
             </form>

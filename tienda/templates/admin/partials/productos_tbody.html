@@ -1,0 +1,61 @@
+{% for producto in productos %}
+<tr>
+    <td>
+        {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+        {% else %}
+            <div class="bg-light rounded text-muted d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 0.75rem;">
+                Sin foto
+            </div>
+        {% endif %}
+    </td>
+    <td>
+        <strong class="text-dark d-block">{{ producto.nombre }}</strong>
+        <small class="text-muted">ID: #{{ producto.id }}</small>
+    </td>
+    <td>
+        {% if producto.categoria %}
+            <span class="badge bg-light text-dark border">{{ producto.categoria.nombre }}</span>
+        {% else %}
+            <span class="text-muted small">-</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if producto.ocasion %}
+            <span class="badge bg-light text-dark border">{{ producto.ocasion.nombre }}</span>
+        {% else %}
+            <span class="text-muted small">-</span>
+        {% endif %}
+    </td>
+    <td class="fw-bold text-success">${{ producto.precio }}</td>
+    <td>
+        {% if producto.stock > 5 %}
+            <span class="badge bg-success-subtle text-success">{{ producto.stock }} un.</span>
+        {% elif producto.stock > 0 %}
+            <span class="badge bg-warning-subtle text-warning">{{ producto.stock }} un. (Bajo)</span>
+        {% else %}
+            <span class="badge bg-danger-subtle text-danger">Sin Stock</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if producto.disponible %}
+            <span class="badge bg-success">Visible</span>
+        {% else %}
+            <span class="badge bg-secondary">Oculto</span>
+        {% endif %}
+    </td>
+    <td class="small text-muted">
+        {{ producto.actualizado_el|date:"d/m/Y H:i" }}
+    </td>
+    <td class="text-end">
+        <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-primary me-1" title="Editar">Editar</a>
+        <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger" title="Eliminar">Eliminar</a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="9" class="text-center py-4 text-muted">
+        No se encontraron productos registrados en el sistema.
+    </td>
+</tr>
+{% endfor %}

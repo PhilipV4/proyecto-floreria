@@ -3,12 +3,16 @@ from . import views
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
-    path('test/', views.test, name='test'),
+
+    #productos
     path('productos/', views.lista_productos, name='lista_productos'),
-    path('crear/', views.crear_producto, name='crear_producto'),
-    path('editar/<int:id>/', views.editar_producto, name='editar_producto'),
-    path('eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
-    path('categoria/crear/', views.crear_categoria, name='crear_categoria'),
-    path('ocasion/crear/', views.crear_ocasion, name='crear_ocasion'),
+    #admin
+    path('gestion/', views.admin_lista_productos, name='admin_lista_productos'),
+    path('gestion/crear/', views.crear_producto, name='crear_producto'),
+    path('gestion/editar/<int:id>/', views.editar_producto, name='editar_producto'),
+    path('gestion/eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
+    path('gestion/crear_categoria/', views.crear_categoria, name='crear_categoria'),
+    path('gestion/crear_ocasion/', views.crear_ocasion, name='crear_ocasion'),
+
 
 ]

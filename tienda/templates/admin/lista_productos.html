@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4 px-4">
+    <!-- Encabezado del Panel Admin -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold text-dark mb-0">Panel de Gestión de Productos</h2>
+            <p class="text-muted small mb-0">Administra el inventario y catálogo de la tienda</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'crear_categoria' %}" class="btn btn-outline-secondary btn-sm">
+                + Nueva Categoría
+            </a>
+            <a href="{% url 'crear_ocasion' %}" class="btn btn-outline-secondary btn-sm">
+                + Nueva Ocasión
+            </a>
+            <a href="{% url 'crear_producto' %}" class="btn btn-success btn-sm px-3">
+                <i class="bi bi-plus-lg"></i> Crear Producto
+            </a>
+        </div>
+    </div>
+
+    <!-- Buscador y Filtros con HTMX -->
+    <form id="search-form" method="GET" action="{% url 'admin_lista_productos' %}" class="row g-2 mb-4">
+        
+        <!-- Input de Búsqueda con HTMX -->
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    name="q" 
+                    value="{{ query }}" 
+                    class="form-control" 
+                    placeholder="Buscar por nombre..."
+                    autocomplete="off"
+                    hx-get="{% url 'admin_lista_productos' %}"
+                    hx-target="#productos-tbody"
+                    hx-include="[name='categoria']"
+                    hx-trigger="keyup changed delay:400ms, search"
+                >
+            </div>
+        </div>
+
+        <!-- Filtro de Categoría con HTMX -->
+        <div class="col-md-3">
+            <select 
+                name="categoria" 
+                class="form-select"
+                hx-get="{% url 'admin_lista_productos' %}"
+                hx-target="#productos-tbody"
+                hx-include="#search-input"
+                hx-trigger="change"
+            >
+                <option value="">Todas las categorías</option>
+                {% for cat in categorias %}
+                    <option value="{{ cat.id }}" {% if categoria_actual == cat.id|stringformat:"s" %}selected{% endif %}>
+                        {{ cat.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Botón Limpiar -->
+        {% if query or categoria_actual %}
+            <div class="col-auto">
+                <a href="{% url 'admin_lista_productos' %}" class="btn btn-outline-secondary">Limpiar filtros</a>
+            </div>
+        {% endif %}
+    </form>
+
+    <!-- Tabla de Productos -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 70px;">Imagen</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Ocasión</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Última Edición</th>
+                            <th class="text-end" style="width: 150px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productos-tbody">
+                        {% include 'admin/partials/productos_tbody.html' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
