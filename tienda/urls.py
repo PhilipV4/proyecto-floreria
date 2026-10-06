@@ -14,5 +14,6 @@ urlpatterns = [
     path('gestion/crear_categoria/', views.crear_categoria, name='crear_categoria'),
     path('gestion/crear_ocasion/', views.crear_ocasion, name='crear_ocasion'),
 
-
+    #PRUEBA
+    path('prueba/', views.prueba, name='prueba'),
 ]

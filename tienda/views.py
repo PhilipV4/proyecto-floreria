@@ -10,7 +10,9 @@ from django.db.models import Q
 def inicio(request):
     return render(request, 'inicio.html')
 
-
+#PRUEBA
+def prueba(request):
+    return render(request, 'catalogo/prueba.html')
 
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
