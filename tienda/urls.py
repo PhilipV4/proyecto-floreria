@@ -16,4 +16,8 @@ urlpatterns = [
 
     #PRUEBA
     path('prueba/', views.prueba, name='prueba'),
+
+    #PRUEBA NAVBAR Y FOOTER
+    path('componentes/', views.prueba_global_componentes, name='prueba_global_componentes'),
+
 ]
