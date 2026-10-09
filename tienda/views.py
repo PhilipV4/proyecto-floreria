@@ -54,7 +54,7 @@ def admin_lista_productos(request):
     if query:
         productos = productos.filter(
             Q(nombre__icontains=query) | Q(descripcion__icontains=query))\
-        .order_by("-creado_el")[0:10]  # Limite de 10 resultados
+        .order_by("-creado_el")  # Limite de 10 resultados
 
     # Aplicamos filtro de categoría si existe
     if categoria_id:

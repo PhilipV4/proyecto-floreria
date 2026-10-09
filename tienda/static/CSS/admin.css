@@ -1,0 +1,89 @@
+:root {
+    --admin-bg-body: #f8f9fa;             /* Fondo general de la página derecha */
+    --admin-bg-sidebar: #ffffff;          /* Fondo del panel lateral (sidebar) */
+    --admin-border-color: #dee2e6;        /* Color de los bordes y líneas divisorias */
+    
+    --admin-text-main: #212529;           /* Color de texto principal */
+    --admin-text-muted: #6c757d;          /* Color de texto secundario */
+
+    --admin-sidebar-link: #212529;        /* Color de texto para los enlaces del menú */
+    --admin-sidebar-hover-bg: #f1f3f5;    /* Color de fondo al pasar el mouse por el menú */
+    --admin-sidebar-active-bg: #0d6efd;   /* Color de fondo del enlace activo (ej. Productos) */
+    --admin-sidebar-active-text: #ffffff; /* Color de texto del enlace activo */
+
+    --admin-card-bg: #ffffff;             /* Fondo de las tarjetas y contenedores de tablas */
+    --admin-input-bg: #ffffff;            /* Fondo de las barras de búsqueda y selectores */
+}
+
+/* ==========================================================
+   APLICACIÓN GLOBAL EN LA ESTRUCTURA DEL ADMIN
+   ========================================================== */
+
+/* Fondo general de la pantalla */
+body {
+    background-color: var(--admin-bg-body) !important;
+    color: var(--admin-text-main) !important;
+}
+
+/* --- SIDEBAR --- */
+#sidebarOffcanvas {
+    background-color: var(--admin-bg-sidebar) !important;
+    border-color: var(--admin-border-color) !important;
+}
+
+#sidebarOffcanvas .nav-link.link-body-emphasis {
+    color: var(--admin-sidebar-link) !important;
+}
+
+#sidebarOffcanvas .nav-link.link-body-emphasis:hover {
+    background-color: var(--admin-sidebar-hover-bg) !important;
+}
+
+#sidebarOffcanvas .nav-link.active {
+    background-color: var(--admin-sidebar-active-bg) !important;
+    color: var(--admin-sidebar-active-text) !important;
+}
+
+#sidebarOffcanvas hr {
+    border-color: var(--admin-border-color) !important;
+}
+
+/* --- TARJETAS (CARDS) --- */
+.card {
+    background-color: var(--admin-card-bg) !important;
+    color: var(--admin-text-main) !important;
+    border-color: var(--admin-border-color) !important;
+}
+
+/* --- TABLAS Y CABECERAS --- */
+.table {
+    color: var(--admin-text-main) !important;
+    background-color: var(--admin-card-bg) !important;
+}
+
+.table-light {
+    background-color: var(--admin-sidebar-hover-bg) !important;
+    color: var(--admin-text-main) !important;
+}
+
+.table td, .table th {
+    border-color: var(--admin-border-color) !important;
+}
+
+/* --- CAMPOS DE FORMULARIO (INPUTS Y SELECTS) --- */
+.form-control, .form-select {
+    background-color: var(--admin-input-bg) !important;
+    color: var(--admin-text-main) !important;
+    border-color: var(--admin-border-color) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--admin-sidebar-active-bg);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.input-group-text {
+    background-color: var(--admin-input-bg) !important;
+    color: var(--admin-text-main) !important;
+    border-color: var(--admin-border-color) !important;
+}
