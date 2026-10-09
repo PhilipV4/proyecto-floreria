@@ -14,6 +14,10 @@ def inicio(request):
 def prueba(request):
     return render(request, 'catalogo/prueba.html')
 
+#PRUEBA NAVBAR Y FOOTER
+def prueba_global_componentes(request):
+    return render(request, 'global_componentes/base.html')
+
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
     #pero mejor hacerlo en la vista.

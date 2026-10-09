@@ -1,0 +1,188 @@
+/* ==========================================================
+   NAVBAR FLORERÍA
+   Índice:
+   1. Contenedor del navbar
+   2. Logo
+   3. Botón menú móvil
+   4. Tipografía (Poppins, solo dentro del navbar)
+   5. Buscador: ancho
+   6. Buscador: altura y alineación
+   7. Buscador: botón de la lupa
+   8. Buscador: efecto de foco (resplandor rosa)
+   ========================================================== */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEDOR DEL NAVBAR
+   ---------------------------------------------------------- */
+.navbar-floreria {
+    background-color: #fdfbf7 !important;
+    min-height: 85px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+/* ----------------------------------------------------------
+   2. LOGO
+   El logo se posiciona de forma absoluta para poder ser
+   más grande que la altura del navbar sin estirarlo.
+   ---------------------------------------------------------- */
+.logo-container {
+    position: relative;
+    width: 180px;
+    margin-right: 2rem;
+}
+
+.logo-navbar {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    top: 50%;
+    left: -20px;
+    transform: translateY(-50%);   /* centra verticalmente */
+    z-index: 10;
+    pointer-events: none;          /* el logo no bloquea clics */
+}
+
+
+/* ----------------------------------------------------------
+   3. BOTÓN MENÚ MÓVIL
+   Queda por encima del logo.
+   ---------------------------------------------------------- */
+.navbar-toggler {
+    position: relative;
+    z-index: 20;
+}
+
+
+/* ----------------------------------------------------------
+   4. TIPOGRAFÍA (Poppins)
+   Solo afecta al navbar, no al resto de la página.
+   ---------------------------------------------------------- */
+.navbar-floreria,
+.navbar-floreria .nav-link,
+.navbar-floreria .dropdown-item,
+.navbar-floreria .form-control,
+.navbar-floreria #userMenu {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Links del menú: Inicio, Categorías, Productos */
+.navbar-floreria .nav-link {
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: .5px;
+    word-spacing: 4px;
+}
+
+/* Color de los links (incluye Categorías, que se veía gris) */
+.navbar-floreria .nav-link,
+.navbar-floreria .nav-link.dropdown-toggle {
+    color: #000;
+}
+/* Opciones de los desplegables */
+.navbar-floreria .dropdown-item {
+    font-size: 1rem;
+    letter-spacing: .3px;
+    word-spacing: 3px;
+}
+
+/* Texto dentro del buscador */
+.navbar-floreria .form-control {
+    font-size: 1rem;
+    letter-spacing: .3px;
+}
+
+
+/* ----------------------------------------------------------
+   5. BUSCADOR: ANCHO (solo escritorio)
+   Alternativa responsiva: width: 40vw; max-width: 880px;
+   ---------------------------------------------------------- */
+@media (min-width: 1200px) {
+    .navbar-floreria .buscador-nav {
+        flex: 1 1 auto;
+        width: auto;
+        max-width: 880px;
+        min-width: 220px;
+    }
+}
+
+
+/* ----------------------------------------------------------
+   6. BUSCADOR: ALTURA Y ALINEACIÓN
+   Campo y botón miden lo mismo para quedar al mismo nivel.
+   ---------------------------------------------------------- */
+.navbar-floreria .buscador-nav .input-group {
+    align-items: stretch;
+}
+
+.navbar-floreria .buscador-nav .form-control,
+.navbar-floreria .buscador-nav .btn {
+    height: 44px;                  /* misma altura para ambos; ajusta a gusto */
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+
+/* ----------------------------------------------------------
+   7. BUSCADOR: BOTÓN DE LA LUPA
+   ---------------------------------------------------------- */
+
+/* Centrado del ícono dentro del botón */
+.navbar-floreria .buscador-nav .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbar-floreria .buscador-nav .btn i {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+/* Color normal: rosa pastel con ícono negro */
+.navbar-floreria .buscador-nav .input-group > .btn.btn-primary {
+    background-color: #FFC5D3 !important;
+    border-color: #FFC5D3 !important;
+    color: #000 !important;
+}
+
+/* Hover / foco / clic: rosa un poco más oscuro */
+.navbar-floreria .buscador-nav .input-group > .btn.btn-primary:hover,
+.navbar-floreria .buscador-nav .input-group > .btn.btn-primary:focus,
+.navbar-floreria .buscador-nav .input-group > .btn.btn-primary:active {
+    background-color: #f7a8bc !important;
+    border-color: #f7a8bc !important;
+    color: #000 !important;
+}
+
+
+/* ----------------------------------------------------------
+   8. BUSCADOR: EFECTO DE FOCO
+   El resplandor rosa lo dibuja el grupo completo (campo + lupa)
+   como una sola pieza. El campo y el botón no tienen halo propio
+   para evitar que se vea doble o desfasado.
+   ---------------------------------------------------------- */
+
+/* Foco del buscador: sin halo, solo el borde rosa */
+.navbar-floreria .buscador-nav .form-control:focus,
+.navbar-floreria .buscador-nav .form-control:focus-visible {
+    border-color: #f7a8bc !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.navbar-floreria .buscador-nav .btn:focus,
+.navbar-floreria .buscador-nav .btn:focus-visible,
+.navbar-floreria .buscador-nav .btn:active {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.navbar-floreria .buscador-nav .input-group:focus-within {
+    box-shadow: none;
+ }
