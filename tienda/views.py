@@ -118,7 +118,8 @@ def editar_producto(request, id):
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     if request.method == 'POST':
-        producto.delete()
+        producto.disponible = False
+        producto.save()
         return redirect('admin_lista_productos')
     return render(request, 'admin/eliminar.html', {'producto': producto})
 

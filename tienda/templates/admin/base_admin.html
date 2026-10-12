@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -13,11 +13,35 @@
     
     <link rel="stylesheet" href="{% static 'CSS/admin.css' %}">
 
+    <script>
+        const savedTheme = localStorage.getItem('admin-theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.11/dist/htmx.min.js"
         integrity="sha384-2OatzQy1H+Zd/IIrjr1TcuDGqLXeHhbooAyJY1KdQMKnr4LZ22k31GBLdYKHmVjg"
         crossorigin="anonymous"></script>
 
     <style>
+        html[data-bs-theme="dark"] .card,
+        html[data-bs-theme="dark"] .card-body,
+        html[data-bs-theme="dark"] .card-header,
+        html[data-bs-theme="dark"] .bg-light,
+        html[data-bs-theme="dark"] .bg-white {
+            background-color: var(--bs-tertiary-bg) !important;
+            color: var(--bs-body-color) !important;
+            border-color: var(--bs-border-color) !important;
+        }
+
+        html[data-bs-theme="dark"] .form-control,
+        html[data-bs-theme="dark"] .form-select {
+            background-color: var(--bs-body-bg) !important;
+            color: var(--bs-body-color) !important;
+            border-color: var(--bs-border-color) !important;
+        }
+
         /* Para fijar el sidebar*/
         @media (min-width: 768px) {
             #sidebarOffcanvas {
@@ -35,23 +59,26 @@
 
 </head>
 
-<body class="bg-light" style="min-height: 100vh; display: flex; flex-direction: column;">
+<body class="bg-body" style="min-height: 100vh; display: flex; flex-direction: column;">
 
-    <nav class="navbar navbar-light bg-white border-bottom px-3 d-md-none">
+    <nav class="navbar bg-body border-bottom px-3 d-md-none">
         <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
             <i class="bi bi-list fs-5"></i> Menú
         </button>
-        <span class="fw-bold text-dark">Florería Admin</span>
-        <!-- Espacio invisible para equilibrar el header en móviles -->
-        <div style="width: 45px;"></div>
+        <span class="fw-bold text-body">Florería Admin</span>
+        <button class="btn btn-outline-secondary btn-sm theme-toggle" type="button"
+            aria-label="Activar modo oscuro" aria-pressed="false">
+            <i class="bi bi-moon-stars-fill"></i>
+            <span class="d-none d-sm-inline">Modo oscuro</span>
+        </button>
     </nav>
 
     <!-- Contenedor principal en formato Flex (Sidebar + Contenido) -->
     <div class="d-flex" style="min-height: 100vh;">
 
         <!-- SIDEBAR RESPONSIVE (Offcanvas en móvil, Fijo en desktop 'md+') -->
-        <div class="offcanvas-md offcanvas-start bg-white border-end shadow-sm" tabindex="-1" id="sidebarOffcanvas"
+        <div class="offcanvas-md offcanvas-start bg-body border-end shadow-sm" tabindex="-1" id="sidebarOffcanvas"
             style="width: 280px;">
 
             <!-- Cabecera del Offcanvas (Solo visible en celulares cuando se despliega) -->
@@ -100,8 +127,13 @@
                     </li>
                 </ul>
 
-                <hr />
+                
 
+                <button class="btn btn-outline-secondary w-100 mb-3 theme-toggle" type="button" aria-pressed="false">
+                    <i class="bi bi-moon-stars-fill me-2"></i>
+                    <span>Activar modo oscuro</span>
+                </button>
+                <hr />
                 <!-- Perfil de usuario en la parte inferior del sidebar -->
                 <div class="dropdown">
                     <a href="#"
@@ -133,6 +165,32 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+
+        function updateThemeButtons(theme) {
+            themeButtons.forEach((button) => {
+                const isDark = theme === 'dark';
+                button.setAttribute('aria-pressed', String(isDark));
+                button.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+                button.innerHTML = isDark
+                    ? '<i class="bi bi-sun-fill me-2">'
+                    : '<i class="bi bi-moon-stars-fill me-2">';
+            });
+        }
+
+        updateThemeButtons(document.documentElement.getAttribute('data-bs-theme'));
+
+        themeButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('admin-theme', newTheme);
+                updateThemeButtons(newTheme);
+            });
+        });
+    </script>
 
 </body>
 
