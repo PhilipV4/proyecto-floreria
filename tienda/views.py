@@ -6,19 +6,45 @@ from .forms import CategoriaForm, OcasionForm, ProductoForm
 
 from django.db.models import Q
 
-# Create your views here.
+
 def inicio(request):
     return render(request, 'inicio.html')
 
-#PRUEBA
-def prueba(request):
-    return render(request, 'catalogo/prueba.html')
+#Catalogo de productos
+def catalogo_productos(request):
+    #Carga los productos y filtra los productos no disponibles.
+    productos = Producto.objects.filter(disponible=True).select_related('categoria','ocasion')
+
+    #Cargamos las Categorias y Ocasiones.
+    categorias = Categoria.objects.all()
+    ocasiones = Ocasion.objects.all()
+
+    #Conseguimos las id de Categoria y Ocasion.
+    categoria_id = request.GET.get('categoria')
+    ocasion_id = request.GET.get('ocasion')
+
+    #Filtra productos por categoria y ocasion.
+    if categoria_id:
+        productos = productos.filter(categoria_id=categoria_id)
+    if ocasion_id:
+        productos = productos.filter(ocasion_id=ocasion_id)
+
+    #Diccionario para la pantilla (catalogo/catalogo_productos.html).
+    context = {
+        'productos' : productos,
+        'categorias' : categorias,
+        'ocasiones' : ocasiones,
+        'categoria_actual' : categoria_id or '',
+        'ocasion_actual' : ocasion_id or '',
+    }
+    
+    return render(request, 'catalogo/catalogo_producto.html', context)
 
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
     #pero mejor hacerlo en la vista.
 
-    productos = Producto.objects.all().select_related('categoria', 'ocasion')
+    productos = Producto.objects.filter(disponible=True).select_related('categoria', 'ocasion')
 
     categoria_id = request.GET.get('categoria')
     ocasion_id = request.GET.get('ocasion')
