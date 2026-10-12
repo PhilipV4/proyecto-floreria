@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import *
 
 class ProductoForm(forms.ModelForm):
@@ -11,7 +12,7 @@ class ProductoForm(forms.ModelForm):
         ]
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'step': '1'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
             'categoria': forms.Select(attrs={'class': 'form-select'}),
@@ -29,6 +30,11 @@ class ProductoForm(forms.ModelForm):
             'disponible': 'Disponible',
             'imagen': 'Imagen del Producto',
         }
+    def clean_precio(self):
+        precio = self.cleaned_data.get('precio')
+        if precio is not None and precio <= 0:
+            raise ValidationError("El precio debe ser un número positivo mayor que cero.")
+        return precio
 
 class CategoriaForm(forms.ModelForm):
     class Meta:

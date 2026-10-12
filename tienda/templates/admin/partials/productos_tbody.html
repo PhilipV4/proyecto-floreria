@@ -1,55 +1,87 @@
 {% for producto in productos %}
+
 <tr>
+    <!-- Imagen-->
     <td>
         {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="rounded"
+            style="width: 40px; height: 40px; object-fit: cover;">
         {% else %}
-            <div class="bg-light rounded text-muted d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 0.75rem;">
-                Sin foto
-            </div>
+        <div class="bg-light rounded text-muted d-flex align-items-center justify-content-center"
+            style="width: 40px; height: 40px; font-size: 0.65rem;">
+            Sin foto
+        </div>
         {% endif %}
     </td>
+
+    <!-- Nombre e ID  -->
     <td>
-        <strong class="text-dark d-block">{{ producto.nombre }}</strong>
+        <strong class="text-body d-block text-break">{{ producto.nombre }}</strong>
         <small class="text-muted">ID: #{{ producto.id }}</small>
     </td>
-    <td>
+
+    <!-- Categoría (Se oculta en móviles, se muestra desde tablets 'md') -->
+    <td class="d-none d-md-table-cell">
         {% if producto.categoria %}
-            <span class="badge bg-light text-dark border">{{ producto.categoria.nombre }}</span>
+        <span class="badge bg-light text-body border">{{ producto.categoria.nombre }}</span>
         {% else %}
-            <span class="text-muted small">-</span>
+        <span class="text-muted small">-</span>
         {% endif %}
     </td>
-    <td>
+
+    <!-- Ocasión (Se oculta en móviles/tablets, se muestra desde pantallas grandes 'lg') -->
+    <td class="d-none d-lg-table-cell">
         {% if producto.ocasion %}
-            <span class="badge bg-light text-dark border">{{ producto.ocasion.nombre }}</span>
+        <span class="badge bg-light text-body border">{{ producto.ocasion.nombre }}</span>
         {% else %}
-            <span class="text-muted small">-</span>
+        <span class="text-muted small">-</span>
         {% endif %}
     </td>
+
+    <!-- Precio (Siempre visible) -->
     <td class="fw-bold text-success">${{ producto.precio }}</td>
+
+    <!-- Stock (Siempre visible) -->
     <td>
         {% if producto.stock > 5 %}
-            <span class="badge bg-success-subtle text-success">{{ producto.stock }} un.</span>
+        <span class="badge bg-success-subtle text-success">{{ producto.stock }} un.</span>
         {% elif producto.stock > 0 %}
-            <span class="badge bg-warning-subtle text-warning">{{ producto.stock }} un. (Bajo)</span>
+        <span class="badge bg-warning-subtle text-warning">{{ producto.stock }} un. (Bajo)</span>
         {% else %}
-            <span class="badge bg-danger-subtle text-danger">Sin Stock</span>
+        <span class="badge bg-danger-subtle text-danger">Sin Stock</span>
         {% endif %}
     </td>
-    <td>
+
+    <!-- Estado (Se muestra desde tablets 'md') -->
+    <td class="d-none d-md-table-cell">
         {% if producto.disponible %}
-            <span class="badge bg-success">Visible</span>
+        <span class="badge bg-success">Visible</span>
         {% else %}
-            <span class="badge bg-secondary">Oculto</span>
+        <span class="badge bg-secondary">Oculto</span>
         {% endif %}
     </td>
-    <td class="small text-muted">
+
+    <!-- Última Edición (Se muestra solo en pantallas extra grandes 'xl') -->
+    <td class="small text-muted d-none d-xl-table-cell">
         {{ producto.actualizado_el|date:"d/m/Y H:i" }}
     </td>
+
+    <!-- Acciones (Siempre visible, botones compactos) -->
     <td class="text-end">
-        <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-primary me-1" title="Editar">Editar</a>
-        <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger" title="Eliminar">Eliminar</a>
+        <div class="btn-group btn-group-sm" role="group" style="gap: 0.5rem;">
+            <a href="{% url 'editar_producto' producto.id %}" class="btn btn-outline-primary" title="Editar ">
+                Editar
+            </a>
+            <button type="button" 
+                    class="btn btn-outline-danger" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#deleteModal"
+                    data-product-name="{{ producto.nombre }}"
+                    data-delete-url="{% url 'eliminar_producto' producto.id %}"
+                    title="Eliminar">
+                Eliminar
+            </button>
+        </div>
     </td>
 </tr>
 {% empty %}

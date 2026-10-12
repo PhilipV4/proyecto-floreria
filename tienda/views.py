@@ -40,6 +40,10 @@ def catalogo_productos(request):
     
     return render(request, 'catalogo/catalogo_producto.html', context)
 
+#PRUEBA NAVBAR Y FOOTER
+def prueba_global_componentes(request):
+    return render(request, 'global_componentes/base.html')
+
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
     #pero mejor hacerlo en la vista.
@@ -80,7 +84,7 @@ def admin_lista_productos(request):
     if query:
         productos = productos.filter(
             Q(nombre__icontains=query) | Q(descripcion__icontains=query))\
-        .order_by("-creado_el")[0:10]  # Limite de 10 resultados
+        .order_by("-creado_el")  # Limite de 10 resultados
 
     # Aplicamos filtro de categoría si existe
     if categoria_id:
@@ -140,7 +144,8 @@ def editar_producto(request, id):
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     if request.method == 'POST':
-        producto.delete()
+        producto.disponible = False
+        producto.save()
         return redirect('admin_lista_productos')
     return render(request, 'admin/eliminar.html', {'producto': producto})
 

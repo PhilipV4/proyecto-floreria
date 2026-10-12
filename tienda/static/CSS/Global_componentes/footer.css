@@ -1,0 +1,129 @@
+/* ==========================================================
+   FOOTER FLORERÍA
+   Índice:
+   1. Contenedor y tipografía
+   2. Títulos de columna
+   3. Listas de enlaces (con flecha)
+   4. Redes sociales
+   5. Derechos reservados
+   ========================================================== */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEDOR Y TIPOGRAFÍA
+   ---------------------------------------------------------- */
+.custom-footer {
+    background-color: #FFC5D3;
+    color: #2b2b2b;
+    font-family: 'Poppins', sans-serif;
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+    margin-top: auto;
+    border-top: 2px solid #000;
+}
+
+
+/* ----------------------------------------------------------
+   2. TÍTULOS DE COLUMNA
+   Mayúsculas, negrita y una línea fina debajo.
+   ---------------------------------------------------------- */
+.custom-footer .footer-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    word-spacing: 4px;
+    color: #000;
+    margin-bottom: 1rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+
+/* ----------------------------------------------------------
+   3. LISTAS DE ENLACES
+   Cada enlace lleva una flecha (bi-chevron-right) a la izquierda.
+   ---------------------------------------------------------- */
+.custom-footer .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-footer .footer-links li {
+    margin-bottom: .55rem;
+}
+
+.custom-footer .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    color: #2b2b2b;
+    font-weight: 400;
+    font-size: .95rem;
+    letter-spacing: .3px;
+    text-decoration: none;
+    transition: color .2s ease, transform .2s ease;
+}
+
+.custom-footer .footer-links a i {
+    font-size: .75rem;
+}
+
+/* Hover: texto negro y un pequeño desplazamiento a la derecha */
+.custom-footer .footer-links a:hover {
+    color: #000;
+    transform: translateX(4px);
+}
+
+
+/* ----------------------------------------------------------
+   4. REDES SOCIALES
+   ---------------------------------------------------------- */
+.custom-footer .footer-social {
+    margin-top: 2rem;
+}
+
+.custom-footer .footer-social-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: .9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    word-spacing: 4px;
+    color: #000;
+    margin-bottom: .8rem;
+}
+
+.custom-footer .footer-social-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+}
+
+.custom-footer .footer-social-icons a {
+    color: #000;
+    font-size: 1.7rem;
+    line-height: 1;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.custom-footer .footer-social-icons a:hover {
+    transform: translateY(-3px);
+    opacity: .7;
+}
+
+
+/* ----------------------------------------------------------
+   5. DERECHOS RESERVADOS
+   ---------------------------------------------------------- */
+.custom-footer .footer-bottom {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    text-align: center;
+    font-size: .85rem;
+    letter-spacing: .3px;
+    color: #2b2b2b;
+}

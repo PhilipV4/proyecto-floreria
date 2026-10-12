@@ -1,0 +1,18 @@
+.borde_boton {
+    border: 1px solid var(--bs-primary);
+    border-radius: 4px;
+    padding: 8px 16px;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.borde_boton:hover,
+.borde_boton:focus-visible {
+    border-color: var(--bs-primary);
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.2);
+}
