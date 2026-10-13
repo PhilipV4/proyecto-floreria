@@ -1,7 +1,26 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 # Create your models here.
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=settings.ROLES)
+
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    ciudad = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    pais = models.CharField(max_length=100, blank=True, null=True)
+    codigo_postal = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+    
+    def direccion_completa(self):
+        parts = [self.direccion, self.ciudad, self.region, self.pais, self.codigo_postal]
+        return ", ".join(filter(None, parts))
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True)

@@ -55,32 +55,79 @@
         </div>
         {% endif %}
     </form>
-    
+
 
     <!-- Tabla de Productos -->
-        <div class="card-body p-0 shadow-sm rounded" style="background-color: var(--admin-card-bg);">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th style="width: 70px;">Imagen</th>
-                            <th>Nombre</th>
-                            <th class="d-none d-md-table-cell">Categoría</th>
-                            <th class="d-none d-lg-table-cell">Ocasión</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
-                            <th class="d-none d-md-table-cell">Estado</th>
-                            <th class="d-none d-xl-table-cell">Última Edición</th>
-                            <th class="text-end" style="width: 140px;">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productos-tbody" >
-                        {% include 'admin/partials/productos_tbody.html' %}
-                    </tbody>
-                </table>
+    <div class="card-body p-0 shadow-sm rounded">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="card-body">
+                    <tr>
+                        <th style="width: 70px;">Imagen</th>
+                        <th>Nombre</th>
+                        <th class="d-none d-md-table-cell">Categoría</th>
+                        <th class="d-none d-lg-table-cell">Ocasión</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th class="d-none d-md-table-cell">Estado</th>
+                        <th class="d-none d-xl-table-cell">Última Edición</th>
+                        <th class="text-end" style="width: 140px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-tbody">
+                    {% include 'admin/partials/productos_tbody.html' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+</div>
+<!--MODAL eliminar-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar el producto <strong id="modal-product-name" class="text-danger"></strong>? 
+                <p class="text-muted small mt-2 mb-0">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <!-- Formulario que ejecuta el POST de eliminación -->
+                <form id="delete-form" method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Sí, eliminar</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                // Botón que disparó el modal
+                const button = event.relatedTarget;
+                
+                // Extraer la información de los atributos data-*
+                const productName = button.getAttribute('data-product-name');
+                const deleteUrl = button.getAttribute('data-delete-url');
+                
+                // Actualizar los elementos dentro del modal
+                const modalProductName = deleteModal.querySelector('#modal-product-name');
+                const deleteForm = deleteModal.querySelector('#delete-form');
+                
+                modalProductName.textContent = productName;
+                deleteForm.action = deleteUrl;
+            });
+        }
+    });
+</script>
+{% endblock %}
 
 {% endblock %}

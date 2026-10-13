@@ -1,9 +1,12 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
 
+    #catalogo
+    path('catalogo/', views.catalogo_productos, name='catalogo_productos'),
     #productos
     path('productos/', views.lista_productos, name='lista_productos'),
     #admin
@@ -15,11 +18,15 @@ urlpatterns = [
     path('gestion/crear_ocasion/', views.crear_ocasion, name='crear_ocasion'),
 
     #PRUEBA
-    path('prueba/', views.prueba, name='prueba'),
+    
 
     #PRUEBA NAVBAR Y FOOTER
     path('componentes/', views.prueba_global_componentes, name='prueba_global_componentes'),
 
     #PRUEBA DETALLE PRODUCTO
     path('detalle_producto/', views.detalle_producto, name='detalle_producto'),
+    #login y logout
+    path('login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 ]
