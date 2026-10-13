@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
@@ -15,4 +16,15 @@ urlpatterns = [
     path('gestion/eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
     path('gestion/crear_categoria/', views.crear_categoria, name='crear_categoria'),
     path('gestion/crear_ocasion/', views.crear_ocasion, name='crear_ocasion'),
+
+    #PRUEBA
+    
+
+    #PRUEBA NAVBAR Y FOOTER
+    path('componentes/', views.prueba_global_componentes, name='prueba_global_componentes'),
+
+    #login y logout
+    path('login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 ]
