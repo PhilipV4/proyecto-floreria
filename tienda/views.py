@@ -45,7 +45,7 @@ def prueba_global_componentes(request):
     return render(request, 'global_componentes/base.html')
 #PRUEBA DETALLE PRODUCTO
 def detalle_producto(request):
-    return render(request, 'productos/detalle_producto.html')
+    return render(request, 'catalogo/detalle_producto.html')
     #producto = get_object_or_404(Producto, id=id)
     #return render(request, 'productos/detalle_producto.html', {'producto': producto})
 
