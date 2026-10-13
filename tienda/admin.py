@@ -22,3 +22,10 @@ class ProductoAdmin(admin.ModelAdmin):
     search_fields = ('nombre', 'descripcion')
     list_editable = ('precio', 'stock', 'disponible')
     ordering = ('-creado_el',)
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'direccion', 'ciudad', 'region', 'pais', 'codigo_postal')
+    search_fields = ('user__username', 'user__email', 'direccion', 'ciudad', 'region', 'pais', 'codigo_postal')
+    list_filter = ('role',)
+    ordering = ('user__username',)
