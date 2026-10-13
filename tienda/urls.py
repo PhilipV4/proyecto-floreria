@@ -20,4 +20,6 @@ urlpatterns = [
     #PRUEBA NAVBAR Y FOOTER
     path('componentes/', views.prueba_global_componentes, name='prueba_global_componentes'),
 
+    #PRUEBA DETALLE PRODUCTO
+    path('detalle_producto/', views.detalle_producto, name='detalle_producto'),
 ]

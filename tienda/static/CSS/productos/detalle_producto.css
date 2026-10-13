@@ -1,0 +1,394 @@
+/* ==========================================================
+   VISTA DETALLE DE PRODUCTO
+   Índice:
+   0. Ayuda para ver las zonas (opcional)
+   1. Breadcrumb
+   2. Barra lateral
+   3. Producto: imagen e información
+   4. Pestañas
+   ========================================================== */
+
+
+/* ----------------------------------------------------------
+   0. AYUDA VISUAL (opcional)
+   Descomenta para ver cada zona con el color de tu boceto.
+   ---------------------------------------------------------- */
+/*
+.detalle-breadcrumb { outline: 3px solid #22b04b; }
+.detalle-sidebar    { outline: 3px solid #000; }
+.detalle-producto   { outline: 3px solid #3f48cc; }
+.detalle-tabs       { outline: 3px solid #ff7f27; }
+*/
+
+
+/* ----------------------------------------------------------
+   1. BREADCRUMB
+   ---------------------------------------------------------- */
+.detalle-breadcrumb {
+    padding: .75rem 0;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: .8rem;
+}
+
+.detalle-breadcrumb .breadcrumb-item a {
+    color: #2b2b2b;
+    text-decoration: none;
+}
+
+.detalle-breadcrumb .breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+.detalle-breadcrumb .breadcrumb-item.active {
+    color: #000;
+    font-weight: 600;
+}
+
+
+/* ----------------------------------------------------------
+   2. BARRA LATERAL
+   ---------------------------------------------------------- */
+.detalle-sidebar {
+    font-family: 'Poppins', sans-serif;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: .5rem;
+    background: #fff;
+}
+
+.detalle-sidebar-title {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: .8rem;
+}
+
+.detalle-sidebar li {
+    margin-bottom: .5rem;
+}
+
+.detalle-sidebar a {
+    color: #2b2b2b;
+    text-decoration: none;
+    font-size: .9rem;
+}
+
+.detalle-sidebar a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+
+/* ----------------------------------------------------------
+   3. PRODUCTO: IMAGEN E INFORMACIÓN
+   ---------------------------------------------------------- */
+.detalle-producto {
+    font-family: 'Poppins', sans-serif;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: .5rem;
+}
+
+.detalle-imagen {
+    text-align: center;
+}
+
+.detalle-imagen img {
+    max-height: 420px;
+    object-fit: contain;
+}
+
+.detalle-titulo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+}
+
+/* Precio + colores en la misma fila */
+.detalle-precio-fila {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.detalle-precio {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+/* Colores */
+.detalle-colores {
+    display: flex;
+    gap: .6rem;
+}
+
+.swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #999;
+    cursor: pointer;
+    transition: transform .2s ease;
+}
+
+.swatch:hover {
+    transform: scale(1.1);
+}
+
+.btn-check:checked + .swatch {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+/* Cantidad + botón añadir */
+.detalle-compra {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detalle-cantidad {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: .375rem;
+    overflow: hidden;
+}
+
+.detalle-cantidad button {
+    width: 36px;
+    border: none;
+    background: #fff;
+    font-size: 1.1rem;
+}
+
+.detalle-cantidad button:hover {
+    background: #f3f3f3;
+}
+
+.detalle-cantidad input {
+    width: 50px;
+    border: none;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.detalle-cantidad input::-webkit-outer-spin-button,
+.detalle-cantidad input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.btn-carrito-detalle {
+    padding: .75rem 2rem;
+    border: none;
+    border-radius: .75rem;
+    background-color: #FFC5D3;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: .5px;
+    transition: background-color .2s ease;
+}
+
+.btn-carrito-detalle:hover {
+    background-color: #f7a8bc;
+}
+
+/* Datos: ID, categoría, ocasiones */
+.detalle-meta {
+    margin: 0;
+    font-size: .75rem;
+    color: #777;
+}
+
+
+/* ----------------------------------------------------------
+   4. PESTAÑAS
+   ---------------------------------------------------------- */
+.detalle-tabs {
+    font-family: 'Poppins', sans-serif;
+    padding: 1rem 1.5rem 1.5rem;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: .5rem;
+}
+
+.detalle-tabs .nav-tabs {
+    border-bottom: 2px solid #ddd;
+}
+
+.detalle-tabs .nav-link {
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.detalle-tabs .nav-link:hover {
+    border-bottom-color: #f7a8bc;
+}
+
+.detalle-tabs .nav-link.active {
+    background: transparent;
+    border-bottom-color: #FFC5D3;
+}
+
+.detalle-tab-contenido {
+    padding-top: 1.25rem;
+    line-height: 1.7;
+    text-align: justify;
+}
+
+
+/* ----------------------------------------------------------
+   5. PRODUCTOS RELACIONADOS (Bootstrap carousel)
+   Reemplaza TODA la sección 5 anterior de detalle_producto.css.
+   Bootstrap aporta la estructura; aquí solo van los detalles de estilo.
+   ---------------------------------------------------------- */
+.relacionados {
+    font-family: 'Poppins', sans-serif;
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: .5rem;
+}
+
+/* Título con subrayado rosa */
+.relacionados-titulo {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    padding-bottom: .4rem;
+    border-bottom: 3px solid #f7a8bc;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    word-spacing: 4px;
+}
+
+/* Etiqueta de descuento */
+.relacionados .rel-badge {
+    z-index: 2;
+    background: #FFC5D3;
+    color: #000;
+    font-weight: 600;
+    font-size: .7rem;
+    border-radius: 50rem;
+}
+
+/* Imagen */
+.relacionados .rel-img {
+    height: 190px;
+    object-fit: contain;
+    transition: transform .25s ease;
+}
+
+.relacionados .card:hover .rel-img {
+    transform: scale(1.05);
+}
+
+/* Nombre del producto */
+.relacionados .rel-nombre {
+    min-height: 2.6em;            /* reserva 2 líneas para alinear las tarjetas */
+    margin-bottom: .4rem;
+    font-size: .8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    line-height: 1.3;
+}
+
+/* Precios */
+.relacionados .rel-precios {
+    margin-bottom: .6rem;
+    font-size: .85rem;
+}
+
+.relacionados .rel-precios del {
+    margin-right: .3rem;
+    color: #888;
+    font-size: .75rem;
+}
+
+.relacionados .rel-precios span {
+    font-weight: 600;
+}
+
+/* Botón */
+.relacionados .rel-btn {
+    background: #FFC5D3;
+    color: #000;
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.relacionados .rel-btn:hover {
+    background: #f7a8bc;
+    color: #000;
+}
+
+/* Flechas: Bootstrap las pinta blancas, aquí se vuelven negras */
+.relacionados .carousel-control-prev,
+.relacionados .carousel-control-next {
+    width: 5%;
+}
+
+.relacionados .carousel-control-prev-icon,
+.relacionados .carousel-control-next-icon {
+    filter: invert(1);
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Puntos indicadores: debajo de las tarjetas, redondos y negros */
+.relacionados .rel-indicators {
+    position: static;
+    margin: 1.25rem 0 0;
+}
+
+.relacionados .rel-indicators [data-bs-target] {
+    width: 9px;
+    height: 9px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    background-color: transparent;
+    opacity: 1;
+}
+
+.relacionados .rel-indicators .active {
+    background-color: #000;
+}
+
+@media (max-width: 575.98px) {
+    .relacionados { padding: 1rem; }
+}
+
+/* ----------------------------------------------------------
+   6. RESPONSIVE GENERAL
+   ---------------------------------------------------------- */
+@media (max-width: 575.98px) {
+    .detalle-producto,
+    .detalle-tabs,
+    .relacionados {
+        padding: 1rem;
+    }
+
+    .detalle-titulo {
+        font-size: 1.25rem;
+    }
+
+    .btn-carrito-detalle {
+        width: 100%;
+    }
+}
