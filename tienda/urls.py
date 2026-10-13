@@ -16,6 +16,7 @@ urlpatterns = [
     path('gestion/eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
     path('gestion/crear_categoria/', views.crear_categoria, name='crear_categoria'),
     path('gestion/crear_ocasion/', views.crear_ocasion, name='crear_ocasion'),
+    path('gestion/dashboard/', views.admin_dashboard, name='admin_dashboard'),
 
     #PRUEBA
     
@@ -28,5 +29,7 @@ urlpatterns = [
     #login y logout
     path('login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('registro/', views.registro_view, name='registro'),
+    path('perfil/editar/', views.editar_perfil_view, name='editar_perfil'),
 
 ]

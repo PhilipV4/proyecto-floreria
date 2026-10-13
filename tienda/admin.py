@@ -25,7 +25,7 @@ class ProductoAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'direccion', 'ciudad', 'region', 'pais', 'codigo_postal')
-    search_fields = ('user__username', 'user__email', 'direccion', 'ciudad', 'region', 'pais', 'codigo_postal')
-    list_filter = ('role',)
+    list_display = ('user', 'role', 'telefono', 'direccion', 'comuna')
+    search_fields = ('user__username', 'user__email', 'telefono', 'comuna')
+    list_filter = ('role', 'comuna')
     ordering = ('user__username',)

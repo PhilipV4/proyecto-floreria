@@ -1,10 +1,16 @@
 from django.shortcuts import redirect, render, get_object_or_404
 
+from tienda.decorators import role_required
+from django.contrib.auth.decorators import login_required
+
 from .models import Categoria, Ocasion, Producto
 
-from .forms import CategoriaForm, OcasionForm, ProductoForm
+from .forms import CategoriaForm, OcasionForm, ProductoForm, RegistroForm, EditarPerfilForm
 
 from django.db.models import Q
+
+from django.contrib.auth import login
+from django.contrib.auth import get_user_model
 
 
 def inicio(request):
@@ -77,6 +83,7 @@ def lista_productos(request):
     return render(request, 'productos/lista_productos.html', context)
 
 #Inicio seccion admin
+@role_required('admin') 
 def admin_lista_productos(request):
     # Obtenemos todos los productos optimizando las relaciones
     productos = Producto.objects.all().select_related('categoria', 'ocasion')
@@ -122,7 +129,7 @@ def admin_lista_productos(request):
         results=[]
 
     return render(request, 'partials/results.html', {"results": results})
-
+@role_required('admin')
 def crear_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST, request.FILES)
@@ -133,7 +140,7 @@ def crear_producto(request):
         form = ProductoForm()
     return render(request, 'admin/crear.html', {'form': form})
 
-
+@role_required('admin')
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     if request.method == 'POST':
@@ -145,7 +152,7 @@ def editar_producto(request, id):
         form = ProductoForm(instance=producto)
     return render(request, 'admin/editar.html', {'form': form, 'producto': producto})
 
-
+@role_required('admin')
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     if request.method == 'POST':
@@ -154,6 +161,7 @@ def eliminar_producto(request, id):
         return redirect('admin_lista_productos')
     return render(request, 'admin/eliminar.html', {'producto': producto})
 
+@role_required('admin')
 def crear_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
@@ -163,7 +171,7 @@ def crear_categoria(request):
     else:
         form = CategoriaForm()
     return render(request, 'admin/crear_categoria.html', {'form': form})
-
+@role_required('admin')
 def crear_ocasion(request):
     if request.method == 'POST':
         form = OcasionForm(request.POST)
@@ -173,4 +181,71 @@ def crear_ocasion(request):
     else:
         form = OcasionForm()
     return render(request, 'admin/crear_ocasion.html', {'form': form})
+
+@role_required('admin')
+def admin_dashboard(request):
+    # contenido del dashboard, por ejemplo estadísticas, gráficos, etc.
+    context = {}
+    return render(request, 'admin/dashboard.html', context)
 #Fin seccion admin
+
+#Registro de usuarios
+User = get_user_model()
+
+def registro_view(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            
+            # Extraer el username de la parte anterior al '@'
+            base_username = email.split('@')[0]
+            username = base_username
+            
+            # Control básico por si el username ya existiera en la base de datos
+            counter = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{counter}"
+                counter += 1
+                
+            # Crear el usuario en Django
+            user = User.objects.create_user(username=username, email=email, password=password)
+            
+            # Iniciar sesión automáticamente tras registrarse
+            login(request, user)
+            
+            # Redirigir a la vista principal (ajusta la ruta según prefieras)
+            return redirect('admin_dashboard') 
+    else:
+        form = RegistroForm()
+        
+    return render(request, 'usuarios/registro.html', {'form': form})
+
+
+
+@login_required
+def editar_perfil_view(request):
+    perfil = request.user.userprofile
+    
+    if request.method == 'POST':
+        form = EditarPerfilForm(request.POST, instance=perfil)
+        if form.is_valid():
+            # Guardar datos del perfil
+            form.save()
+            
+            # Guardar nombre y apellido en el modelo User si los incluiste
+            request.user.first_name = form.cleaned_data.get('first_name', '')
+            request.user.last_name = form.cleaned_data.get('last_name', '')
+            request.user.save()
+            
+            return redirect('admin_dashboard') # O a la vista de perfil que prefieras
+    else:
+        # Precargar los datos actuales del usuario
+        initial_data = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        }
+        form = EditarPerfilForm(instance=perfil, initial=initial_data)
+
+    return render(request, 'usuarios/editar_perfil.html', {'form': form})
