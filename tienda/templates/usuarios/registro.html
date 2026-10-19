@@ -2,8 +2,7 @@
 {% load static %}
 {% block content %}
 
-
-    <div class="container" style="max-width: 400px;">
+    <div class="container" style="max-width: 400px; margin-top: 50px; margin-bottom: 50px;">
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
 
@@ -22,8 +21,7 @@
                     {% endif %}
 
                     <div class="mb-3">
-                        <label for="{{ form.email.id_for_label }}" class="form-label small fw-bold">Correo
-                            Electrónico</label>
+                        <label for="{{ form.email.id_for_label }}" class="form-label small fw-bold">Correo Electrónico</label>
                         {{ form.email }}
                         {% if form.email.errors %}
                         <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
@@ -31,15 +29,19 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="{{ form.password.id_for_label }}"
-                            class="form-label small fw-bold">Contraseña</label>
+                        <label for="{{ form.password.id_for_label }}" class="form-label small fw-bold">Contraseña</label>
                         {{ form.password }}
+                        {% if form.password.errors %}
+                        <div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
-                        <label for="{{ form.password_confirm.id_for_label }}" class="form-label small fw-bold">Confirmar
-                            Contraseña</label>
+                        <label for="{{ form.password_confirm.id_for_label }}" class="form-label small fw-bold">Confirmar Contraseña</label>
                         {{ form.password_confirm }}
+                        {% if form.password_confirm.errors %}
+                        <div class="text-danger small mt-1">{{ form.password_confirm.errors.0 }}</div>
+                        {% endif %}
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm">
@@ -48,8 +50,7 @@
                 </form>
 
                 <div class="text-center mt-3">
-                    <p class="small text-muted mb-0">¿Ya tienes una cuenta? <a href="{% url 'login' %}"
-                            class="text-decoration-none">Inicia sesión</a></p>
+                    <p class="small text-muted mb-0">¿Ya tienes una cuenta? <a href="{% url 'login' %}" class="text-decoration-none">Inicia sesión</a></p>
                 </div>
 
             </div>

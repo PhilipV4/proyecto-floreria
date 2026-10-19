@@ -1,4 +1,6 @@
 from django.urls import path
+
+from tienda.forms import CustomAuthenticationForm
 from . import views
 from django.contrib.auth import views as auth_views
 
@@ -27,9 +29,15 @@ urlpatterns = [
     #PRUEBA DETALLE PRODUCTO
     path('detalle_producto/', views.detalle_producto, name='detalle_producto'),
     #login y logout
-    path('login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login/', auth_views.LoginView.as_view(
+        template_name='usuarios/login.html', # Ajusta según la ruta real de tu HTML
+        authentication_form=CustomAuthenticationForm
+    ), name='login'),
+    
+    path('logout/', auth_views.LogoutView.as_view(next_page='inicio'), name='logout'), # Redirige al inicio al salir
+    
     path('registro/', views.registro_view, name='registro'),
+    
     path('perfil/editar/', views.editar_perfil_view, name='editar_perfil'),
 
 ]

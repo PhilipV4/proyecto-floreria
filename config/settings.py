@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-vp#kp*4h&i6m03h&=mc2mnwnc5c4zwd@)=#ny3tg6yq$0n%i9g
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://thank-like-withdrawal-ward.trycloudflare.com']
+CSRF_TRUSTED_ORIGINS = ['https://vessels-boundary-multiple-applying.trycloudflare.com']
 
 
 # Application definition
@@ -130,6 +130,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'  #  redirigir al iniciar sesión
 LOGOUT_REDIRECT_URL = '/'  # redirigir al cerrar sesión
+
+AUTH_USER_MODEL = 'tienda.CustomUser'
 
 # Configuración de roles de usuario
 ROLES = (

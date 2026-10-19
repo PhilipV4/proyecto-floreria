@@ -1,3 +1,5 @@
+from django.contrib import messages
+
 from django.shortcuts import redirect, render, get_object_or_404
 
 from tienda.decorators import role_required
@@ -196,56 +198,25 @@ def registro_view(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            
-            # Extraer el username de la parte anterior al '@'
-            base_username = email.split('@')[0]
-            username = base_username
-            
-            # Control básico por si el username ya existiera en la base de datos
-            counter = 1
-            while User.objects.filter(username=username).exists():
-                username = f"{base_username}{counter}"
-                counter += 1
-                
-            # Crear el usuario en Django
-            user = User.objects.create_user(username=username, email=email, password=password)
-            
-            # Iniciar sesión automáticamente tras registrarse
+            user = form.save()
             login(request, user)
-            
-            # Redirigir a la vista principal (ajusta la ruta según prefieras)
-            return redirect('admin_dashboard') 
+            return redirect('inicio') 
     else:
         form = RegistroForm()
-        
+    
     return render(request, 'usuarios/registro.html', {'form': form})
 
 
 
 @login_required
 def editar_perfil_view(request):
-    perfil = request.user.userprofile
-    
     if request.method == 'POST':
-        form = EditarPerfilForm(request.POST, instance=perfil)
+        form = EditarPerfilForm(request.POST, instance=request.user)
         if form.is_valid():
-            # Guardar datos del perfil
             form.save()
-            
-            # Guardar nombre y apellido en el modelo User si los incluiste
-            request.user.first_name = form.cleaned_data.get('first_name', '')
-            request.user.last_name = form.cleaned_data.get('last_name', '')
-            request.user.save()
-            
-            return redirect('admin_dashboard') # O a la vista de perfil que prefieras
+            messages.success(request, 'Datos actualizados correctamente.')
+            return redirect('editar_perfil')
     else:
-        # Precargar los datos actuales del usuario
-        initial_data = {
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-        }
-        form = EditarPerfilForm(instance=perfil, initial=initial_data)
-
+        form = EditarPerfilForm(instance=request.user)
+    
     return render(request, 'usuarios/editar_perfil.html', {'form': form})

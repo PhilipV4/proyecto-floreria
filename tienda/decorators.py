@@ -5,10 +5,9 @@ def role_required(*roles):
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(request, *args, **kwargs):
-            if request.user.is_authenticated:
-                user_profile = getattr(request.user, 'userprofile', None)
-                if user_profile and user_profile.role in roles:
-                    return view_func(request, *args, **kwargs)
-            return redirect('/')  # O la URL que quieras redirigir si no tiene permisos
+            # Verificamos si está autenticado y si su rol está dentro de los permitidos
+            if request.user.is_authenticated and getattr(request.user, 'role', None) in roles:
+                return view_func(request, *args, **kwargs)
+            return redirect('/')  # Redirige al inicio si no tiene permisos
         return wrapper
     return decorator

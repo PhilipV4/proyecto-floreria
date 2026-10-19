@@ -1,31 +1,32 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from django.contrib.auth.models import AbstractUser
+
+
 # Create your models here.
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=settings.ROLES)
+class CustomUser(AbstractUser):
+    # El username pasa a ser opcional para la BD, ya que usaremos el email
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
+    email = models.EmailField(unique=True, verbose_name="Correo electrónico")
+    
+    role = models.CharField(max_length=20, default='cliente', verbose_name="Rol")
+    telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono")
+    direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección")
+    comuna = models.CharField(max_length=100, blank=True, null=True, verbose_name="Comuna")
 
-    direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección y número")
-    comuna = models.CharField(
-        max_length=100, 
-        blank=True, 
-        null=True, 
-        default="", 
-        verbose_name="Comuna"
-    )
-    telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono de contacto")
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [] # Ya no pedirá username extra al crear superusuario
+
+    def save(self, *args, **kwargs):
+        # Asigna automáticamente el correo como username por debajo
+        if not self.username:
+            self.username = self.email
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username} - {self.role}"
-    
-    def direccion_completa(self):
-        # Como es exclusivo de la RM, fijamos por defecto la Región Metropolitana en el texto final si se desea
-        parts = [self.direccion, self.comuna, "Región Metropolitana"]
-        return ", ".join(filter(None, parts))
+        return self.email
     
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
