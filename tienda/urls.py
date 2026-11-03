@@ -11,6 +11,7 @@ urlpatterns = [
     path('catalogo/', views.catalogo_productos, name='catalogo_productos'),
     #productos
     path('productos/', views.lista_productos, name='lista_productos'),
+    path('detalle_producto/<int:id>/', views.detalle_producto, name='detalle_producto'),
     #admin
     path('gestion/', views.admin_lista_productos, name='admin_lista_productos'),
     path('gestion/crear/', views.crear_producto, name='crear_producto'),

@@ -19,7 +19,6 @@
  
 <div class="row g-4">
  
-
     <!-- Columna derecha: producto + pestañas -->
     <div class="col-12 col-lg-10 order-1 order-lg-2">
  
@@ -30,10 +29,17 @@
             <div class="row g-4 align-items-center">
  
                 <!-- Imagen -->
+                
                 <div class="col-12 col-md-6">
+                {% if producto.imagen %}
                     <div class="detalle-imagen">
                         <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid">
                     </div>
+                {% else %}
+                    <div class="detalle-imagen">
+                        <img src="{% static 'Placeholder.jpg' %}" alt="Sin imagen" class="img-fluid">
+                    </div>
+                {% endif %}
                 </div>
  
                 <!-- Información -->
@@ -64,7 +70,8 @@
                             <button type="button" id="btn-mas" aria-label="Aumentar">+</button>
                         </div>
  
-                        <button type="button" class="btn-carrito-detalle">Añadir al carrito</button>
+                        <!-- Botón actualizado con el ID del producto y la clase para AJAX -->
+                        <button type="button" value="{{ producto.id }}" id="agregar-carrito-detalle" class="btn-carrito-detalle">Añadir al carrito</button>
                     </div>
  
                     <!-- Datos del producto -->
@@ -113,25 +120,51 @@
     </div>
 </div>
  
-<!-- Selector de cantidad -->
+<!-- Script combinado para Selector de cantidad y AJAX al carrito -->
 <script>
-    (function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const input = document.getElementById('cantidad');
+        
+        // 1. Funcionalidad de los botones + y -
         document.getElementById('btn-mas').addEventListener('click', () => {
             input.value = parseInt(input.value || 1) + 1;
         });
+        
         document.getElementById('btn-menos').addEventListener('click', () => {
             input.value = Math.max(1, parseInt(input.value || 1) - 1);
         });
-    })();
+
+        // 2. Funcionalidad AJAX para añadir al carrito enviando la cantidad seleccionada
+        $(document).on('click', '#agregar-carrito-detalle', function(e){
+            e.preventDefault();
+            
+            var productoId = $(this).val();
+            var cantidadSeleccionada = $('#cantidad').val();
+
+            $.ajax({
+               type: 'POST',
+               url: "{% url 'carrito_agregar' %}",
+               data: {
+                   producto_id: productoId,
+                   cantidad: cantidadSeleccionada, // Enviamos la cantidad elegida
+                   csrfmiddlewaretoken: '{{ csrf_token }}',
+                   action: 'post' 
+               },
+               success: function(json){
+                   console.log("Producto agregado:", json);
+                   // Actualiza el contador global del carrito en el navbar (igual que en el catálogo)
+                   document.getElementById('cantidad_carrito').textContent = json.cantidad;
+               },
+               error: function(xhr, errmsg, err){
+                   console.log("Error al agregar al carrito");
+               }
+            });
+        });
+    });
 </script>
 
 <!-- ======================================================
      5. PRODUCTOS RELACIONADOS (Bootstrap carousel, solo diseño)
-     Pégalo DESPUÉS del cierre del <div class="row g-4">
-     y ANTES del <script> del selector de cantidad.
-     Cada <div class="carousel-item"> es una "página" de 4 tarjetas.
-     No necesita JavaScript propio: lo maneja bootstrap.bundle.js.
      ====================================================== -->
 <section class="relacionados" aria-labelledby="titulo-relacionados">
 

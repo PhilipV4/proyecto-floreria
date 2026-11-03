@@ -1,0 +1,82 @@
+{% extends 'global_componentes/base.html' %}
+
+{% block content %}
+
+<div class="py-5">
+    <div class="container">
+        <h1 class="text-center mb-2">Carrito de Compras</h1>
+        <p class="text-center text-muted mb-5">Revisa tus productos antes de finalizar la compra</p>
+
+        <div class="row g-4">
+            <!-- Cart Items -->
+            {% if carrito %}
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+
+                            {% for item in carrito %}
+                            <div class="list-group-item p-3">
+                                <div class="row align-items-center">
+
+                                    <!-- Imagen compacta -->
+                                    <div class="col-3 col-md-2 text-center">
+                                        {% if item.producto.imagen %}
+                                        <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}"
+                                            class="rounded shadow-sm"
+                                            style="width: 75px; height: 75px; object-fit: cover;">
+                                        {% else %}
+                                        <div class="bg-light rounded text-muted d-flex align-items-center justify-content-center mx-auto"
+                                            style="width: 75px; height: 75px;">
+                                            <small class="text-center" style="font-size: 10px;">Sin imagen</small>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Información del Producto (Nombre y Precio) -->
+                                    <div class="col-9 col-md-5">
+                                        <h6 class="mb-1 fw-bold text-dark">{{ item.producto.nombre }}</h6>
+                                        <p class="mb-0 text-muted small">Precio unitario: $ {{ item.precio|floatformat:"0g" }}</p>
+                                        <p class="mb-0 text-dark small fw-semibold">Subtotal: $ {{ item.subtotal|floatformat:"0g" }}</p>
+                                    </div>
+
+                                    <!-- Cantidad y Acciones -->
+                                    <div class="col-12 col-md-5 text-md-end mt-2 mt-md-0 d-flex justify-content-between justify-content-md-end align-items-center gap-3">
+                                        <span class="badge bg-light text-dark border px-3 py-2">
+                                            Cant: <strong>{{ item.cantidad }}</strong>
+                                        </span>
+                                        <a href="#" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card p-4 shadow-sm border-0">
+                    <h4 class="fw-semibold mb-3">Resumen del Pedido</h4>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Total a pagar</span>
+                        <strong class="fs-5 text-success">$ {{ carrito.total|floatformat:"0g" }}</strong>
+                    </div>
+                    <button class="btn btn-success w-100 py-2 fw-semibold">Proceder al Pago</button>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-5">Tu carrito está vacío.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

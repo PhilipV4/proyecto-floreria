@@ -24,6 +24,8 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.11/dist/htmx.min.js"
         integrity="sha384-2OatzQy1H+Zd/IIrjr1TcuDGqLXeHhbooAyJY1KdQMKnr4LZ22k31GBLdYKHmVjg"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+    integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 
     <title>Florería</title>
 
@@ -129,8 +131,8 @@
                     role="button" aria-controls="carritoPanel" aria-label="Abrir carrito de compras">
                     <i class="bi bi-cart3"></i>
 
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        0
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cantidad_carrito">
+                        {{ carrito | length }}
                     </span>
                 </a>
 
@@ -234,7 +236,7 @@
                     <span>$0.00</span>
                 </div>
 
-                <a href="#" class="btn btn-success w-100">
+                <a href="{% url 'carrito_detalle' %}" class="btn btn-success w-100">
                     Ver carrito
                 </a>
             </div>

@@ -51,11 +51,13 @@ def catalogo_productos(request):
 #PRUEBA NAVBAR Y FOOTER
 def prueba_global_componentes(request):
     return render(request, 'global_componentes/base.html')
+
 #PRUEBA DETALLE PRODUCTO
-def detalle_producto(request):
-    return render(request, 'catalogo/detalle_producto.html')
-    #producto = get_object_or_404(Producto, id=id)
-    #return render(request, 'productos/detalle_producto.html', {'producto': producto})
+def detalle_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    return render(request, 'catalogo/detalle_producto.html', {
+        'producto': producto,
+    })
 
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
@@ -220,3 +222,4 @@ def editar_perfil_view(request):
         form = EditarPerfilForm(instance=request.user)
     
     return render(request, 'usuarios/editar_perfil.html', {'form': form})
+
