@@ -2,28 +2,75 @@
 {% block content %}
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+    <title>Catálogo de Productos</title>
 </head>
 
-<!--Contenedor principal-->
-<div class="container-fluid px-1 px-md-3 px-xl-5 my-4" >
+<!--Body-->
+<div class="container-fluid px-1 my-4" >
 
     <div class="card mb-5" style="height: 100px;"></div>
 
-    <div class="row g-4">
-        <!--Recuadro categorias-->
-        <div class="col-12 col-xl-3" style="background-color: orange;"><h3 class="d-flex justify-content-center">CATEGORIAS_CONTAINER</h3> </div>
+    <!--Barra busquedas-->
+    
+    <!--Contenedor principal-->
+    <div class="row g-4 flower-catalogo">
+        <!--Recuadro Filtros-->
+        <div class="col-12 col-xl-2">
+            <div class="" id="catalogo-filtros">
+                <form class="row" method="get" id="form-filtros">
+
+                    <!--Categorias-->
+                    <div class="col-6 col-xl-12">
+                        <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#categoriabox"><i class="bi bi-chevron-down mx-2"></i>Categorias</button>
+                        <div class="collapse" id="categoriabox" data-estado>
+                            {% for cat in categorias %}
+                            <div class="form-check flower-sidetag">
+                                <input class="form-check-input flower-check" type="checkbox" name="categoria" 
+                                    value="{{ cat.id }}" id="cat-{{ cat.id }}"
+                                    {% if cat.id in list_categorias %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <label class="form-check-label flower-sidetagname" for="cat-{{ cat.id }}">{{ cat.nombre }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!--Ocasiones-->
+                    <div class="col-6 col-xl-12">
+                        <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#ocasionbox"><i class="bi bi-chevron-down mx-2"></i>Ocasiones</button>
+                        <div class="collapse" id="ocasionbox" data-estado>
+                            {% for oca in ocasiones %}
+                            <div class="form-check flower-sidetag">
+                                <input class="form-check-input flower-check" type="checkbox" name="ocasion"
+                                    value="{{ oca.id }}" id="oca-{{ oca.id }}"
+                                    {% if oca.id in list_ocasiones %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <label class="form-check-label flower-sidetagname" for="oca-{{ oca.id }}">{{ oca.nombre }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!--Boton limpiar-->
+                    {% if list_categorias or list_ocasiones %}
+                        <a href="{% url 'catalogo_productos' %}" class="btn btn-sm btn-link">Limpiar</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
 
         <!--Catalogo de productos-->
-        <div class="col-12 col-xl-9" >
-            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-2 g-md-3">
+        <div class="col-12 col-xl-10" >
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 g-2 g-md-3">
             {% for prod in productos %}
                 <div class="col">          
                     <!--Recuadro del producto-->
                     <div class="card shadow-sm flower-productbox">
 
-                        <!--Recuadro Imagen producto-->
+                        <!--Imagen producto-->
                         <div class="ratio position-relative overflow-hidden flower-boxratio">
 
                             {% if prod.imagen %}
@@ -33,12 +80,16 @@
                             {% endif %}
 
                             <!--Etiquetas de categoría y ocasión-->
-                            <p class="card-text text-muted position-absolute top-0 start-0 m-3 flower-tagbox">
-                                {% if prod.categoria %}<span class="badge p-2 px-3 flower-tag">{{prod.categoria.nombre}}</span>{% endif %}
-                                {% if prod.ocasion %}<span class="badge p-2 px-3 flower-tag">{{prod.ocasion.nombre}}</span>{% endif %}
+                            <p class="card-text text-muted position-absolute top-0 start-0 m-2 flower-tagbox">
+                                {% if prod.categoria %}
+                                    <span class="badge  flower-tag"><span class="flower-tagname" title="{{prod.categoria.nombre}}">{{prod.categoria.nombre}}</span></span>
+                                {% endif %}
+                                {% if prod.ocasion %}
+                                    <span class="badge  flower-tag"><span class="flower-tagname" title="{{prod.ocasion.nombre}}">{{prod.ocasion.nombre}}</span></span>
+                                {% endif %}
                             </p>
 
-                            <!--Boton-->
+                            <!--Boton agragar al carrito-->
                             <div class="flower-cartbtn position-absolute bottom-0 start-0 end-0 p-3">
                                 <div class="d-flex justify-content-center">
                                     <button class="btn btn-primary btn-md d-flex align-items-center justify-content-center gap-2"><i class="bi bi-cart-plus-fill fs-4"></i><span>Agregar al carrito</span></button>
@@ -47,10 +98,10 @@
 
                         </div>
 
-                        <!--Cuerpo del recuadro-->
+                        <!--Info del producto-->
                         <div class="card-body d-flex flex-column align-items-center">
-                            <h5 class="text-truncate text-center flower-productname">{{prod.nombre}}</h5>
-                            <span class="mt-1 fs-5 flower-pricetext">$<span class="fs-5 fw-bold flower-pricetext">{{prod.precio|floatformat:"0g"}}</span></span>
+                            <h5 class="text-center w-100 flower-productname">{{prod.nombre}}</h5>
+                            <span class="fs-5 flower-pricetext">$<span class="fs-5 fw-bold flower-pricetext">{{prod.precio|floatformat:"0g"}}</span></span>
                         </div>
 
                     </div>
@@ -59,7 +110,65 @@
             </div>
         </div>
 
+        <!--Paginación-->
+        {% if pag_num.has_other_pages %}
+            <nav aria-label="Catalogo-paginación" class="mt-4">
+                <ul class="pagination justify-content-center flex-wrap">
+
+                    <!--Pagina previa-->
+                    {% if pag_num.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if querystring  %}{{ querystring }}&{% endif %}page={{ pag_num.previous_page_number }}">&laquo;</a>
+                        </li>   
+                    {% endif %} 
+
+                    <!--Rango de paginas-->
+                    {% for n in pag_num.paginator.page_range %}
+                        {% if n == pag_num.number %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ n }}</span>
+                            </li>
+                        {% elif n >= pag_num.number|add:'-2' and n <= pag_num.number|add:'2' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!--Pagina siguiente-->
+                    {% if pag_num.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ pag_num.next_page_number }}">&raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+
     </div>
 </div>
+
+<script>
+    //Recordar estado de las casillas de filtros
+    (function (){
+        const filtros = document.querySelectorAll('.collapse[data-estado]');
+
+        filtros.forEach(filtro => {
+            const filter_id = 'collapse-' + filtro.id;
+            const button = document.querySelector('[data-bs-target="#' + filtro.id + '"]');
+
+            if (sessionStorage.getItem(filter_id) === 'abierto'){
+                filtro.classList.add('show');
+                if(button){
+                    button.classList.remove('collapsed')
+                    button.setAttribute('aria-expanded','true');
+                }
+            }
+
+            filtro.addEventListener('shown.bs.collapse', () => sessionStorage.setItem(filter_id, 'abierto'));
+            filtro.addEventListener('hidden.bs.collapse', () => sessionStorage.setItem(filter_id, 'cerrado'));
+        });
+    })();
+</script>
 
 {% endblock %}
