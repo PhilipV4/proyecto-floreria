@@ -12,7 +12,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;600&display=swap"
+        rel="stylesheet">
 
 
     <link rel="stylesheet" href="{% static 'CSS/global_componentes/header.css' %}">
@@ -22,6 +24,8 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.11/dist/htmx.min.js"
         integrity="sha384-2OatzQy1H+Zd/IIrjr1TcuDGqLXeHhbooAyJY1KdQMKnr4LZ22k31GBLdYKHmVjg"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+    integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 
     <title>Florería</title>
 
@@ -42,15 +46,28 @@
             <!-- Acciones visibles en móvil y escritorio -->
             <div class="d-flex align-items-center gap-2 ms-auto order-lg-3">
 
-                <!-- Perfil -->
+                <!-- Perfil / Autenticación -->
                 <div class="dropdown">
-                    <a href="#" class="text-dark text-decoration-none dropdown-toggle" id="userMenu"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="text-dark text-decoration-none dropdown-toggle d-flex align-items-center"
+                        id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-circle fs-4"></i>
-                        <span class="d-none d-lg-inline ms-1">Perfil</span>
+                        <span class="d-none d-lg-inline ms-1">
+                            {% if request.user.is_authenticated %}{{ request.user.username }}{% else %}Perfil{% endif %}
+                        </span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenu">
+                        {% if request.user.is_authenticated %}
+                        <!-- Iniciado sesión -->
+                        <li>
+                            <h6 class="dropdown-header text-truncate" style="max-width: 180px;">
+                                {{ request.user.email|default:request.user.username }}
+                            </h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider my-1">
+                        </li>
+
                         <li>
                             <a class="dropdown-item" href="#">
                                 <i class="bi bi-person me-2"></i>Mi perfil
@@ -62,13 +79,50 @@
                             </a>
                         </li>
                         <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-danger" href="#">
-                                <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+                            <a class="dropdown-item " href="{% url 'editar_perfil' %}">
+                                <i class="bi bi-gear me-2"></i>Editar perfil
                             </a>
                         </li>
+
+                        <!-- para el administrador -->
+                        {% if request.user.role == 'admin' %}
+                        <li>
+                            <hr class="dropdown-divider my-1">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-primary fw-bold" href="{% url 'admin_dashboard' %}">
+                                <i class="bi bi-speedometer2 me-2"></i>Panel Admin
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <!-- Cerrar sesión -->
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="dropdown-item text-danger w-100 text-start bg-transparent border-0">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+                                </button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <!-- Cuando no se ha iniciado sesión -->
+                        <li>
+                            <a class="dropdown-item" href="{% url 'login' %}">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar sesión
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'registro' %}">
+                                <i class="bi bi-person-plus me-2"></i>Registrarse
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
 
@@ -77,8 +131,8 @@
                     role="button" aria-controls="carritoPanel" aria-label="Abrir carrito de compras">
                     <i class="bi bi-cart3"></i>
 
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        0
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cantidad_carrito">
+                        {{ carrito | length }}
                     </span>
                 </a>
 
@@ -109,8 +163,8 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <button class="nav-link dropdown-toggle" type="button"
-                            id="categoriesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="nav-link dropdown-toggle" type="button" id="categoriesDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Categorías
                         </button>
 
@@ -129,7 +183,7 @@
                             <li><a class="dropdown-item" href="#">Regalos</a></li>
                         </ul>
                     </li>
-                    
+
 
 
                 </ul>
@@ -182,7 +236,7 @@
                     <span>$0.00</span>
                 </div>
 
-                <a href="#" class="btn btn-success w-100">
+                <a href="{% url 'carrito_detalle' %}" class="btn btn-success w-100">
                     Ver carrito
                 </a>
             </div>
@@ -196,69 +250,69 @@
     </main>
 
     <footer class="custom-footer">
-    <div class="container">
+        <div class="container">
 
-        <!-- Columnas de enlaces -->
-        <div class="row g-4">
+            <!-- Columnas de enlaces -->
+            <div class="row g-4">
 
-            <!-- Columna 1 -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <h5 class="footer-title">Información importante</h5>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Sobre nosotros</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Formas de pago</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Costo de envío</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Política de devoluciones</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Promociones especiales</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Contacto</a></li>
-                </ul>
+                <!-- Columna 1 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h5 class="footer-title">Información importante</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Sobre nosotros</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Formas de pago</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Costo de envío</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Política de devoluciones</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Promociones especiales</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h5 class="footer-title">Categorías</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Arreglos florales</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Ramos</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Plantas</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Regalos</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Más vendidos</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Novedades</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h5 class="footer-title">Enlaces rápidos</h5>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'inicio' %}"><i class="bi bi-chevron-right"></i>Inicio</a></li>
+                        <li><a href="{% url 'lista_productos' %}"><i class="bi bi-chevron-right"></i>Productos</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Mi cuenta</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Mis pedidos</a></li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- Columna 2 -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <h5 class="footer-title">Categorías</h5>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Arreglos florales</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Ramos</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Plantas</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Regalos</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Más vendidos</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Novedades</a></li>
-                </ul>
+            <!-- Redes sociales -->
+            <div class="footer-social">
+                <h6 class="footer-social-title">Síguenos en las redes sociales</h6>
+                <div class="footer-social-icons">
+                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" aria-label="X"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+                    <a href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                </div>
             </div>
 
-            <!-- Columna 3 -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <h5 class="footer-title">Enlaces rápidos</h5>
-                <ul class="footer-links">
-                    <li><a href="{% url 'inicio' %}"><i class="bi bi-chevron-right"></i>Inicio</a></li>
-                    <li><a href="{% url 'lista_productos' %}"><i class="bi bi-chevron-right"></i>Productos</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Mi cuenta</a></li>
-                    <li><a href="#"><i class="bi bi-chevron-right"></i>Mis pedidos</a></li>
-                </ul>
+            <!-- Derechos -->
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2026 Florería. Todos los derechos reservados.</p>
             </div>
+
         </div>
-
-        <!-- Redes sociales -->
-        <div class="footer-social">
-            <h6 class="footer-social-title">Síguenos en las redes sociales</h6>
-            <div class="footer-social-icons">
-                <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" aria-label="X"><i class="bi bi-twitter-x"></i></a>
-                <a href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
-                <a href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
-                <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
-            </div>
-        </div>
-
-        <!-- Derechos -->
-        <div class="footer-bottom">
-            <p class="mb-0">&copy; 2026 Florería. Todos los derechos reservados.</p>
-        </div>
-
-    </div>
-</footer>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

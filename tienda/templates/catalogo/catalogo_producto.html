@@ -72,13 +72,13 @@
 
                         <!--Imagen producto-->
                         <div class="ratio position-relative overflow-hidden flower-boxratio">
-
+                        <a href="{% url 'detalle_producto' prod.id %}">
                             {% if prod.imagen %}
                             <img src="{{prod.imagen.url}}" class="card-img-top" alt="{{prod.nombre}}">
                             {% else %}
                             <img src="/static/Placeholder.jpg" class="card-img-top" alt="{{prod.nombre}}">
                             {% endif %}
-
+                         </a>
                             <!--Etiquetas de categoría y ocasión-->
                             <p class="card-text text-muted position-absolute top-0 start-0 m-2 flower-tagbox">
                                 {% if prod.categoria %}
@@ -92,7 +92,12 @@
                             <!--Boton agragar al carrito-->
                             <div class="flower-cartbtn position-absolute bottom-0 start-0 end-0 p-3">
                                 <div class="d-flex justify-content-center">
-                                    <button class="btn btn-primary btn-md d-flex align-items-center justify-content-center gap-2"><i class="bi bi-cart-plus-fill fs-4"></i><span>Agregar al carrito</span></button>
+                                    <!-- Ojo: Cambiamos id por class="agregar-carrito" -->
+                                    <button value="{{ prod.id }}"
+                                        class="btn btn-primary btn-md d-flex align-items-center justify-content-center gap-2 agregar-carrito">
+                                        <i class="bi bi-cart-plus-fill fs-4"></i>
+                                        <span>Agregar al carrito</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -106,7 +111,7 @@
 
                     </div>
                 </div>
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
 
@@ -169,6 +174,31 @@
             filtro.addEventListener('hidden.bs.collapse', () => sessionStorage.setItem(filter_id, 'cerrado'));
         });
     })();
+    
+    // Usamos la clase .agregar-carrito en lugar del ID
+    $(document).on('click', '.agregar-carrito', function(e){
+        e.preventDefault();
+        
+        var productoId = $(this).val(); // Captura el ID del botón específico que se presionó
+
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'carrito_agregar' %}",
+        data: {
+            producto_id: productoId,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post' 
+        },
+        success: function(json){
+            console.log("Producto agregado:", json);
+            document.getElementById('cantidad_carrito').textContent = json.cantidad;
+            // Opcional: Aquí puedes actualizar un contador flotante en tu navbar si lo deseas
+        },
+        error: function(xhr, errmsg, err){
+            console.log("Error al agregar al carrito");
+        }
+        });
+    });
 </script>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from django.contrib.auth.admin import UserAdmin
 from tienda.models import *
 
 # Register your models here.
@@ -23,9 +23,15 @@ class ProductoAdmin(admin.ModelAdmin):
     list_editable = ('precio', 'stock', 'disponible')
     ordering = ('-creado_el',)
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'direccion', 'ciudad', 'region', 'pais', 'codigo_postal')
-    search_fields = ('user__username', 'user__email', 'direccion', 'ciudad', 'region', 'pais', 'codigo_postal')
-    list_filter = ('role',)
-    ordering = ('user__username',)
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    list_display = ('email', 'username', 'role', 'telefono', 'comuna', 'is_staff')
+    
+    # Agregamos secciones personalizadas al editar un usuario en el admin
+    fieldsets = UserAdmin.fieldsets + (
+        ('Información de Envío y Rol (Florería)', {'fields': ('role', 'telefono', 'direccion', 'comuna')}),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('Información de Envío y Rol (Florería)', {'fields': ('email', 'role', 'telefono', 'direccion', 'comuna')}),
+    )

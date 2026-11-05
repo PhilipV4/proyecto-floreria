@@ -1,27 +1,33 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from django.contrib.auth.models import AbstractUser
+
+
 # Create your models here.
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=settings.ROLES)
+class CustomUser(AbstractUser):
+    # El username pasa a ser opcional para la BD, ya que usaremos el email
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
+    email = models.EmailField(unique=True, verbose_name="Correo electrónico")
+    
+    role = models.CharField(max_length=20, default='cliente', verbose_name="Rol")
+    telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono")
+    direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección")
+    comuna = models.CharField(max_length=100, blank=True, null=True, verbose_name="Comuna")
 
-    direccion = models.CharField(max_length=255, blank=True, null=True)
-    ciudad = models.CharField(max_length=100, blank=True, null=True)
-    region = models.CharField(max_length=100, blank=True, null=True)
-    pais = models.CharField(max_length=100, blank=True, null=True)
-    codigo_postal = models.CharField(max_length=20, blank=True, null=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [] # Ya no pedirá username extra al crear superusuario
+
+    def save(self, *args, **kwargs):
+        # Asigna automáticamente el correo como username por debajo
+        if not self.username:
+            self.username = self.email
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username} - {self.role}"
+        return self.email
     
-    def direccion_completa(self):
-        parts = [self.direccion, self.ciudad, self.region, self.pais, self.codigo_postal]
-        return ", ".join(filter(None, parts))
-
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True, null=True)
@@ -66,3 +72,4 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+    
