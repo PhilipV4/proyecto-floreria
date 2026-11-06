@@ -11,6 +11,7 @@ from .forms import CategoriaForm, OcasionForm, ProductoForm, RegistroForm, Edita
 
 from django.db.models import Q
 
+from django.core.paginator import Paginator
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 
@@ -20,30 +21,40 @@ def inicio(request):
 
 #Catalogo de productos
 def catalogo_productos(request):
-    #Carga los productos y filtra los productos no disponibles.
-    productos = Producto.objects.filter(disponible=True).select_related('categoria','ocasion')
+    #Carga los productos, filtra los productos no disponibles y los ordena por ID.
+    productos = Producto.objects.filter(disponible=True).select_related('categoria','ocasion').order_by('id')
 
-    #Cargamos las Categorias y Ocasiones.
+    #Cargamos todas las Categorias y Ocasiones.
     categorias = Categoria.objects.all()
     ocasiones = Ocasion.objects.all()
 
-    #Conseguimos las id de Categoria y Ocasion.
-    categoria_id = request.GET.get('categoria')
-    ocasion_id = request.GET.get('ocasion')
+    #Conseguimos las id de Categoria y Ocasion. Las almacenamos en listas.
+    list_categorias = [int(c) for c in request.GET.getlist('categoria') if c.isdigit()]
+    list_ocasiones = [int(o) for o in request.GET.getlist('ocasion') if o.isdigit()]
 
-    #Filtra productos por categoria y ocasion.
-    if categoria_id:
-        productos = productos.filter(categoria_id=categoria_id)
-    if ocasion_id:
-        productos = productos.filter(ocasion_id=ocasion_id)
+    #Filtra productos por categorias y ocasiones seleccionadas.
+    if list_categorias:
+        productos = productos.filter(categoria_id__in=list_categorias)
+    if list_ocasiones:
+        productos = productos.filter(ocasion_id__in=list_ocasiones)
 
-    #Diccionario para la pantilla (catalogo/catalogo_productos.html).
+    #Fija la cantidad de productos por pagina.
+    paginacion = Paginator(productos, 12)
+    pagina_num = paginacion.get_page(request.GET.get('page'))
+
+    #Querystring que conserva los filtros
+    params = request.GET.copy()
+    params.pop = ('page', None)
+
+    #Diccionario para la plantilla (catalogo).
     context = {
-        'productos' : productos,
+        'productos' : pagina_num,
+        'pag_num' : pagina_num,
+        'querystring' : params.urlencode(),
         'categorias' : categorias,
         'ocasiones' : ocasiones,
-        'categoria_actual' : categoria_id or '',
-        'ocasion_actual' : ocasion_id or '',
+        'list_categorias' : list_categorias,
+        'list_ocasiones' : list_ocasiones,
     }
     
     return render(request, 'catalogo/catalogo_producto.html', context)

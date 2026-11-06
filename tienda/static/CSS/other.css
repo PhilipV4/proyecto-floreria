@@ -1,35 +1,84 @@
 /*== VARIABLES ==*/
 
+    :root {
+    --text-dark: #2d3748;  
+    --dark-leaf: #2f8344;
+    --text-light: #eef1f5;       
+    --light-leaf: #7dc262;  
+    --filter-bg: #cccbcb;
+    --font-heading: 'Georgia', serif;
+    --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
 /*== ELEMENTOS ==*/
+    .flower-catalogo * {
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-dark);
+    }
 
     .flower-boxratio{
         --bs-aspect-ratio: 100%;
     }
 
         .flower-boxratio > .flower-cartbtn {
-        top: auto;
-        height: auto;
+            top: auto;
+            height: auto;
         }
 
         .flower-boxratio > .flower-tagbox {
-        width: auto;
-        height: auto;
+            width: auto;
+            height: auto;
+            margin: clamp(0.4rem, 0.2rem + 1vw, 1rem);
         }
 
+    
+    .flower-tagbox{
+        max-width: 100%;
+    }
+
     .flower-tag{
-        background-color: rgb(125, 194, 98);
-        border-top-left-radius: 15px;
-        border-bottom-right-radius: 15px;
+        background-color: var(--light-leaf);
+        font-size: clamp(0.5rem, 0.5rem + 0.4vw, 0.6rem);
+        padding: clamp(0.3rem, 0.15rem + 0.4vw, 0.45rem) clamp(0.45rem, 0.3rem + 0.8vw, 0.85rem);
+        border-top-left-radius: clamp(10px, 1vw, 12px);
+        border-top-right-radius: clamp(10px, 1vw, 12px);
+        border-bottom-right-radius: clamp(10px, 1vw, 12px);
+        border-bottom-left-radius: clamp(2px, 0.5vw, 4px);
         box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5);
+        display: inline-flex;
+        max-width: clamp(4rem, 2.5rem + 8vw, 6.5rem);
+    }
+
+    .flower-tagname{
+        color: var(--text-light);
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .flower-cartbtn * {
+        color: var(--text-light);
     }
 
     .flower-productname{
-        font-size: clamp(1.2rem, 0.8rem + 0.5vw, 2rem);
+        --name-size: clamp(0.8rem, 0.8rem + 0.5vw, 1rem);
+        --name-lines: 2;
+        --name-lh: 1.2;
+
+        font-size: var(--name-size);
+        line-height: var(--name-lh);
+        height: calc(var(--name-size) * var(--name-lh) * var(--name-lines));
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
     }
 
     .flower-pricetext{
-        color: #2f8344;
+        font-size: clamp(0.8rem, 0.8rem + 0.5vw, 1rem);
+        color: var(--dark-leaf);
     }
 
     .background-blur{ 
@@ -37,6 +86,45 @@
         backdrop-filter: blur(10px);
         border-top-left-radius: 15px;
         border-bottom-right-radius: 15px;
+    }
+
+    .flower-filtertitle{
+        max-width: 100%;
+        font-weight: bold;
+        font-size: clamp(1rem, 0.8rem + 0.5vw, 1.2rem);
+        border: none;
+    }
+
+    .flower-check{
+        display: none;
+    }
+
+    #categoriabox, #ocasionbox{
+        background-color: var(--filter-bg);
+        border-radius: clamp(10px, 1vw, 12px);
+        padding: 5px;
+    }
+
+    .flower-sidetag{
+        background-color: var(--light-leaf);
+        font-size: clamp(0.5rem, 0.5rem + 0.4vw, 0.65rem);
+        font-weight: bold;
+        padding: clamp(0.3rem, 0.15rem + 0.4vw, 0.45rem) clamp(0.45rem, 0.3rem + 0.8vw, 0.85rem);
+        border-top-left-radius: clamp(10px, 1vw, 12px);
+        border-top-right-radius: clamp(10px, 1vw, 12px);
+        border-bottom-right-radius: clamp(10px, 1vw, 12px);
+        border-bottom-left-radius: clamp(2px, 0.5vw, 4px);
+        box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5);
+        max-width:max-content;
+        margin-bottom: 7px;
+    }
+
+    .flower-sidetagname{
+        color: var(--text-light);
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
 /*== ANIMACIONES ==*/
