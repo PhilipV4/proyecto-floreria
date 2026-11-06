@@ -134,8 +134,7 @@
                     <span class="page-link">{{ n }}</span>
                 </li>
                 {% elif n >= pag_num.number|add:'-2' and n <= pag_num.number|add:'2' %} <li class="page-item">
-                    <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n
-                        }}</a>
+                    <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n}}</a>
                     </li>
                     {% endif %}
                     {% endfor %}
@@ -143,8 +142,7 @@
                     <!--Pagina siguiente-->
                     {% if pag_num.has_next %}
                     <li class="page-item">
-                        <a class="page-link"
-                            href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ pag_num.next_page_number }}">&raquo;</a>
+                        <a class="page-link"href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ pag_num.next_page_number }}">&raquo;</a>
                     </li>
                     {% endif %}
             </ul>
