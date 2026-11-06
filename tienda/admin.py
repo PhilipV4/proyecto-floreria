@@ -35,3 +35,10 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Información de Envío y Rol (Florería)', {'fields': ('email', 'role', 'telefono', 'direccion', 'comuna')}),
     )
+    # Añadimos 'carrito_guardado' a los campos que ya muestra el UserAdmin por defecto
+    fieldsets = UserAdmin.fieldsets + (
+        ('Información del Carrito', {'fields': ('carrito_guardado',)}),
+    )
+    
+    # Hacemos que sea un campo de solo lectura para evitar modificaciones manuales accidentales
+    readonly_fields = ('carrito_guardado',) + UserAdmin.readonly_fields

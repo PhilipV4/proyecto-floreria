@@ -6,4 +6,5 @@ class TiendaConfig(AppConfig):
     name = 'tienda'  
 
     def ready(self):
-        pass
+        import tienda.signals  # Importa el módulo signals para registrar las señales
+

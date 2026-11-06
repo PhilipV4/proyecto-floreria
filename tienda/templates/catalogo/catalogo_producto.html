@@ -90,10 +90,14 @@ $(document).on('click', '.agregar-carrito', function(e){
            action: 'post' 
        },
        success: function(json){
-           console.log("Producto agregado:", json);
-           document.getElementById('cantidad_carrito').textContent = json.cantidad;
-           // Opcional: Aquí puedes actualizar un contador flotante en tu navbar si lo deseas
-       },
+        console.log("Producto agregado:", json);
+        
+        // 1. Actualiza el contador en la página actual
+        $('#cantidad_carrito').text(json.cantidad);
+        
+        // 2. NUEVO: Guarda el valor en el almacenamiento local del navegador
+        localStorage.setItem('cart_count', json.cantidad);
+    },
        error: function(xhr, errmsg, err){
            console.log("Error al agregar al carrito");
        }

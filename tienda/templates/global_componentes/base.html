@@ -315,6 +315,25 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Escucha cuando el localStorage cambia en otra pestaña
+    window.addEventListener('storage', function(event) {
+        if (event.key === 'cart_count') {
+            // Si cambió, actualiza el contador del carrito automáticamente en esta pestaña
+            $('#cantidad_carrito').text(event.newValue);
+        }
+    });
+
+    // Al cargar la página, sincronizamos con la sesión real del servidor
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtenemos el valor real que viene de la sesión de Django
+        var serverCount = "{{ carrito|length }}";
+        
+        // Actualizamos el contador visualmente y el localStorage
+        $('#cantidad_carrito').text(serverCount);
+        localStorage.setItem('cart_count', serverCount);
+    });
+</script>
 </body>
 
 </html>

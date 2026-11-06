@@ -2,40 +2,50 @@ from django.shortcuts import render, get_object_or_404
 from .carrito import Carrito
 from tienda.models import Producto
 from django.http import JsonResponse
-# Create your views here.
 
 def carrito_detalle(request):
-    #obtener carrito
+    # Instanciamos el carrito. Como tiene __iter__, podemos recorrerlo directamente en el HTML
     carrito = Carrito(request)
-    carrito_productos = carrito.get_productos()
-
-    return render(request, 'carrito/carrito_detalle.html', {'carrito_productos': carrito_productos})
+    return render(request, 'carrito/carrito_detalle.html', {'carrito': carrito})
 
 def carrito_agregar(request):
-    # Obtener carrito
     carrito = Carrito(request)
     
-    # Test POST
     if request.POST.get('action') == 'post':
-        # Obtener producto ID
         producto_id = int(request.POST.get('producto_id'))
-        # Obtener cantidad (si viene del detalle usa esa, si viene del catálogo por defecto es 1)
         cantidad = int(request.POST.get('cantidad', 1))
-        # Buscar producto en la base de datos
-        producto = get_object_or_404(Producto, id=producto_id)  
-        # Guardar producto en la sesión con su cantidad
+        
+        producto = get_object_or_404(Producto, id=producto_id)
         carrito.agregar(producto=producto, cantidad=cantidad)
-        # Obtener cantidad total de elementos en el carrito
+        
         cantidad_carrito = len(carrito)
-        # Devolver respuesta JSON
-        response = JsonResponse({'cantidad': cantidad_carrito, 'nombre': producto.nombre})
-        return response
-    
+        return JsonResponse({'cantidad': cantidad_carrito, 'nombre': producto.nombre})
 
 def carrito_borrar(request):
-    pass
+    carrito = Carrito(request)
+    
+    if request.POST.get('action') == 'post':
+        producto_id = int(request.POST.get('producto_id'))
+        producto = get_object_or_404(Producto, id=producto_id)
+        
+        carrito.eliminar(producto=producto)
+        
+        return JsonResponse({
+            'cantidad': len(carrito),
+            'total': carrito.total()
+        })
 
 def carrito_actualizar(request):
-    pass
-
-
+    carrito = Carrito(request)
+    
+    if request.POST.get('action') == 'post':
+        producto_id = int(request.POST.get('producto_id'))
+        cantidad = int(request.POST.get('cantidad'))
+        
+        producto = get_object_or_404(Producto, id=producto_id)
+        carrito.actualizar(producto=producto, cantidad=cantidad)
+        
+        return JsonResponse({
+            'cantidad': len(carrito),
+            'total': carrito.total()
+        })
