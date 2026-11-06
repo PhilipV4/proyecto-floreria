@@ -29,11 +29,8 @@
                         <div class="collapse" id="categoriabox" data-estado>
                             {% for cat in categorias %}
                             <div class="form-check flower-sidetag">
-                                <input class="form-check-input flower-check" type="checkbox" name="categoria"
-                                    value="{{ cat.id }}" id="cat-{{ cat.id }}" {% if cat.id in list_categorias
-                                    %}checked{% endif %} onchange="this.form.submit()">
-                                <label class="form-check-label flower-sidetagname" for="cat-{{ cat.id }}">{{ cat.nombre
-                                    }}</label>
+                                <input class="form-check-input flower-check" type="checkbox" name="categoria"value="{{ cat.id }}" id="cat-{{ cat.id }}" {% if cat.id in list_categorias%}checked{% endif %} onchange="this.form.submit()">
+                                <label class="form-check-label flower-sidetagname" for="cat-{{ cat.id }}">{{ cat.nombre}}</label>
                             </div>
                             {% endfor %}
                         </div>
@@ -46,11 +43,8 @@
                         <div class="collapse" id="ocasionbox" data-estado>
                             {% for oca in ocasiones %}
                             <div class="form-check flower-sidetag">
-                                <input class="form-check-input flower-check" type="checkbox" name="ocasion"
-                                    value="{{ oca.id }}" id="oca-{{ oca.id }}" {% if oca.id in list_ocasiones
-                                    %}checked{% endif %} onchange="this.form.submit()">
-                                <label class="form-check-label flower-sidetagname" for="oca-{{ oca.id }}">{{ oca.nombre
-                                    }}</label>
+                                <input class="form-check-input flower-check" type="checkbox" name="ocasion"value="{{ oca.id }}" id="oca-{{ oca.id }}" {% if oca.id in list_ocasiones%}checked{% endif %} onchange="this.form.submit()">
+                                <label class="form-check-label flower-sidetagname" for="oca-{{ oca.id }}">{{ oca.nombre}}</label>
                             </div>
                             {% endfor %}
                         </div>
