@@ -1,6 +1,180 @@
 {% extends 'global_componentes/base.html' %}
+{% load static %}
 
 {% block content %}
 
+<link rel="stylesheet" href="{% static 'CSS/Inicio/general.css' %}">
+
+<div class="petalo">
+
+  <!-- 1. HERO con foto de fondo -->
+ <section class="hero bleed" style="--foto: url('/media/productos/hero.png')">
+  </section>
+
+  <!-- 2. ¿CON PRISA? -->
+  <section class="rush bleed py-5 text-center">
+    <div class="container px-3 px-md-5">
+      <h2>¿Con prisa?</h2>
+      <p class="mx-auto">Revisa qué arreglos están disponibles hoy y envía una sonrisa a quien más quieres.</p>
+      <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Enviar</a>
+    </div>
+  </section>
+
+  {% for p in productos_destacados %}
+  <div class="carrusel-item">
+    <article class="card producto h-100 border-0">
+      <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}">
+      <div class="card-body d-flex flex-column">
+        <h3>{{ p.nombre }}</h3>
+        <p class="precio">${{ p.precio }}</p>
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime w-100 mt-auto">Ver producto</a>
+      </div>
+    </article>
+  </div>
+{% endfor %}
+
+  <!-- 3. CÓMO FUNCIONA -->
+  <section class="how bleed py-5">
+    <div class="container px-3 px-md-5">
+      <h2 class="section-title">Cómo funciona</h2>
+      <p class="section-sub">Fácil. Compra local y regala con significado, todo en línea.</p>
+
+      <div class="row g-4 mb-5">
+        <div class="col-12 col-md-4">
+          <article class="card step h-100 border-0">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <span class="step-icon"><i class="bi bi-chat-heart"></i></span>
+              <h3>Cuéntanos qué necesitas</h3>
+              <p>¿Para quién son las flores? ¿Cuál es la ocasión? Elige tu arreglo y escribe tu tarjeta.</p>
+              <span class="step-num mt-auto">1</span>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-4">
+          <article class="card step h-100 border-0">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <span class="step-icon"><i class="bi bi-flower1"></i></span>
+              <h3>Nosotros nos encargamos</h3>
+              <p>Una florista de la zona prepara tu arreglo a mano con flores frescas, según lo que elegiste.</p>
+              <span class="step-num mt-auto">2</span>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-4">
+          <article class="card step h-100 border-0">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <span class="step-icon"><i class="bi bi-envelope-heart"></i></span>
+              <h3>Les va a encantar</h3>
+              <p>Entregamos en la puerta de quien quieras. Un regalo que se disfruta desde que llega.</p>
+              <span class="step-num mt-auto">3</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Comenzar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. TEXTO + FOTO (en celular: texto arriba, foto abajo) -->
+  <section class="split bleed">
+    <div class="row g-0">
+      <div class="col-12 col-md-6 split-text p-4 p-md-5">
+        <h2>Entonces, ¿qué tienes en mente hoy?</h2>
+        <p>Nuestra comunidad de floristas está lista para diseñar y entregar arreglos hechos a mano, con significado y pensados para cada momento.</p>
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Celebrar Ocasiones</a>
+      </div>
+      <div class="col-12 col-md-6 split-media">
+        <img src="/media/productos/ramo-flores-armado.webp" alt="Florista atando un ramo de flores rosadas y blancas sobre una mesa de madera">
+      </div>
+    </div>
+  </section>
+
+   <section class="split bleed">
+    <div class="row g-0">
+      <div class="col-12 col-md-6 split-media">
+        <img src="/media/productos/ramo-flores-armado.webp" alt="Florista atando un ramo de flores rosadas y blancas sobre una mesa de madera">
+      </div>
+      <div class="col-12 col-md-6 split-text p-4 p-md-5">
+        <h2>Entonces, ¿qué tienes en mente hoy?</h2>
+        <p>Nuestra comunidad de floristas está lista para diseñar y entregar arreglos hechos a mano, con significado y pensados para cada momento.</p>
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Celebrar Ocasiones</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PREGUNTAS FRECUENTES (accordion de Bootstrap) -->
+  <section class="faq">
+    <h2 class="section-title">Preguntas frecuentes</h2>
+    <p class="section-sub">Fácil. Compra local y regala con significado, todo en línea.</p>
+
+    <div class="row g-3 g-md-4">
+
+      <div class="col-12 col-md-6">
+        <div class="accordion" id="faqIzq">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">¿Cuánto cuesta el despacho?</button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse">
+              <div class="accordion-body">El costo depende de la comuna de entrega y se muestra antes de pagar.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="true" aria-controls="faq2">¿Qué sucede si no hay nadie quien las reciba?</button>
+            </h3>
+           <div id="faq2" class="accordion-collapse collapse">
+              <div class="accordion-body">Coordinamos otra entrega contigo o con quien recibe.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">¿Hacen entregas el mismo día?</button>
+            </h3>
+            <div id="faq3" class="accordion-collapse collapse">
+              <div class="accordion-body">Sí, los pedidos hechos antes de las 14:00 llegan hoy.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="accordion" id="faqDer">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">¿Puedo añadir una tarjeta con mensaje?</button>
+            </h3>
+            <div id="faq4" class="accordion-collapse collapse">
+              <div class="accordion-body">Sí, escribe tu mensaje al hacer el pedido y lo incluimos sin costo.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">¿Cuánto duran las flores?</button>
+            </h3>
+            <div id="faq5" class="accordion-collapse collapse">
+              <div class="accordion-body">Con los cuidados que te indicamos, un ramo fresco dura entre 7 y 10 días.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">¿Puedo elegir los colores?</button>
+            </h3>
+            <div id="faq6" class="accordion-collapse collapse">
+              <div class="accordion-body">Sí, puedes indicar colores y flores favoritas al hacer tu pedido.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+ 
+
+</div>
 
 {% endblock %}

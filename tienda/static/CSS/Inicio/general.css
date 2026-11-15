@@ -1,0 +1,185 @@
+/* Landing de inicio. Ruta: static/CSS/Inicio/general.css
+   Mobile-first: lo base es para celular y los @media (min-width) amplían.
+   Usa el grid y los componentes de Bootstrap; aquí solo van colores y detalles.
+   Todo acotado a .petalo para no afectar el resto del sitio. */
+
+:root {
+  --pt-lime: #FFC5D3;        /* color base */
+  --pt-lime-dark: #FFC5D3;   /* hover de botones */
+  --pt-lime-soft: #FFC5D3;   /* 50% lima + 50% blanco */
+  --pt-lime-tint: #F7FAD8;   /* 25% lima + 75% blanco */
+  --pt-text: #26300F;
+  --pt-muted: #5D6642;
+  --pt-grey: #F4F4F1;
+  --pt-shadow: 0 4px 18px rgba(38, 48, 15, .10);
+  --pt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2326300F' stroke-width='2'%3E%3Cpath d='M3 6l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+/* Las secciones a todo el ancho usan 100vw: evita el scroll horizontal en celular */
+body:has(.petalo) { overflow-x: clip; }
+
+/* ---------- Base ---------- */
+/* El margen negativo anula el my-4 del <main> para que el hero quede pegado al navbar */
+.petalo { margin: -1.5rem 0; color: var(--pt-text); font-family: 'Open Sans', system-ui, sans-serif; line-height: 1.65; }
+.petalo img { display: block; max-width: 100%; }
+.petalo h1, .petalo h2, .petalo h3 { font-weight: 600; }
+.petalo h2, .petalo h3 { font-family: 'Poppins', system-ui, sans-serif; }
+
+/* Sección a todo el ancho de la pantalla.
+   Para dejarlas dentro del container de tu <main>, borra esta regla. */
+.petalo .bleed { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+
+.petalo .section-title { font-size: clamp(1.5rem, 4vw, 1.8rem); text-align: center; margin: 0 0 8px; }
+.petalo .section-sub { text-align: center; color: var(--pt-muted); margin: 0 0 32px; }
+
+/* ---------- Botón lima (variante de Bootstrap) ---------- */
+.petalo .btn-lime {
+  --bs-btn-color: var(--pt-text);
+  --bs-btn-bg: var(--pt-lime);
+  --bs-btn-border-color: var(--pt-text);
+  --bs-btn-border-width: 2px;
+  --bs-btn-hover-color: var(--pt-text);
+  --bs-btn-hover-bg: var(--pt-lime-dark);
+  --bs-btn-hover-border-color: var(--pt-text);
+  --bs-btn-active-color: var(--pt-text);
+  --bs-btn-active-bg: var(--pt-lime-dark);
+  --bs-btn-active-border-color: var(--pt-text);
+  --bs-btn-border-radius: 8px;
+  --bs-btn-padding-x: 1.6rem;
+  --bs-btn-padding-y: .7rem;          /* área táctil cómoda en celular */
+  --bs-btn-font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-size: .85rem;
+}
+.petalo .btn:focus-visible { outline: 3px solid var(--pt-text); outline-offset: 2px; }
+
+/* ---------- 1. Hero ---------- */
+.petalo .hero {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  /* Con tu foto: define --foto en la sección. Sin foto se ve el degradado. */
+  background: var(--foto, none), linear-gradient(135deg, #f3d9dc 0%, #f2dcae 45%, #c9d9b8 100%);
+  background-size: cover;
+  background-position: center 30%;
+}
+.petalo .hero-card { width: 100%; max-width: 520px; background: rgba(240, 228, 208, .93); text-align: center; border-radius: 6px; }
+.petalo .hero-card h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(1.6rem, 6vw, 2.6rem); line-height: 1.2; margin: 0 0 12px; }
+.petalo .hero-card p { margin: 0 0 24px; }
+
+/* ---------- 2. ¿Con prisa? ---------- */
+.petalo .rush { background: #fff; }
+.petalo .rush h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 8px; }
+.petalo .rush p { max-width: 640px; color: var(--pt-muted); font-size: .95rem; margin-bottom: 20px; }
+
+/* ---------- 3. Cómo funciona ---------- */
+.petalo .how { background: var(--pt-grey); }
+.petalo .step { border-radius: 14px; box-shadow: var(--pt-shadow); }
+.petalo .step-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--pt-lime); display: grid; place-items: center; font-size: 1.8rem; margin-bottom: 16px; }
+.petalo .step h3 { font-size: 1.05rem; margin: 0 0 8px; }
+.petalo .step p { color: var(--pt-muted); font-size: .92rem; margin: 0 0 20px; }
+.petalo .step-num { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #d8d8d2; display: grid; place-items: center; font-size: .8rem; color: var(--pt-muted); }
+
+/* ---------- 4. Texto + foto ---------- */
+.petalo .split { background: #fff; overflow: hidden; }
+.petalo .split-text { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.petalo .split-text h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; max-width: 14ch; margin: 0 0 16px; }
+.petalo .split-text p { max-width: 38ch; color: var(--pt-muted); margin: 0 0 24px; }
+.petalo .split-media { position: relative; min-height: 260px; }
+.petalo .split-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- 5. Preguntas frecuentes (accordion de Bootstrap) ---------- */
+/* En celular el <main> del base solo deja 4px de margen: se agregan 12px para que no pegue al borde */
+.petalo .faq { padding: 48px 12px; }
+.petalo .accordion {
+  --bs-accordion-border-width: 0;
+  --bs-accordion-btn-color: var(--pt-text);
+  --bs-accordion-btn-bg: #fff;
+  --bs-accordion-active-color: var(--pt-text);
+  --bs-accordion-active-bg: #fff;
+  --bs-accordion-btn-icon: var(--pt-chevron);
+  --bs-accordion-btn-active-icon: var(--pt-chevron);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 .2rem rgba(221, 233, 97, .6);
+  --bs-accordion-body-padding-x: 1.25rem;
+}
+.petalo .accordion-item { border-radius: 10px; overflow: hidden; box-shadow: var(--pt-shadow); }
+.petalo .accordion-item + .accordion-item { margin-top: 12px; }
+.petalo .accordion-button { font-weight: 600; font-size: .95rem; padding: 1rem 1.25rem; gap: 12px; }
+.petalo .accordion-button::after { width: 28px; height: 28px; flex: none; border-radius: 50%; background-color: var(--pt-lime-soft); background-size: 12px; background-position: center; }
+.petalo .accordion-body { color: var(--pt-muted); font-size: .9rem; padding-top: 0; }
+
+/* ---------- 6. Foto final ---------- */
+.petalo .final-photo {
+  height: 300px;
+  background: var(--foto, none), linear-gradient(135deg, #f2cfcf 0%, #f4dcc0 50%, #e8bfc0 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+
+/* ================= Tablet y escritorio (≥ 768px) ================= */
+@media (min-width: 768px) {
+  .petalo .hero { min-height: clamp(320px, 26vw, 480px); padding: 48px 16px; }
+  .petalo .section-sub { margin-bottom: 40px; }
+  .petalo .split-text { min-height: 440px; }
+  .petalo .split-media { min-height: 440px; }
+  .petalo .faq { padding: 64px 0; }          /* en escritorio el <main> ya trae su padding */
+  
+}
+
+/* ================= Carrusel de productos ================= */
+.petalo .productos { background: #fff; }
+.petalo .carrusel { position: relative; }
+.petalo .carrusel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding: 4px 4px 20px;          /* espacio para que no se corte la sombra */
+  margin: 0 -4px;
+  -webkit-overflow-scrolling: touch;
+}
+.petalo .carrusel-track::-webkit-scrollbar { display: none; }
+
+/* Celular: 1 tarjeta y un pedazo de la siguiente, para que se note que se desliza */
+.petalo .carrusel-item { flex: 0 0 78%; scroll-snap-align: start; }
+
+.petalo .producto { background: #fff; border-radius: 14px; box-shadow: var(--pt-shadow); overflow: hidden; }
+.petalo .producto img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.petalo .producto .card-body { padding: 16px; }
+.petalo .producto h3 { font-size: 1rem; margin: 0 0 4px; }
+.petalo .producto .precio { font-weight: 600; color: var(--pt-muted); margin: 0 0 14px; }
+
+/* Flechas: solo desde tablet (en celular se desliza con el dedo) */
+.petalo .carrusel-btn {
+  display: none;
+  position: absolute; top: 40%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--pt-text); background: var(--pt-lime); color: var(--pt-text);
+  place-items: center; font-size: 1.1rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+  z-index: 2;
+}
+.petalo .carrusel-btn:hover:not(:disabled) { background: var(--pt-lime-dark); }
+.petalo .carrusel-btn:disabled { opacity: .35; cursor: default; }
+.petalo .carrusel-btn:focus-visible { outline: 3px solid var(--pt-text); outline-offset: 2px; }
+.petalo .carrusel-prev { left: -22px; }
+.petalo .carrusel-next { right: -22px; }
+
+@media (min-width: 576px) {   /* 2 tarjetas */
+  .petalo .carrusel-item { flex-basis: calc((100% - 16px) / 2); }
+}
+@media (min-width: 768px) {   /* 3 tarjetas + flechas */
+  .petalo .carrusel-item { flex-basis: calc((100% - 32px) / 3); }
+  .petalo .carrusel-btn { display: grid; }
+}
+@media (min-width: 992px) {   /* 4 tarjetas */
+  .petalo .carrusel-item { flex-basis: calc((100% - 48px) / 4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .petalo .carrusel-track { scroll-behavior: auto; }
+}
