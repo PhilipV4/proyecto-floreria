@@ -1,0 +1,65 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; color: #333; background-color: #f8f9fa; padding: 20px; }
+        .container { max-width: 600px; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .header { text-align: center; border-bottom: 2px solid #28a745; padding-bottom: 15px; margin-bottom: 20px; }
+        .header h2 { color: #28a745; margin: 0; }
+        .details { margin-bottom: 20px; }
+        .details p { margin: 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: left; font-size: 14px; }
+        th { background-color: #f8f9fa; }
+        .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>¡Gracias por tu compra, {{ orden.nombre_cliente_correo }}! 🌸</h2>
+            <p>Tu pedido ha sido recibido con éxito y ya lo estamos preparando.</p>
+        </div>
+
+        <div class="details">
+            <p><strong>Número de Pedido:</strong> #{{ orden.id }}</p>
+            <p><strong>Fecha de Entrega Programada:</strong> {{ orden.fecha_entrega }}</p>
+            <p><strong>Destinatario:</strong> {{ orden.nombre_destinatario }}</p>
+            <p><strong>Dirección de Despacho:</strong> {{ orden.direccion_envio }}, {{ orden.comuna }}</p>
+            {% if orden.nota_tarjeta %}
+                <p><strong>Dedicatoria:</strong> <em>"{{ orden.nota_tarjeta }}"</em></p>
+            {% endif %}
+        </div>
+
+        <h4>Resumen de Productos</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in orden.items.all %}
+                <tr>
+                    <td>{{ item.producto_nombre }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>${{ item.subtotal |floatformat:"0g" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total">
+            Total Pagado: ${{ orden.total |floatformat:"0g"  }}
+        </div>
+
+        <p style="text-align: center; color: #6c757d; font-size: 12px; margin-top: 30px;">
+            Este es un correo automático de tu florería. Si tienes dudas, contáctanos.
+        </p>
+    </div>
+</body>
+</html>
+
+#Agregar nombre de cliente si es invitado.

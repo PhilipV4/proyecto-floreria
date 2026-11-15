@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tienda',
     'carrito',
+    'pedidos',
     'django_browser_reload',
 ]
 
@@ -140,3 +141,16 @@ ROLES = (
     ('cliente', 'Cliente'),
     ('admin', 'Administrador'),
 )
+
+#configuración de correo electrónico
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+#EMAIL_HOST_USER = 'tucorreo@gmail.com'          
+#EMAIL_HOST_PASSWORD = 'tu_password_de_app'      
+#DEFAULT_FROM_EMAIL = 'Florería <tucorreo@gmail.com>'
+
+# Configuración de Correo para Desarrollo Local (Se imprime en la terminal)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'Florería <noreply@floreria.cl>'

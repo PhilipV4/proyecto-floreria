@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('tienda.urls')),
     path('carrito/', include('carrito.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
+    path('pedidos/', include('pedidos.urls')),
 
 ]
 
