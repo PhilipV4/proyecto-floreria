@@ -119,6 +119,11 @@ def detalle_producto(request, id):
         'producto': producto,
     })
 
+#INICIO 
+def inicio(request):
+    productos_destacados = Producto.objects.all()[:8]   # ajusta el modelo y el filtro
+    return render(request, 'inicio.html', {'productos_destacados': productos_destacados})
+
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
     #pero mejor hacerlo en la vista.

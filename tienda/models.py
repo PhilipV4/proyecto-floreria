@@ -15,6 +15,9 @@ class CustomUser(AbstractUser):
     telefono = models.CharField(max_length=20, blank=True, null=True, verbose_name="Teléfono")
     direccion = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección")
     comuna = models.CharField(max_length=100, blank=True, null=True, verbose_name="Comuna")
+    
+    #Carrito
+    carrito_guardado = models.JSONField(default=dict, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username'] # Ya no pedirá username extra al crear superusuario

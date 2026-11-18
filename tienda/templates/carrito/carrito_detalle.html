@@ -1,7 +1,7 @@
 {% extends 'global_componentes/base.html' %}
-
+{% load static %}
 {% block content %}
-
+<link rel="stylesheet" href="{% static 'CSS/productos/detalle_producto.css' %}">
 <div class="py-5">
     <div class="container">
         <h1 class="text-center mb-2">Carrito de Compras</h1>
@@ -33,21 +33,32 @@
                                         {% endif %}
                                     </div>
 
-                                    <!-- Información del Producto (Nombre y Precio) -->
-                                    <div class="col-9 col-md-5">
+                                    <!-- Información del Producto -->
+                                    <div class="col-9 col-md-4">
                                         <h6 class="mb-1 fw-bold text-dark">{{ item.producto.nombre }}</h6>
                                         <p class="mb-0 text-muted small">Precio unitario: $ {{ item.precio|floatformat:"0g" }}</p>
-                                        <p class="mb-0 text-dark small fw-semibold">Subtotal: $ {{ item.subtotal|floatformat:"0g" }}</p>
+                                        <p class="mb-0 text-dark small fw-semibold">Subtotal: $ {{item.subtotal|floatformat:"0g" }}</p>
                                     </div>
 
-                                    <!-- Cantidad y Acciones -->
-                                    <div class="col-12 col-md-5 text-md-end mt-2 mt-md-0 d-flex justify-content-between justify-content-md-end align-items-center gap-3">
-                                        <span class="badge bg-light text-dark border px-3 py-2">
-                                            Cant: <strong>{{ item.cantidad }}</strong>
-                                        </span>
-                                        <a href="#" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </a>
+                                    <!-- Selector de cantidad con estilo + y - -->
+                                    <div class="col-6 col-md-3 mt-2 mt-md-0 text-center">
+                                        <div class="detalle-cantidad d-inline-flex align-items-center">
+                                            <button type="button" class="btn-menos" data-index="{{ item.producto.id }}"
+                                                aria-label="Disminuir">-</button>
+                                            <input type="number" class="cantidad-input"
+                                                data-index="{{ item.producto.id }}" value="{{ item.cantidad }}" min="1"
+                                                aria-label="Cantidad">
+                                            <button type="button" class="btn-mas" data-index="{{ item.producto.id }}"
+                                                aria-label="Aumentar">+</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón Eliminar -->
+                                    <div class="col-6 col-md-3 text-end mt-2 mt-md-0">
+                                        <button type="button" data-index="{{ item.producto.id }}"
+                                            class="btn btn-sm btn-outline-danger eliminar-producto">
+                                            <i class="bi bi-trash"></i> 
+                                        </button>
                                     </div>
 
                                 </div>
@@ -78,5 +89,89 @@
         </div>
     </div>
 </div>
+<script>
+    // Función centralizada para enviar la actualización al servidor via AJAX
+    function enviarActualizacion(productoId, nuevaCantidad) {
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'carrito_actualizar' %}",
+            data: {
+                producto_id: productoId,
+                cantidad: nuevaCantidad,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(json){
+                // Actualiza el contador global del navbar en tiempo real
+                $('#cantidad_carrito').text(json.cantidad);
+                localStorage.setItem('cart_count', json.cantidad);
+                
+                // Recarga la página para recalcular los subtotales y totales generales limpios
+                location.reload();
+            },
+            error: function(xhr, errmsg, err){
+                console.log("Error al actualizar la cantidad");
+            }
+        });
+    }
 
+    // 1. Botón Aumentar (+)
+    $(document).on('click', '.btn-mas', function(e){
+        e.preventDefault();
+        var productoId = $(this).data('index');
+        var input = $('.cantidad-input[data-index="' + productoId + '"]');
+        var nuevaCantidad = parseInt(input.val() || 1) + 1;
+        
+        input.val(nuevaCantidad);
+        enviarActualizacion(productoId, nuevaCantidad);
+    });
+
+    // 2. Botón Disminuir (-)
+    $(document).on('click', '.btn-menos', function(e){
+        e.preventDefault();
+        var productoId = $(this).data('index');
+        var input = $('.cantidad-input[data-index="' + productoId + '"]');
+        var nuevaCantidad = Math.max(1, parseInt(input.val() || 1) - 1);
+        
+        input.val(nuevaCantidad);
+        enviarActualizacion(productoId, nuevaCantidad);
+    });
+
+    // 3. Cambio directo escrito en el input
+    $(document).on('change', '.cantidad-input', function(e){
+        e.preventDefault();
+        var productoId = $(this).data('index');
+        var nuevaCantidad = parseInt($(this).val());
+        
+        if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
+            nuevaCantidad = 1;
+            $(this).val(1);
+        }
+        enviarActualizacion(productoId, nuevaCantidad);
+    });
+
+    // 4. Botón Eliminar producto
+    $(document).on('click', '.eliminar-producto', function(e){
+        e.preventDefault();
+        var productoId = $(this).data('index');
+
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'carrito_borrar' %}",
+            data: {
+                producto_id: productoId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(json){
+                $('#cantidad_carrito').text(json.cantidad);
+                localStorage.setItem('cart_count', json.cantidad);
+                location.reload();
+            },
+            error: function(xhr, errmsg, err){
+                console.log("Error al eliminar el producto");
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -42,7 +42,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    
+
                     <!--Ocasiones-->
                     <div class="col-12 col-md-6 col-sm-6 col-xl-12">
                         <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#ocasionbox"><i class="bi bi-calendar-date mx-1 mx-xl-3"></i>Ocasiones</button>
@@ -68,7 +68,7 @@
 
                     <!--Boton limpiar-->
                     {% if list_categorias or list_ocasiones %}
-                        <a href="{% url 'catalogo_productos' %}" class="btn btn-sm btn-link">Limpiar</a>
+                    <a href="{% url 'catalogo_productos' %}" class="btn btn-sm btn-link">Limpiar</a>
                     {% endif %}
                 </form>
             </div>
@@ -204,18 +204,18 @@
 
 <script>
     //Recordar estado de las casillas de filtros
-    (function (){
+    (function () {
         const filtros = document.querySelectorAll('.collapse[data-estado]');
 
         filtros.forEach(filtro => {
             const filter_id = 'collapse-' + filtro.id;
             const button = document.querySelector('[data-bs-target="#' + filtro.id + '"]');
 
-            if (sessionStorage.getItem(filter_id) === 'abierto'){
+            if (sessionStorage.getItem(filter_id) === 'abierto') {
                 filtro.classList.add('show');
-                if(button){
+                if (button) {
                     button.classList.remove('collapsed')
-                    button.setAttribute('aria-expanded','true');
+                    button.setAttribute('aria-expanded', 'true');
                 }
             }
 
@@ -223,29 +223,33 @@
             filtro.addEventListener('hidden.bs.collapse', () => sessionStorage.setItem(filter_id, 'cerrado'));
         });
     })();
-    
+
     // Usamos la clase .agregar-carrito en lugar del ID
-    $(document).on('click', '.agregar-carrito', function(e){
+    $(document).on('click', '.agregar-carrito', function (e) {
         e.preventDefault();
-        
+
         var productoId = $(this).val(); // Captura el ID del botón específico que se presionó
 
         $.ajax({
-        type: 'POST',
-        url: "{% url 'carrito_agregar' %}",
-        data: {
-            producto_id: productoId,
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            action: 'post' 
-        },
-        success: function(json){
-            console.log("Producto agregado:", json);
-            document.getElementById('cantidad_carrito').textContent = json.cantidad;
-            // Opcional: Aquí puedes actualizar un contador flotante en tu navbar si lo deseas
-        },
-        error: function(xhr, errmsg, err){
-            console.log("Error al agregar al carrito");
-        }
+            type: 'POST',
+            url: "{% url 'carrito_agregar' %}",
+            data: {
+                producto_id: productoId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function (json) {
+                console.log("Producto agregado:", json);
+
+                // 1. Actualiza el contador en la página actual
+                $('#cantidad_carrito').text(json.cantidad);
+
+                // 2. NUEVO: Guarda el valor en el almacenamiento local del navegador
+                localStorage.setItem('cart_count', json.cantidad);
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("Error al agregar al carrito");
+            }
         });
     });
 </script>

@@ -151,10 +151,14 @@
                    action: 'post' 
                },
                success: function(json){
-                   console.log("Producto agregado:", json);
-                   // Actualiza el contador global del carrito en el navbar (igual que en el catálogo)
-                   document.getElementById('cantidad_carrito').textContent = json.cantidad;
-               },
+                console.log("Producto agregado:", json);
+                
+                // 1. Actualiza el contador en la página actual
+                $('#cantidad_carrito').text(json.cantidad);
+                
+                // 2. NUEVO: Guarda el valor en el almacenamiento local del navegador
+                localStorage.setItem('cart_count', json.cantidad);
+            },
                error: function(xhr, errmsg, err){
                    console.log("Error al agregar al carrito");
                }
