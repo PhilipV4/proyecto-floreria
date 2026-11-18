@@ -2,10 +2,12 @@
 
     :root {
     --text-dark: #2d3748;  
+    --text-gray: #545a66;  
+    --text-lightgray: #898b8d;
     --dark-leaf: #2f8344;
     --text-light: #eef1f5;       
     --light-leaf: #7dc262;  
-    --filter-bg: #cccbcb;
+    --filter-bg: #e6e6e6;
     --font-heading: 'Georgia', serif;
     --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -30,10 +32,19 @@
             height: auto;
             margin: clamp(0.4rem, 0.2rem + 1vw, 1rem);
         }
+    
+        .flower-productbox{
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            border: none;
+        }
 
     
     .flower-tagbox{
         max-width: 100%;
+    }
+
+    .flower-prodimg{
+        min-height: 100% !important;
     }
 
     .flower-tag{
@@ -46,7 +57,7 @@
         border-bottom-left-radius: clamp(2px, 0.5vw, 4px);
         box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5);
         display: inline-flex;
-        max-width: clamp(4rem, 2.5rem + 8vw, 6.5rem);
+        max-width: clamp(6rem, 2.5rem + 8vw, 8.5rem);
     }
 
     .flower-tagname{
@@ -95,6 +106,7 @@
         border: none;
     }
 
+
     .flower-check{
         display: none;
     }
@@ -102,6 +114,7 @@
     #categoriabox, #ocasionbox{
         background-color: var(--filter-bg);
         border-radius: clamp(10px, 1vw, 12px);
+        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
         padding: 5px;
     }
 
@@ -127,6 +140,98 @@
         white-space: nowrap;
     }
 
+    /* search error */
+
+        .search-errorbox{
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+
+        .search-errortext{
+            font-style: italic;
+        }
+
+    /* no filter */
+
+        .nofilter-text{
+            font-style: italic;
+            text-align: center;
+        }
+    /* no product */
+
+        .noproduct-box{
+            background-color: var(--filter-bg);
+            border-radius: clamp(10px, 1vw, 12px);
+            text-align: center;
+            width: clamp(22rem, 8rem + 20vw, 30rem);
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .noproduct-icon{
+            margin-top: clamp(0.4rem, 0.2rem + 0.4vw, 0.9rem);
+            font-size: clamp(5.5rem, 2.5rem + 4vw, 8rem);
+            color: var(--filter-bg);
+        }
+
+        .noproduct-circle{
+            background-color: var(--text-dark);
+            border-radius: 50%;
+            width: clamp(9rem, 4rem + 8vw, 12rem);
+            margin-bottom: clamp(0.8rem, 0.2rem + 1.8vw, 5rem);
+        }
+
+        .noproduct-title{
+            font-size: clamp(1.8rem, 0.6rem + 0.5vw, 5rem);
+            color: var(--text-dark);
+            font-weight: bold;
+            margin-top: clamp(0.4rem, 0.2rem + 0.4vw, 0.9rem);
+            margin-bottom: clamp(0.4rem, 0.2rem + 0.4vw, 0.9rem);
+            text-align: center;
+        }
+
+        .noproduct-text{
+            font-size: clamp(0.4rem, 0.8rem + 0.5vw, 1.2rem);
+            color: var(--text-gray);
+            text-align: center;
+            margin: clamp(0.4rem, 0.2rem + 0.4vw, 0.9rem) clamp(0.4rem, 0.2rem + 0.4vw, 0.9rem) clamp(1rem, 0.2rem + 1vw, 2rem) clamp(0.4rem, 0.2rem + 0.4vw, 0.9rem);
+        }
+    
+    /* paginación */
+        .pagination{
+            gap: 0.8rem;
+        }
+
+        ul.pagination .page-item .page-link{
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            box-sizing: border-box;
+            text-align: center !important;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flower-pagebox{
+            /*background-color: white;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;*/
+            width: fit-content;
+            margin: auto;
+            border-radius: 30px;
+        }    
+
+        .flower-pageitem{
+            font-weight: bold;
+        }
+
+        .flower-pageitem a{
+            text-align: center;
+            font-size: clamp(0.6rem, 0.8rem + 0.5vw, 1rem); 
+            border-radius: 50% !important;
+        }
+
 /*== ANIMACIONES ==*/
 
     /*== Animación sobrepuesta ==*/
@@ -140,4 +245,30 @@
         .flower-productbox:focus-within .flower-cartbtn{
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* btn carrito mobile */
+        @media (hover: none){
+            .flower-cartbtn{
+                opacity: 1;
+                transform: none;
+                pointer-events: none; 
+                justify-content: end !important;
+            }
+
+            .box-cartbtn{
+                justify-content: end !important;
+            }
+
+            .flower-cartbtn .btn{
+                pointer-events: auto;
+                width: 3rem;
+                height: 3rem;
+                padding: 0;
+                border-radius: 25%;
+            }
+
+            .text-cartbtn{
+                display: none;
+            }
         }

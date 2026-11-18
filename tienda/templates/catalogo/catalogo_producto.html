@@ -9,48 +9,60 @@
 </head>
 
 <!--Body-->
-<div class="container-fluid px-1 my-4" >
+<div class="container-fluid my-4 px-xl-5" >
 
     <div class="card mb-5" style="height: 100px;"></div>
-
-    <!--Barra busquedas-->
     
     <!--Contenedor principal-->
     <div class="row g-4 flower-catalogo">
         <!--Recuadro Filtros-->
-        <div class="col-12 col-xl-2">
+        <div class="col-12 col-xxl-3 col-xl-3">
             <div class="" id="catalogo-filtros">
-                <form class="row" method="get" id="form-filtros">
+                <form class="row g-4 mx-md-5 mx-lg-5 mx-xl-0" method="get" id="form-filtros">
 
                     <!--Categorias-->
-                    <div class="col-6 col-xl-12">
-                        <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#categoriabox"><i class="bi bi-chevron-down mx-2"></i>Categorias</button>
+                    <div class="col-12 col-md-6 col-sm-6 col-xl-12">
+                        <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#categoriabox"><i class="bi bi-bookmark mx-1 mx-xl-3"></i>Categorías</button>
                         <div class="collapse" id="categoriabox" data-estado>
-                            {% for cat in categorias %}
-                            <div class="form-check flower-sidetag">
-                                <input class="form-check-input flower-check" type="checkbox" name="categoria" 
-                                    value="{{ cat.id }}" id="cat-{{ cat.id }}"
-                                    {% if cat.id in list_categorias %}checked{% endif %}
-                                    onchange="this.form.submit()">
-                                <label class="form-check-label flower-sidetagname" for="cat-{{ cat.id }}">{{ cat.nombre }}</label>
-                            </div>
-                            {% endfor %}
+                            {% if categorias %}
+                                {% for cat in categorias %}
+                                    <div class="form-check flower-sidetag">
+                                        <input class="form-check-input flower-check" type="checkbox" name="categoria" 
+                                            value="{{ cat.id }}" id="cat-{{ cat.id }}"
+                                            {% if cat.id in list_categorias %}checked{% endif %}
+                                            onchange="this.form.submit()">
+                                        <label class="form-check-label flower-sidetagname" for="cat-{{ cat.id }}">{{ cat.nombre }}</label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="row d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-info-circle col-1"></i>
+                                    <label class="nofilter-text col-10">No hay filtros disponibles</label>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     
                     <!--Ocasiones-->
-                    <div class="col-6 col-xl-12">
-                        <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#ocasionbox"><i class="bi bi-chevron-down mx-2"></i>Ocasiones</button>
+                    <div class="col-12 col-md-6 col-sm-6 col-xl-12">
+                        <button class="flower-filtertitle btn btn-outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#ocasionbox"><i class="bi bi-calendar-date mx-1 mx-xl-3"></i>Ocasiones</button>
                         <div class="collapse" id="ocasionbox" data-estado>
-                            {% for oca in ocasiones %}
-                            <div class="form-check flower-sidetag">
-                                <input class="form-check-input flower-check" type="checkbox" name="ocasion"
-                                    value="{{ oca.id }}" id="oca-{{ oca.id }}"
-                                    {% if oca.id in list_ocasiones %}checked{% endif %}
-                                    onchange="this.form.submit()">
-                                <label class="form-check-label flower-sidetagname" for="oca-{{ oca.id }}">{{ oca.nombre }}</label>
-                            </div>
-                            {% endfor %}
+                            {% if ocasiones %}
+                                {% for oca in ocasiones %}
+                                    <div class="form-check flower-sidetag">
+                                        <input class="form-check-input flower-check" type="checkbox" name="ocasion"
+                                            value="{{ oca.id }}" id="oca-{{ oca.id }}"
+                                            {% if oca.id in list_ocasiones %}checked{% endif %}
+                                            onchange="this.form.submit()">
+                                        <label class="form-check-label flower-sidetagname" for="oca-{{ oca.id }}">{{ oca.nombre }}</label>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="row d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-info-circle col-1"></i>
+                                    <label class="nofilter-text col-10">No hay filtros disponibles</label>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -63,92 +75,129 @@
         </div>
 
         <!--Catalogo de productos-->
-        <div class="col-12 col-xl-10" >
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 g-2 g-md-3">
-            {% for prod in productos %}
-                <div class="col">          
-                    <!--Recuadro del producto-->
-                    <div class="card shadow-sm flower-productbox">
+        {% if productos %}
+            <div class="col-12 mt-5 mt-xl-0 col-xxl-9 col-xl-9" >
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-3 row-cols-xxl-4 g-2 g-md-3">
+                {% for prod in productos %}
+                    <div class="col">          
+                        <!--Recuadro del producto-->
+                        <div class="card flower-productbox">
 
-                        <!--Imagen producto-->
-                        <div class="ratio position-relative overflow-hidden flower-boxratio">
-                        <a href="{% url 'detalle_producto' prod.id %}">
-                            {% if prod.imagen %}
-                            <img src="{{prod.imagen.url}}" class="card-img-top" alt="{{prod.nombre}}">
-                            {% else %}
-                            <img src="/static/Placeholder.jpg" class="card-img-top" alt="{{prod.nombre}}">
-                            {% endif %}
-                         </a>
-                            <!--Etiquetas de categoría y ocasión-->
-                            <p class="card-text text-muted position-absolute top-0 start-0 m-2 flower-tagbox">
-                                {% if prod.categoria %}
-                                    <span class="badge  flower-tag"><span class="flower-tagname" title="{{prod.categoria.nombre}}">{{prod.categoria.nombre}}</span></span>
-                                {% endif %}
-                                {% if prod.ocasion %}
-                                    <span class="badge  flower-tag"><span class="flower-tagname" title="{{prod.ocasion.nombre}}">{{prod.ocasion.nombre}}</span></span>
-                                {% endif %}
-                            </p>
+                            <!--Imagen producto-->
+                            <div class="ratio position-relative overflow-hidden flower-boxratio">
+                                <a href="{% url 'detalle_producto' prod.id %}">
+                                    {% if prod.imagen %}
+                                    <img src="{{prod.imagen.url}}" class="card-img-top flower-prodimg" alt="{{prod.nombre}}">
+                                    {% else %}
+                                    <img src="/static/Placeholder.jpg" class="card-img-top" alt="{{prod.nombre}}">
+                                    {% endif %}
+                                </a>
+                                <!--Etiquetas de categoría y ocasión-->
+                                <p class="card-text text-muted position-absolute top-0 start-0 m-2 flower-tagbox">
+                                    {% if prod.categoria %}
+                                        <span class="badge  flower-tag"><span class="flower-tagname" title="{{prod.categoria.nombre}}">{{prod.categoria.nombre}}</span></span>
+                                    {% endif %}
+                                    {% if prod.ocasion %}
+                                        <span class="badge  flower-tag"><span class="flower-tagname" title="{{prod.ocasion.nombre}}">{{prod.ocasion.nombre}}</span></span>
+                                    {% endif %}
+                                </p>
 
-                            <!--Boton agragar al carrito-->
-                            <div class="flower-cartbtn position-absolute bottom-0 start-0 end-0 p-3">
-                                <div class="d-flex justify-content-center">
-                                    <!-- Ojo: Cambiamos id por class="agregar-carrito" -->
-                                    <button value="{{ prod.id }}"
-                                        class="btn btn-primary btn-md d-flex align-items-center justify-content-center gap-2 agregar-carrito">
-                                        <i class="bi bi-cart-plus-fill fs-4"></i>
-                                        <span>Agregar al carrito</span>
-                                    </button>
+                                <!--Boton agragar al carrito-->
+                                <div class="flower-cartbtn position-absolute bottom-0 p-2 p-md-3">
+                                    <div class="d-flex justify-content-center box-cartbtn">
+                                        <button value="{{ prod.id }}" class="btn btn-primary btn-md d-flex align-items-center justify-content-center gap-2 agregar-carrito">
+                                            <i class="bi bi-cart-plus-fill fs-4 lh-1"></i>
+                                            <span class="text-cartbtn">Agregar al carrito</span>
+                                        </button>
+                                    </div>
                                 </div>
+
+                            </div>
+
+                            <!--Info del producto-->
+                            <div class="card-body d-flex flex-column align-items-center">
+                                <h5 class="text-center w-100 flower-productname">{{prod.nombre}}</h5>
+                                <span class="fs-5 flower-pricetext">$<span class="fs-5 fw-bold flower-pricetext">{{prod.precio|floatformat:"0g"}}</span></span>
                             </div>
 
                         </div>
+                    </div>
+                    {% endfor %}
+                </div>
 
-                        <!--Info del producto-->
-                        <div class="card-body d-flex flex-column align-items-center">
-                            <h5 class="text-center w-100 flower-productname">{{prod.nombre}}</h5>
-                            <span class="fs-5 flower-pricetext">$<span class="fs-5 fw-bold flower-pricetext">{{prod.precio|floatformat:"0g"}}</span></span>
+                <!--Paginación-->
+                {% if pag_num.has_other_pages %}
+                    <nav aria-label="Catalogo-paginación d-flex justify-content-center" class="mt-5">
+                        <ul class="pagination justify-content-center flex-wrap flower-pagebox">
+
+                            {% if pag_num.has_previous %}
+                                {% if pag_num.previous_page_number != 1 %}
+                                    <!--Primera pagina-->
+                                    <li class="page-item flower-pageitem" >
+                                        <a class="page-link" title="Primera página" href="?{% if querystring  %}{{ querystring }}&{% endif %}page=1">&laquo;</a>
+                                    </li>
+                                {% endif %}
+                                <!--Pagina previa-->
+                                <li class="page-item flower-pageitem">
+                                    <a class="page-link" title="Página anterior" href="?{% if querystring  %}{{ querystring }}&{% endif %}page={{ pag_num.previous_page_number }}"> &lsaquo; </a>
+                                </li>   
+                            {% endif %} 
+
+                            <!--Rango de paginas-->
+                            {% for n in pag_num.paginator.page_range %}
+                                <!--pagina actual-->
+                                {% if n == pag_num.number %}
+                                    <li class="page-item active flower-pageitem">
+                                        <span class="page-link" title="Página actual">{{ n }}</span>
+                                    </li>
+                                <!--Rango de paginas siempre visible-->
+                                {% elif n >= pag_num.number|add:'-1' and n <= pag_num.number|add:'1' %}
+                                    <li class="page-item flower-pageitem">
+                                        <a class="page-link" title="Página {{ n }}" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n }}</a>
+                                    </li>
+                                <!--Rango de paginas ocultas en movil-->
+                                {% elif n >= pag_num.number|add:'-2' and n <= pag_num.number|add:'2' %}
+                                    <li class="page-item d-none d-sm-block flower-pageitem">
+                                        <a class="page-link" title="Página {{ n }}" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            
+                            {% if pag_num.has_next %}
+                                <!--Pagina siguiente-->
+                                <li class="page-item flower-pageitem">
+                                    <a class="page-link" title="Página siguiente" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ pag_num.next_page_number }}"> &rsaquo; </a>
+                                </li>
+                                {% if pag_num.next_page_number != pag_num.paginator.num_pages %}
+                                    <!--Ultima pagina-->
+                                    <li class="page-item flower-pageitem">
+                                        <a class="page-link" title="Última página" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ pag_num.paginator.num_pages }}">&raquo;</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                {% endif %}
+
+            </div>
+        {% else %}
+        <!--Catalogo vacío-->
+            <div class="col-12 col-xl-9 col-xxl-9 d-flex flex-column align-items-center justify-content-center mt-5 mt-xl-0">
+                <div class="ratio ratio-1x1 noproduct-box">
+                    <div class="d-flex flex-column align-items-center justify-content-center">
+                        <div class="noproduct-circle ratio ratio-1x1">
+                            <div class="d-flex flex-column align-items-center justify-content-center"> 
+                                <i class="bi bi-cart-x noproduct-icon"></i>
+                            </div>
                         </div>
-
+                        <h1 class="fw-bold noproduct-title">¡Ups, algo ocurrió!</h1>
+                        <h2 class="noproduct-text">Lo sentimos, no se encontraron productos registrados o que coincidan con los filtros seleccionados.</h2>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-        </div>
-
-        <!--Paginación-->
-        {% if pag_num.has_other_pages %}
-            <nav aria-label="Catalogo-paginación" class="mt-4">
-                <ul class="pagination justify-content-center flex-wrap">
-
-                    <!--Pagina previa-->
-                    {% if pag_num.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?{% if querystring  %}{{ querystring }}&{% endif %}page={{ pag_num.previous_page_number }}">&laquo;</a>
-                        </li>   
-                    {% endif %} 
-
-                    <!--Rango de paginas-->
-                    {% for n in pag_num.paginator.page_range %}
-                        {% if n == pag_num.number %}
-                            <li class="page-item active">
-                                <span class="page-link">{{ n }}</span>
-                            </li>
-                        {% elif n >= pag_num.number|add:'-2' and n <= pag_num.number|add:'2' %}
-                            <li class="page-item">
-                                <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-
-                    <!--Pagina siguiente-->
-                    {% if pag_num.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ pag_num.next_page_number }}">&raquo;</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+        {% endif%}
 
     </div>
 </div>

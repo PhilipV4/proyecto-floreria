@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     comuna = models.CharField(max_length=100, blank=True, null=True, verbose_name="Comuna")
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [] # Ya no pedirá username extra al crear superusuario
+    REQUIRED_FIELDS = ['username'] # Ya no pedirá username extra al crear superusuario
 
     def save(self, *args, **kwargs):
         # Asigna automáticamente el correo como username por debajo

@@ -1,0 +1,102 @@
+<style>
+    .flower-coincidencias
+    {
+    top: 100%;
+    z-index: 1050;
+    max-height: 60vh;
+    overflow-y: auto;
+    }
+</style>
+
+
+<form method="get" action="{% url 'catalogo_productos' %}" class="position-relative buscador-nav me-lg-3 my-2 my-lg-0" id="busqueda-form" autocomplete="off">
+    <div class="input-group">
+        <input type="search" name="q" id="busqueda-input" class="form-control" placeholder="Busque productos, categorias u ocaciones..." data-url="{% url 'busqueda' %}">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+    </div>
+    
+    <div id="busqueda-coincidencias" class="list-group position-absolute w-100 d-none flower-coincidencias"></div>
+</form>
+
+<script>
+    (function(){
+        const input = document.getElementById('busqueda-input');
+        const coin = document.getElementById('busqueda-coincidencias');
+        
+        let temporizador = null;
+        let controlador = null;
+
+        function close_coin(){
+            coin.classList.add('d-none');
+            coin.replaceChildren();
+        }
+
+        function draw_coin(coincidencias){
+            coin.replaceChildren();
+
+            if(!coincidencias.length){
+                const empty_coin = document.createElement('div');
+                empty_coin.className = 'list-group-item text-muted';
+                
+                const text = document.createElement('span');
+                text.textContent = 'No hay coincidencias con tu búsqueda'
+                text.className = 'search-errortext'
+
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-info-circle mx-2'
+
+                empty_coin.append(icon, text)
+                coin.appendChild(empty_coin);
+            }
+
+            coincidencias.forEach(c =>{
+                const item = document.createElement('a');
+                item.href = c.url;
+                item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+
+                const text = document.createElement('span');
+                text.textContent = c.texto;
+
+                const type = document.createElement('span');
+                type.className = 'badge text-bg-light';
+                type.textContent = c.tipo;
+
+                item.append(text, type);
+                coin.appendChild(item);
+            });
+
+            coin.classList.remove('d-none');
+
+        }
+
+        async function search_coin(){
+            const q = input.value.trim();
+            if(q.length < 2) {close_coin(); return;}
+
+            if(controlador) controlador.abort();
+            controlador = new AbortController();
+
+            try{
+                const search_answer = await fetch(input.dataset.url + '?q=' + encodeURIComponent(q), {signal: controlador.signal});
+                const search_data = await search_answer.json();
+                draw_coin(search_data.coincidencias)
+            }catch(e){
+                if(e.name !== 'AbortError') close_coin();
+            }
+        }
+
+        input.addEventListener('input', ()=>{
+            clearTimeout(temporizador);
+            temporizador = setTimeout(search_coin, 250);
+        });
+
+        document.addEventListener('click', e =>{
+            if(!e.target.closest('#busqueda-form'))close_coin();
+        });
+
+        input.addEventListener('keydown', e =>{
+            if (e.key === 'Escape')close_coin();
+        });
+
+    })();
+</script>

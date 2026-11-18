@@ -187,17 +187,9 @@
 
 
                 </ul>
-                <!-- Buscador -->
-                <form class="d-flex buscador-nav me-lg-3 my-2 my-lg-0" action="" method="GET" role="search">
-                    <div class="input-group">
-                        <input class="form-control" type="search" name="q" placeholder="Buscar productos..."
-                            aria-label="Buscar productos">
 
-                        <button class="btn btn-primary" type="submit" aria-label="Buscar">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
+                <!-- Buscador -->
+                {% include 'catalogo/busqueda.html' %}
 
             </div>
 
@@ -243,7 +235,7 @@
         </div>
     </div>
 
-    <main class="container my-4 px-1 px-md-5 flex-grow-1">
+    <main class="container-fluid my-4 px-1 px-xl-5 flex-grow-1">
         {% block content %}
 
         {% endblock %}
