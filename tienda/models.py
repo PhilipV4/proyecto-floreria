@@ -20,7 +20,7 @@ class CustomUser(AbstractUser):
     carrito_guardado = models.JSONField(default=dict, blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [] # Ya no pedirá username extra al crear superusuario
+    REQUIRED_FIELDS = ['username'] # Ya no pedirá username extra al crear superusuario
 
     def save(self, *args, **kwargs):
         # Asigna automáticamente el correo como username por debajo

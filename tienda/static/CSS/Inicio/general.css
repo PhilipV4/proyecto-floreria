@@ -5,8 +5,8 @@
 
 :root {
   --pt-lime: #FFC5D3;        /* color base */
-  --pt-lime-dark: #FFC5D3;   /* hover de botones */
-  --pt-lime-soft: #FFC5D3;   /* 50% lima + 50% blanco */
+  --pt-lime-dark: #b68a9f;   /* hover de botones */
+  --pt-lime-soft: #EEF4B0;   /* 50% lima + 50% blanco */
   --pt-lime-tint: #F7FAD8;   /* 25% lima + 75% blanco */
   --pt-text: #26300F;
   --pt-muted: #5D6642;
@@ -63,7 +63,7 @@ body:has(.petalo) { overflow-x: clip; }
   /* Con tu foto: define --foto en la sección. Sin foto se ve el degradado. */
   background: var(--foto, none), linear-gradient(135deg, #f3d9dc 0%, #f2dcae 45%, #c9d9b8 100%);
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 30%;   /* sube o baja la parte de la foto que se ve: 0% = arriba, 100% = abajo */
 }
 .petalo .hero-card { width: 100%; max-width: 520px; background: rgba(240, 228, 208, .93); text-align: center; border-radius: 6px; }
 .petalo .hero-card h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(1.6rem, 6vw, 2.6rem); line-height: 1.2; margin: 0 0 12px; }
@@ -101,7 +101,7 @@ body:has(.petalo) { overflow-x: clip; }
   --bs-accordion-active-bg: #fff;
   --bs-accordion-btn-icon: var(--pt-chevron);
   --bs-accordion-btn-active-icon: var(--pt-chevron);
-  --bs-accordion-btn-focus-box-shadow: 0 0 0 .2rem rgba(221, 233, 97, .6);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 .2rem rgba(255, 255, 255, 0.6);
   --bs-accordion-body-padding-x: 1.25rem;
 }
 .petalo .accordion-item { border-radius: 10px; overflow: hidden; box-shadow: var(--pt-shadow); }
@@ -110,76 +110,61 @@ body:has(.petalo) { overflow-x: clip; }
 .petalo .accordion-button::after { width: 28px; height: 28px; flex: none; border-radius: 50%; background-color: var(--pt-lime-soft); background-size: 12px; background-position: center; }
 .petalo .accordion-body { color: var(--pt-muted); font-size: .9rem; padding-top: 0; }
 
-/* ---------- 6. Foto final ---------- */
-.petalo .final-photo {
-  height: 300px;
-  background: var(--foto, none), linear-gradient(135deg, #f2cfcf 0%, #f4dcc0 50%, #e8bfc0 100%);
-  background-size: cover;
-  background-position: center;
-}
+/* ---------- 6. Banner final (Transbank) ---------- */
+/* La imagen lleva texto: se muestra entera (height:auto) para que nunca se recorte */
+.petalo .final-banner { background: linear-gradient(180deg, #fce3df 0%, #fbc7d4 100%); }
+.petalo .final-banner img { display: block; width: 100%; max-width: 1100px; height: auto; margin: 0 auto; }   /* baja o sube el 1100px para cambiar la altura */
 
+/* ---------- Navbar y footer del base.html en lima (solo en esta landing) ----------
+   Ajusta los selectores si header.css / footer.css usan otros nombres. */
+body:has(.petalo) .navbar-floreria { background: var(--pt-lime); }
+body:has(.petalo) .navbar-floreria .nav-link,
+body:has(.petalo) .navbar-floreria .nav-link.active { color: var(--pt-text); }
+body:has(.petalo) .custom-footer { background: var(--pt-lime); }
+body:has(.petalo) .custom-footer :is(h5, h6, p, a, i) { color: var(--pt-text); }
 
 /* ================= Tablet y escritorio (≥ 768px) ================= */
 @media (min-width: 768px) {
-  .petalo .hero { min-height: clamp(320px, 26vw, 480px); padding: 48px 16px; }
+  .petalo .hero { min-height: clamp(320px, 26vw, 480px); padding: 48px 16px; }   /* más alto = menos zoom, más bajo = más zoom */
   .petalo .section-sub { margin-bottom: 40px; }
   .petalo .split-text { min-height: 440px; }
   .petalo .split-media { min-height: 440px; }
   .petalo .faq { padding: 64px 0; }          /* en escritorio el <main> ya trae su padding */
-  
 }
 
-/* ================= Carrusel de productos ================= */
+/* ================= Carrusel de productos (carousel de Bootstrap, páginas de 4) ================= */
 .petalo .productos { background: #fff; }
-.petalo .carrusel { position: relative; }
-.petalo .carrusel-track {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  padding: 4px 4px 20px;          /* espacio para que no se corte la sombra */
-  margin: 0 -4px;
-  -webkit-overflow-scrolling: touch;
-}
-.petalo .carrusel-track::-webkit-scrollbar { display: none; }
+.petalo .carousel-item { padding: 8px 0 16px; }            /* espacio para que no se corte la sombra */
 
-/* Celular: 1 tarjeta y un pedazo de la siguiente, para que se note que se desliza */
-.petalo .carrusel-item { flex: 0 0 78%; scroll-snap-align: start; }
+.petalo .carousel .card { background: #fff; border-radius: 14px; box-shadow: var(--pt-shadow); overflow: hidden; }
+.petalo .rel-img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.petalo .rel-nombre { font-size: .95rem; margin: 8px 0 4px; }
+.petalo .rel-precios { font-size: .95rem; margin-bottom: 12px; }
+.petalo .rel-precios del { color: var(--pt-muted); font-size: .85rem; margin-right: 4px; }
+.petalo .rel-precios span { font-weight: 600; }
+.petalo .rel-badge { background: var(--pt-lime); color: var(--pt-text); border: 1px solid var(--pt-text); font-weight: 600; max-width: calc(100% - 1rem); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.petalo .rel-btn { --bs-btn-padding-y: .5rem; --bs-btn-padding-x: .75rem; font-size: .78rem; }
 
-.petalo .producto { background: #fff; border-radius: 14px; box-shadow: var(--pt-shadow); overflow: hidden; }
-.petalo .producto img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-.petalo .producto .card-body { padding: 16px; }
-.petalo .producto h3 { font-size: 1rem; margin: 0 0 4px; }
-.petalo .producto .precio { font-weight: 600; color: var(--pt-muted); margin: 0 0 14px; }
-
-/* Flechas: solo desde tablet (en celular se desliza con el dedo) */
-.petalo .carrusel-btn {
+/* Flechas: círculos de color, solo desde tablet (en celular se desliza con el dedo) */
+.petalo .rel-ctrl {
   display: none;
-  position: absolute; top: 40%; transform: translateY(-50%);
-  width: 44px; height: 44px; border-radius: 50%;
-  border: 2px solid var(--pt-text); background: var(--pt-lime); color: var(--pt-text);
-  place-items: center; font-size: 1.1rem; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
-  z-index: 2;
+  width: 44px; height: 44px;
+  top: 40%; bottom: auto; transform: translateY(-50%);
+  opacity: 1;
+  background: var(--pt-lime);
+  border: 2px solid var(--pt-text); border-radius: 50%;
 }
-.petalo .carrusel-btn:hover:not(:disabled) { background: var(--pt-lime-dark); }
-.petalo .carrusel-btn:disabled { opacity: .35; cursor: default; }
-.petalo .carrusel-btn:focus-visible { outline: 3px solid var(--pt-text); outline-offset: 2px; }
-.petalo .carrusel-prev { left: -22px; }
-.petalo .carrusel-next { right: -22px; }
+.petalo .rel-ctrl:hover { background: var(--pt-lime-dark); opacity: 1; }
+.petalo .carousel-control-prev.rel-ctrl { left: 0; }
+.petalo .carousel-control-next.rel-ctrl { right: 0; }
+.petalo .rel-ctrl .carousel-control-prev-icon,
+.petalo .rel-ctrl .carousel-control-next-icon { width: 1rem; height: 1rem; filter: invert(1) grayscale(100); }
 
-@media (min-width: 576px) {   /* 2 tarjetas */
-  .petalo .carrusel-item { flex-basis: calc((100% - 16px) / 2); }
-}
-@media (min-width: 768px) {   /* 3 tarjetas + flechas */
-  .petalo .carrusel-item { flex-basis: calc((100% - 32px) / 3); }
-  .petalo .carrusel-btn { display: grid; }
-}
-@media (min-width: 992px) {   /* 4 tarjetas */
-  .petalo .carrusel-item { flex-basis: calc((100% - 48px) / 4); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .petalo .carrusel-track { scroll-behavior: auto; }
+/* Puntos: debajo de las tarjetas y con color oscuro (los de Bootstrap son blancos) */
+.petalo .rel-indicators { position: static; margin: 8px 0 0; }
+.petalo .rel-indicators [data-bs-target] { width: 10px; height: 10px; margin: 0 5px; border: 0; border-radius: 50%; background-color: var(--pt-text); opacity: .3; }
+.petalo .rel-indicators .active { opacity: 1; }
+
+@media (min-width: 768px) {
+  .petalo .rel-ctrl { display: flex; }
 }

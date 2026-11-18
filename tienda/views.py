@@ -59,21 +59,42 @@ def catalogo_productos(request):
     
     return render(request, 'catalogo/catalogo_producto.html', context)
 
+
+
 #PRUEBA NAVBAR Y FOOTER
 def prueba_global_componentes(request):
     return render(request, 'global_componentes/base.html')
 
-#PRUEBA DETALLE PRODUCTO
+
+# PRUEBA DETALLE PRODUCTO
 def detalle_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
+
+    # Productos de la misma categoría, sin el que se está viendo
+    relacionados = []
+    if producto.categoria_id:
+        relacionados = list(
+            Producto.objects
+            .filter(categoria_id=producto.categoria_id)
+            .exclude(id=producto.id)
+            .select_related('ocasion')
+            .order_by('-id')[:8]
+        )
+
+    # Se agrupan de 4 en 4: cada grupo es una página del carrusel
+    paginas_relacionados = [relacionados[i:i + 4] for i in range(0, len(relacionados), 4)]
+
     return render(request, 'catalogo/detalle_producto.html', {
         'producto': producto,
+        'paginas_relacionados': paginas_relacionados,
     })
-
 #INICIO 
 def inicio(request):
-    productos_destacados = Producto.objects.all()[:8]   # ajusta el modelo y el filtro
-    return render(request, 'inicio.html', {'productos_destacados': productos_destacados})
+    destacados = list(
+        Producto.objects.select_related('categoria').order_by('-id')[:8]
+    )
+    paginas_productos = [destacados[i:i + 4] for i in range(0, len(destacados), 4)]
+    return render(request, 'inicio.html', {'paginas_productos': paginas_productos})
 
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,

@@ -49,17 +49,7 @@
                     <div class="detalle-precio-fila">
                         <span class="detalle-precio">${{ producto.precio|floatformat:0 }}</span>
  
-                        <!-- Colores (opcional) -->
-                        <div class="detalle-colores" role="radiogroup" aria-label="Color">
-                            <input type="radio" class="btn-check" name="color" id="color-1" checked>
-                            <label class="swatch" for="color-1" style="background:#ffffff"></label>
- 
-                            <input type="radio" class="btn-check" name="color" id="color-2">
-                            <label class="swatch" for="color-2" style="background:#e8b4b8"></label>
- 
-                            <input type="radio" class="btn-check" name="color" id="color-3">
-                            <label class="swatch" for="color-3" style="background:#ffffff"></label>
-                        </div>
+                        
                     </div>
  
                     <!-- Cantidad + botón -->
@@ -168,124 +158,50 @@
 </script>
 
 <!-- ======================================================
-     5. PRODUCTOS RELACIONADOS (Bootstrap carousel, solo diseño)
+     5. PRODUCTOS RELACIONADOS (misma categoría, carrusel de 4 por página)
      ====================================================== -->
+{% if paginas_relacionados %}
 <section class="relacionados" aria-labelledby="titulo-relacionados">
-
+ 
     <h2 class="relacionados-titulo" id="titulo-relacionados">Productos relacionados</h2>
-
+ 
     <div id="carruselRelacionados" class="carousel slide" data-bs-ride="false">
-
+ 
         <div class="carousel-inner">
-
-            <!-- ============ Página 1 ============ -->
-            <div class="carousel-item active">
+ 
+            {% for pagina in paginas_relacionados %}
+            <!-- ============ Página {{ forloop.counter }} ============ -->
+            <div class="carousel-item{% if forloop.first %} active{% endif %}">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 px-5">
-
+ 
+                    {% for r in pagina %}
                     <div class="col">
                         <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-8%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 1"></a>
+                            {% if r.ocasion %}
+                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">{{ r.ocasion.nombre }}</span>
+                            {% endif %}
+                            <a href="{% url 'detalle_producto' r.id %}">
+                                {% if r.imagen %}
+                                <img src="{{ r.imagen.url }}" class="card-img-top rel-img" alt="{{ r.nombre }}">
+                                {% else %}
+                                <img src="{% static 'Placeholder.jpg' %}" class="card-img-top rel-img" alt="{{ r.nombre }}">
+                                {% endif %}
+                            </a>
                             <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$34.990</del> <span>$32.190</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
+                                <h3 class="rel-nombre">{{ r.nombre }}</h3>
+                                <div class="rel-precios"><span>${{ r.precio|floatformat:"0g" }}</span></div>
+                                <button type="button" value="{{ r.id }}" class="btn btn-sm rel-btn mt-auto agregar-carrito-rel">Añadir al carrito</button>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-20%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 2"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$35.990</del> <span>$28.790</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 3"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><span>$28.790</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-8%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 4"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$27.990</del> <span>$25.690</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
+                    {% endfor %}
+ 
                 </div>
             </div>
-
-            <!-- ============ Página 2 ============ -->
-            <div class="carousel-item">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 px-5">
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 5"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><span>$31.490</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-15%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 6"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$39.990</del> <span>$33.990</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 7"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><span>$24.990</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-10%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 8"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$29.990</del> <span>$26.990</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+            {% endfor %}
         </div>
-
+ 
+        {% if paginas_relacionados|length > 1 %}
         <!-- Flechas -->
         <button class="carousel-control-prev" type="button"
                 data-bs-target="#carruselRelacionados" data-bs-slide="prev">
@@ -297,16 +213,18 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Siguiente</span>
         </button>
-
+ 
         <!-- Puntos indicadores (uno por página) -->
         <div class="carousel-indicators rel-indicators">
-            <button type="button" data-bs-target="#carruselRelacionados" data-bs-slide-to="0"
-                    class="active" aria-current="true" aria-label="Página 1"></button>
-            <button type="button" data-bs-target="#carruselRelacionados" data-bs-slide-to="1"
-                    aria-label="Página 2"></button>
+            {% for pagina in paginas_relacionados %}
+            <button type="button" data-bs-target="#carruselRelacionados" data-bs-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active" aria-current="true"{% endif %} aria-label="Página {{ forloop.counter }}"></button>
+            {% endfor %}
         </div>
-
+        {% endif %}
+ 
     </div>
 </section>
+{% endif %}
+
 
 {% endblock %}

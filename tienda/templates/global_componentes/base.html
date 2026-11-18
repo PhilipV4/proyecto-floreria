@@ -158,25 +158,20 @@
                         <a class="nav-link active" href="{% url 'catalogo_productos' %}">Productos</a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <button class="nav-link dropdown-toggle" type="button" id="categoriesDropdown"
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Categorías
-                        </button>
-
-                        <ul class="dropdown-menu shadow" aria-labelledby="categoriesDropdown">
+                        </a>
+                        <ul class="dropdown-menu shadow" aria-labelledby="productosDropdown">
+                            {% for categoria in categorias_navbar %}
                             <li>
-                                <a class="dropdown-item fw-semibold" href="#">
-                                    Todas las categorías
+                                <a class="dropdown-item"
+                                    href="{% url 'catalogo_productos' %}?categoria={{ categoria.id }}">
+                                    {{ categoria.nombre }}
                                 </a>
                             </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Arreglos florales</a></li>
-                            <li><a class="dropdown-item" href="#">Ramos</a></li>
-                            <li><a class="dropdown-item" href="#">Plantas</a></li>
-                            <li><a class="dropdown-item" href="#">Regalos</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
 
