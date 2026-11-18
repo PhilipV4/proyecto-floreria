@@ -1,0 +1,72 @@
+{% extends 'global_componentes/base.html' %}
+{load static %}
+
+{% block title %}¡Compra Exitosa! 🌸{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow border-0 p-4 p-md-5 mx-auto" style="max-width: 650px;">
+        <div class="text-center mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+            <h1 class="text-success fw-bold mt-3">¡Muchas gracias por tu compra! 🌸</h1>
+            <p class="text-muted lead fs-6">Tu pedido ha sido recibido con éxito y ya estamos preparando tus flores.</p>
+        </div>
+        
+        {% if orden %}
+            <div class="bg-light rounded p-4 mb-4 border">
+                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                    <span class="text-muted fw-semibold">Número de Pedido:</span>
+                    <span class="fw-bold text-primary fs-5">#{{ orden.id }}</span>
+                </div>
+                
+                <div class="row g-2 text-start small mb-3">
+                    <div class="col-12">
+                        <span class="text-muted d-block">Destinatario:</span>
+                        <strong class="text-dark">{{ orden.nombre_destinatario }}</strong>
+                    </div>
+                    <div class="col-12">
+                        <span class="text-muted d-block">Dirección de Despacho:</span>
+                        <strong class="text-dark">{{ orden.direccion_envio }}, {{ orden.comuna }}</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-muted d-block">Fecha de Entrega:</span>
+                        <strong class="text-dark">{{ orden.fecha_entrega|date:"d/m/Y" }}</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-muted d-block">Correo de contacto:</span>
+                        <strong class="text-dark">{{ orden.email_cliente }}</strong>
+                    </div>
+                </div>
+
+                <div class="border-top pt-3 d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Costo de envío ({{ orden.comuna }}):</span>
+                    <span class="fw-semibold text-dark">$ {{ orden.costo_envio|floatformat:"0g" }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="fw-bold text-dark fs-5">Total Pagado:</span>
+                    <strong class="text-success fs-4">$ {{ orden.total|floatformat:"0g" }}</strong>
+                </div>
+            </div>
+
+            <p class="text-muted small text-center mb-4">
+                Hemos enviado un correo electrónico de confirmación con todos los detalles de tu compra.
+            </p>
+        {% endif %}
+        
+        <div class="text-center">
+            <a href="/" class="btn btn-success px-5 py-2 fw-semibold">Volver al inicio</a>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4">
+                    <h5 class="footer-title">Información importante</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Sobre nosotros</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Formas de pago</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Costo de envío</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Política de devoluciones</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Promociones especiales</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right"></i>Contacto</a></li>
+                    </ul>
+                </div>
+</div>
+{% endblock %}
