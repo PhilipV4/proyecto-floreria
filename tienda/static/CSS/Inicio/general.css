@@ -5,11 +5,11 @@
 
 :root {
   --pt-lime: #FFC5D3;        /* color base */
-  --pt-lime-dark: #FFC5D3;   /* hover de botones */
-  --pt-lime-soft: #FFC5D3;   /* 50% lima + 50% blanco */
+  --pt-lime-dark: #b68a9f;   /* hover de botones */
+  --pt-lime-soft: #FFC5D3;   /* círculo de la flecha en las FAQ */
   --pt-lime-tint: #F7FAD8;   /* 25% lima + 75% blanco */
-  --pt-text: #26300F;
-  --pt-muted: #5D6642;
+  --pt-text: #000000;
+  --pt-muted: #000000;
   --pt-grey: #F4F4F1;
   --pt-shadow: 0 4px 18px rgba(38, 48, 15, .10);
   --pt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2326300F' stroke-width='2'%3E%3Cpath d='M3 6l5 5 5-5'/%3E%3C/svg%3E");
@@ -63,14 +63,14 @@ body:has(.petalo) { overflow-x: clip; }
   /* Con tu foto: define --foto en la sección. Sin foto se ve el degradado. */
   background: var(--foto, none), linear-gradient(135deg, #f3d9dc 0%, #f2dcae 45%, #c9d9b8 100%);
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 30%;   /* sube o baja la parte de la foto que se ve: 0% = arriba, 100% = abajo */
 }
 .petalo .hero-card { width: 100%; max-width: 520px; background: rgba(240, 228, 208, .93); text-align: center; border-radius: 6px; }
 .petalo .hero-card h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(1.6rem, 6vw, 2.6rem); line-height: 1.2; margin: 0 0 12px; }
 .petalo .hero-card p { margin: 0 0 24px; }
 
 /* ---------- 2. ¿Con prisa? ---------- */
-.petalo .rush { background: #fff; }
+.petalo .rush { background: #fffbfb; }
 .petalo .rush h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 8px; }
 .petalo .rush p { max-width: 640px; color: var(--pt-muted); font-size: .95rem; margin-bottom: 20px; }
 
@@ -82,13 +82,155 @@ body:has(.petalo) { overflow-x: clip; }
 .petalo .step p { color: var(--pt-muted); font-size: .92rem; margin: 0 0 20px; }
 .petalo .step-num { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #d8d8d2; display: grid; place-items: center; font-size: .8rem; color: var(--pt-muted); }
 
-/* ---------- 4. Texto + foto ---------- */
-.petalo .split { background: #fff; overflow: hidden; }
-.petalo .split-text { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.petalo .split-text h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; max-width: 14ch; margin: 0 0 16px; }
-.petalo .split-text p { max-width: 38ch; color: var(--pt-muted); margin: 0 0 24px; }
-.petalo .split-media { position: relative; min-height: 260px; }
-.petalo .split-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* ---------- 4 y 5. CTA y Sobre nosotros ---------- */
+/* Etiqueta pequeña sobre los títulos */
+.petalo .eyebrow {
+  display: inline-block;
+  margin-bottom: .9rem;
+  padding: .3rem .85rem;
+  border-radius: 50rem;
+  background: var(--pt-lime);
+  border: 1px solid var(--pt-text);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ---------- 4. CTA: banner con tarjeta ---------- */
+.petalo .cta-ocasiones {
+  min-height: clamp(360px, 40vw, 520px);
+  display: grid;
+  place-items: center;
+  padding: 48px 16px;
+  background:
+    linear-gradient(rgba(0, 0, 0, .28), rgba(0, 0, 0, .28)),
+    var(--foto) center / cover no-repeat;
+}
+
+.petalo .cta-card {
+  width: 100%;
+  max-width: 560px;
+  padding: 2.5rem 2rem;
+  background: rgba(255, 255, 255, .95);
+  border-radius: 14px;
+  box-shadow: var(--pt-shadow);
+}
+
+.petalo .cta-card h2 {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.5rem, 5vw, 2.1rem);
+  line-height: 1.2;
+}
+
+.petalo .cta-card p {
+  margin: 0 0 1.5rem;
+  color: var(--pt-text);
+}
+
+/* ---------- 5. Sobre nosotros ---------- */
+.petalo .about { background: #fff; overflow: hidden; }
+
+.petalo .about-media {
+  position: relative;
+  min-height: 320px;
+}
+
+.petalo .about-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.petalo .about-badge {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem 1rem;
+  border: 2px solid var(--pt-text);
+  border-radius: 50rem;
+  background: var(--pt-lime);
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.petalo .about-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.petalo .about-text h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  line-height: 1.2;
+}
+
+.petalo .about-text p {
+  max-width: 60ch;
+  margin: 0 0 1rem;
+  text-align: justify;
+  hyphens: none;
+  line-height: 1.7;
+  color: var(--pt-text);
+}
+
+.petalo .about-text .about-lead {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+/* Los 3 puntos clave */
+.petalo .about-points {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: 60ch;
+  margin: .5rem 0 1.75rem;
+  padding: 0;
+}
+
+.petalo .about-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: .9rem;
+}
+
+.petalo .about-points i {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pt-lime);
+  font-size: 1.15rem;
+  transition: transform .3s ease, background-color .3s ease;
+}
+
+.petalo .about-points strong { display: block; }
+.petalo .about-points span { font-size: .9rem; color: var(--pt-muted); }
+
+@media (hover: hover) {
+  .petalo .about-points li:hover i {
+    transform: scale(1.12) rotate(-8deg);
+    background-color: var(--pt-lime-dark);
+  }
+}
+
+@media (min-width: 768px) {
+  .petalo .about-media { min-height: 560px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petalo .about-points i { transition: none; }
+}
 
 /* ---------- 5. Preguntas frecuentes (accordion de Bootstrap) ---------- */
 /* En celular el <main> del base solo deja 4px de margen: se agregan 12px para que no pegue al borde */
@@ -101,7 +243,7 @@ body:has(.petalo) { overflow-x: clip; }
   --bs-accordion-active-bg: #fff;
   --bs-accordion-btn-icon: var(--pt-chevron);
   --bs-accordion-btn-active-icon: var(--pt-chevron);
-  --bs-accordion-btn-focus-box-shadow: 0 0 0 .2rem rgba(221, 233, 97, .6);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 .2rem rgba(255, 255, 255, 0.6);
   --bs-accordion-body-padding-x: 1.25rem;
 }
 .petalo .accordion-item { border-radius: 10px; overflow: hidden; box-shadow: var(--pt-shadow); }
@@ -110,76 +252,172 @@ body:has(.petalo) { overflow-x: clip; }
 .petalo .accordion-button::after { width: 28px; height: 28px; flex: none; border-radius: 50%; background-color: var(--pt-lime-soft); background-size: 12px; background-position: center; }
 .petalo .accordion-body { color: var(--pt-muted); font-size: .9rem; padding-top: 0; }
 
-/* ---------- 6. Foto final ---------- */
-.petalo .final-photo {
-  height: 300px;
-  background: var(--foto, none), linear-gradient(135deg, #f2cfcf 0%, #f4dcc0 50%, #e8bfc0 100%);
-  background-size: cover;
-  background-position: center;
-}
-
+/* ---------- Navbar y footer del base.html en lima (solo en esta landing) ----------
+   Ajusta los selectores si header.css / footer.css usan otros nombres. */
+body:has(.petalo) .navbar-floreria { background: var(--pt-lime); }
+body:has(.petalo) .navbar-floreria .nav-link,
+body:has(.petalo) .navbar-floreria .nav-link.active { color: var(--pt-text); }
+body:has(.petalo) .custom-footer { background: var(--pt-lime); }
+body:has(.petalo) .custom-footer :is(h5, h6, p, a, i) { color: var(--pt-text); }
 
 /* ================= Tablet y escritorio (≥ 768px) ================= */
 @media (min-width: 768px) {
-  .petalo .hero { min-height: clamp(320px, 26vw, 480px); padding: 48px 16px; }
+  .petalo .hero { min-height: clamp(320px, 26vw, 480px); padding: 48px 16px; }   /* más alto = menos zoom, más bajo = más zoom */
   .petalo .section-sub { margin-bottom: 40px; }
-  .petalo .split-text { min-height: 440px; }
-  .petalo .split-media { min-height: 440px; }
   .petalo .faq { padding: 64px 0; }          /* en escritorio el <main> ya trae su padding */
-  
 }
 
-/* ================= Carrusel de productos ================= */
-.petalo .productos { background: #fff; }
-.petalo .carrusel { position: relative; }
-.petalo .carrusel-track {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  padding: 4px 4px 20px;          /* espacio para que no se corte la sombra */
-  margin: 0 -4px;
-  -webkit-overflow-scrolling: touch;
-}
-.petalo .carrusel-track::-webkit-scrollbar { display: none; }
+/* ================= Carrusel de productos (carousel de Bootstrap, páginas de 4) ================= */
+.petalo .productos { background: 
+#ffeeee60 }
+.petalo .carousel-item { padding: 8px 0 16px; }            /* espacio para que no se corte la sombra */
 
-/* Celular: 1 tarjeta y un pedazo de la siguiente, para que se note que se desliza */
-.petalo .carrusel-item { flex: 0 0 78%; scroll-snap-align: start; }
+.petalo .carousel .card { background: #fff; border-radius: 14px; box-shadow: var(--pt-shadow); overflow: hidden; }
+.petalo .rel-img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.petalo .rel-nombre { font-size: .95rem; margin: 8px 0 4px; }
+.petalo .rel-precios { font-size: .95rem; margin-bottom: 12px; }
+.petalo .rel-precios del { color: var(--pt-muted); font-size: .85rem; margin-right: 4px; }
+.petalo .rel-precios span { font-weight: 600; }
+.petalo .rel-badge { background: var(--pt-lime); color: var(--pt-text); border: 1px solid var(--pt-text); font-weight: 600; max-width: calc(100% - 1rem); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.petalo .rel-btn { --bs-btn-padding-y: .5rem; --bs-btn-padding-x: .75rem; font-size: .78rem; }
 
-.petalo .producto { background: #fff; border-radius: 14px; box-shadow: var(--pt-shadow); overflow: hidden; }
-.petalo .producto img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-.petalo .producto .card-body { padding: 16px; }
-.petalo .producto h3 { font-size: 1rem; margin: 0 0 4px; }
-.petalo .producto .precio { font-weight: 600; color: var(--pt-muted); margin: 0 0 14px; }
-
-/* Flechas: solo desde tablet (en celular se desliza con el dedo) */
-.petalo .carrusel-btn {
+/* Flechas: círculos de color, solo desde tablet (en celular se desliza con el dedo) */
+.petalo .rel-ctrl {
   display: none;
-  position: absolute; top: 40%; transform: translateY(-50%);
-  width: 44px; height: 44px; border-radius: 50%;
-  border: 2px solid var(--pt-text); background: var(--pt-lime); color: var(--pt-text);
-  place-items: center; font-size: 1.1rem; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
-  z-index: 2;
+  width: 44px; height: 44px;
+  top: 40%; bottom: auto; transform: translateY(-50%);
+  opacity: 1;
+  background: var(--pt-lime);
+  border: 2px solid var(--pt-text); border-radius: 50%;
 }
-.petalo .carrusel-btn:hover:not(:disabled) { background: var(--pt-lime-dark); }
-.petalo .carrusel-btn:disabled { opacity: .35; cursor: default; }
-.petalo .carrusel-btn:focus-visible { outline: 3px solid var(--pt-text); outline-offset: 2px; }
-.petalo .carrusel-prev { left: -22px; }
-.petalo .carrusel-next { right: -22px; }
+.petalo .rel-ctrl:hover { background: var(--pt-lime-dark); opacity: 1; }
+.petalo .carousel-control-prev.rel-ctrl { left: 0; }
+.petalo .carousel-control-next.rel-ctrl { right: 0; }
+.petalo .rel-ctrl .carousel-control-prev-icon,
+.petalo .rel-ctrl .carousel-control-next-icon { width: 1rem; height: 1rem; filter: invert(1) grayscale(100); }
 
-@media (min-width: 576px) {   /* 2 tarjetas */
-  .petalo .carrusel-item { flex-basis: calc((100% - 16px) / 2); }
+/* Puntos: debajo de las tarjetas y con color oscuro (los de Bootstrap son blancos) */
+.petalo .rel-indicators { position: static; margin: 8px 0 0; }
+.petalo .rel-indicators [data-bs-target] { width: 10px; height: 10px; margin: 0 5px; border: 0; border-radius: 50%; background-color: var(--pt-text); opacity: .3; }
+.petalo .rel-indicators .active { opacity: 1; }
+
+@media (min-width: 768px) {
+  .petalo .rel-ctrl { display: flex; }
 }
-@media (min-width: 768px) {   /* 3 tarjetas + flechas */
-  .petalo .carrusel-item { flex-basis: calc((100% - 32px) / 3); }
-  .petalo .carrusel-btn { display: grid; }
+
+/* ---------- Efecto: Cómo funciona ----------
+   Hover con mouse, y clase .activo en celular (la agrega el JS de inicio.html) */
+.petalo .step { transition: transform .3s ease, box-shadow .3s ease; }
+.petalo .step-icon { transition: transform .35s ease, background-color .3s ease; }
+.petalo .step-num { transition: background-color .3s ease, color .3s ease, border-color .3s ease; }
+
+.petalo .step:hover,
+.petalo .step.activo {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .18);
 }
-@media (min-width: 992px) {   /* 4 tarjetas */
-  .petalo .carrusel-item { flex-basis: calc((100% - 48px) / 4); }
+.petalo .step:hover .step-icon,
+.petalo .step.activo .step-icon {
+  transform: scale(1.12) rotate(-8deg);
+  background-color: var(--pt-lime-dark);
 }
+.petalo .step:hover .step-num,
+.petalo .step.activo .step-num {
+  background-color: var(--pt-lime);
+  border-color: var(--pt-lime-dark);
+  color: #000;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .petalo .carrusel-track { scroll-behavior: auto; }
+  .petalo .step,
+  .petalo .step-icon,
+  .petalo .step-num { transition: none; }
 }
+
+/* ---------- Animación de entrada de la página ---------- */
+@keyframes entrada-suave {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+main {
+  animation: entrada-suave .7s ease-out both;
+}
+
+.custom-footer {
+  animation: entrada-suave .7s ease-out .2s both;   /* aparece un poco después */
+}
+
+/* Respeta a quien tiene desactivadas las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  main, .custom-footer { animation: none; }
+}
+
+/* ==========================================================
+   FONDO NEGRO CON FLORES BLANCAS DIBUJADAS
+   Patrón SVG que se repite. Úsalo agregando la clase .fondo-flores
+   a una sección (ej.: <section class="cta-ocasiones fondo-flores bleed">)
+   ========================================================== */
+:root {
+  --patron-flores: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23000'/%3E%3Cdefs%3E%3Cg id='f'%3E%3Ccircle r='4'/%3E%3Cellipse cy='-14' rx='6' ry='10'/%3E%3Cellipse cy='-14' rx='6' ry='10' transform='rotate(72)'/%3E%3Cellipse cy='-14' rx='6' ry='10' transform='rotate(144)'/%3E%3Cellipse cy='-14' rx='6' ry='10' transform='rotate(216)'/%3E%3Cellipse cy='-14' rx='6' ry='10' transform='rotate(288)'/%3E%3C/g%3E%3Cg id='h'%3E%3Cpath d='M0 0 C-12 -6 -16 -16 -10 -24 C-2 -22 2 -10 0 0Z'/%3E%3Cpath d='M0 0 C-4 -8 -4 -16 -10 -24'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cuse xlink:href='%23f' href='%23f' transform='translate(52 50)'/%3E%3Cpath d='M52 66 C55 92 46 108 49 138'/%3E%3Cuse xlink:href='%23h' href='%23h' transform='translate(50 100) scale(.9)'/%3E%3Cuse xlink:href='%23h' href='%23h' transform='translate(51 118) scale(-.8 .8)'/%3E%3Cuse xlink:href='%23f' href='%23f' transform='translate(146 128) scale(.8) rotate(25)'/%3E%3Cpath d='M146 141 C143 160 149 172 147 188'/%3E%3Cuse xlink:href='%23h' href='%23h' transform='translate(147 166) scale(.7) rotate(8)'/%3E%3Ccircle cx='140' cy='40' r='5'/%3E%3Cpath d='M140 45 C139 56 143 62 141 72'/%3E%3Cpath d='M141 62 C148 58 152 62 150 68 C145 70 142 67 141 62Z'/%3E%3Ccircle cx='100' cy='92' r='2'/%3E%3Ccircle cx='20' cy='170' r='2'/%3E%3Ccircle cx='178' cy='84' r='2'/%3E%3Ccircle cx='96' cy='176' r='2'/%3E%3Ccircle cx='104' cy='14' r='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.petalo .fondo-flores {
+  background: #000 var(--patron-flores) center / 200px 200px repeat;   /* 200px = tamaño de cada repetición */
+}
+
+
+/* ==========================================================
+   FONDOS BLANCOS UNIFORMES - FLOWERVIEW
+   ========================================================== */
+
+/* Fondo de la página */
+body:has(.petalo),
+body:has(.petalo) main,
+body:has(.petalo) .petalo {
+    background-color: #ffffff !important;
+}
+
+/* Todas las secciones */
+.petalo .rush,
+.petalo .how,
+.petalo .about,
+.petalo .faq,
+.petalo .cta-ocasiones,
+.petalo .cta-card {
+    background: #ffffff !important;
+}
+
+/* Eliminar el patrón negro de flores */
+.petalo .fondo-flores {
+    background: #ffffff !important;
+    background-image: none !important;
+}
+
+/* Tarjetas */
+.petalo .step,
+.petalo .carousel .card,
+.petalo .accordion-item {
+    background-color: #ffffff;
+}
+
+/* Evitar franjas laterales en preguntas frecuentes */
+.petalo .faq {
+    width: 100%;
+    background-color: #ffffff !important;
+}
+
+/* Banner final */
+.petalo .final-banner {
+    background: #ffffff !important;
+}
+
+/* Mantener el rosado de identidad */
+.petalo .btn-lime,
+.petalo .step-icon,
+.petalo .eyebrow,
+.petalo .about-badge {
+    background-color: #FFC5D3;
+}
+
+

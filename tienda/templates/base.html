@@ -89,41 +89,32 @@
             <div class="collapse navbar-collapse order-lg-2" id="navbarEcommerce">
 
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'inicio' %}">
-                            Inicio
-                        </a>
+                        <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <button class="nav-link dropdown-toggle bg-transparent border-0 text-white" type="button"
-                            id="categoriesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categorías
-                        </button>
-
-                        <ul class="dropdown-menu shadow" aria-labelledby="categoriesDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productosDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Productos
+                        </a>
+                        <ul class="dropdown-menu shadow" aria-labelledby="productosDropdown">
+                            {% for categoria in categorias_navbar %}
                             <li>
-                                <a class="dropdown-item fw-semibold" href="#">
-                                    Todas las categorías
+                                <a class="dropdown-item"
+                                    href="{% url 'catalogo_productos' %}?categoria={{ categoria.id }}">
+                                    {{ categoria.nombre }}
                                 </a>
                             </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Arreglos florales</a></li>
-                            <li><a class="dropdown-item" href="#">Ramos</a></li>
-                            <li><a class="dropdown-item" href="#">Plantas</a></li>
-                            <li><a class="dropdown-item" href="#">Regalos</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'lista_productos' %}">Productos</a>
-                    </li>
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li
 
 
-
-                </ul>
                 <!-- Buscador -->
                 <form class="d-flex me-lg-3 my-2 my-lg-0" action="" method="GET">
                     <div class="input-group">

@@ -15,9 +15,58 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 
+from django.http import JsonResponse
+from django.urls import reverse
+
 
 def inicio(request):
-    return render(request, 'inicio.html')
+    return render(request, 'index.html')
+
+#Barra de busqueda
+def barra_busqueda(request):
+    #Almacena la busqueda del usuario en una variable.
+    q = request.GET.get('q','').strip()
+
+    #Si la busqueda es muy corta no muestra resultados.
+    if len(q) < 2:
+        return JsonResponse({'coincidencias': []})
+
+    #Cargamos los productos y filtros que coincidan con la busqueda.
+    productos = Producto.objects.filter(disponible=True, nombre__icontains=q)[:5]
+    categorias = Categoria.objects.filter(nombre__icontains=q)[:2]
+    ocasiones = Ocasion.objects.filter(nombre__icontains=q)[:2]
+
+    #Almacenamos las coincidencias de la busqueda en una lista.
+    coincidencias = []
+    #Almacenamos la url del catalogo para poder concatenar
+    catalogo_url = reverse('catalogo_productos')
+
+    for prod in productos:
+        coincidencias.append({
+            'tipo': 'Producto',
+            'texto': prod.nombre,
+            'url': reverse('detalle_producto', args=[prod.id])
+        })
+
+    for cat in categorias:
+        coincidencias.append({
+            'tipo': 'Categoria',
+            'texto': cat.nombre,
+            'url': f'{catalogo_url}?categoria={cat.id}'
+        })
+
+    for oca in ocasiones:
+        coincidencias.append({
+            'tipo': 'Ocasion',
+            'texto': oca.nombre,
+            'url': f'{catalogo_url}?ocasion={oca.id}'
+        })
+
+    
+
+    return JsonResponse({'coincidencias': coincidencias})
+
+    
 
 #Catalogo de productos
 def catalogo_productos(request):
@@ -39,18 +88,18 @@ def catalogo_productos(request):
         productos = productos.filter(ocasion_id__in=list_ocasiones)
 
     #Fija la cantidad de productos por pagina.
-    paginacion = Paginator(productos, 12)
+    paginacion = Paginator(productos, 6)
     pagina_num = paginacion.get_page(request.GET.get('page'))
 
     #Querystring que conserva los filtros
     params = request.GET.copy()
-    params.pop = ('page', None)
+    params.pop('page', None)
 
     #Diccionario para la plantilla (catalogo).
     context = {
         'productos' : pagina_num,
         'pag_num' : pagina_num,
-        'querystring' : params.urlencode(),
+        'querystring': params.urlencode(),
         'categorias' : categorias,
         'ocasiones' : ocasiones,
         'list_categorias' : list_categorias,
@@ -59,21 +108,48 @@ def catalogo_productos(request):
     
     return render(request, 'catalogo/catalogo_producto.html', context)
 
+
+
 #PRUEBA NAVBAR Y FOOTER
 def prueba_global_componentes(request):
     return render(request, 'global_componentes/base.html')
 
-#PRUEBA DETALLE PRODUCTO
+
+# PRUEBA DETALLE PRODUCTO
 def detalle_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
+
+    # Productos de la misma categoría, sin el que se está viendo
+    relacionados = []
+    if producto.categoria_id:
+        relacionados = list(
+            Producto.objects
+            .filter(categoria_id=producto.categoria_id)
+            .exclude(id=producto.id)
+            .select_related('ocasion')
+            .order_by('-id')[:8]
+        )
+
+    # Se agrupan de 4 en 4: cada grupo es una página del carrusel
+    paginas_relacionados = [relacionados[i:i + 4] for i in range(0, len(relacionados), 4)]
+
+    # Filtros de la barra lateral (los mismos que usa el catálogo)
+    categorias = Categoria.objects.all()
+    ocasiones = Ocasion.objects.all()
+
     return render(request, 'catalogo/detalle_producto.html', {
         'producto': producto,
+        'paginas_relacionados': paginas_relacionados,
+        'categorias': categorias,   # ← nuevo
+        'ocasiones': ocasiones,     # ← nuevo
     })
-
 #INICIO 
 def inicio(request):
-    productos_destacados = Producto.objects.all()[:8]   # ajusta el modelo y el filtro
-    return render(request, 'inicio.html', {'productos_destacados': productos_destacados})
+    destacados = list(
+        Producto.objects.select_related('categoria').order_by('-id')[:8]
+    )
+    paginas_productos = [destacados[i:i + 4] for i in range(0, len(destacados), 4)]
+    return render(request, 'index.html', {'paginas_productos': paginas_productos})
 
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,

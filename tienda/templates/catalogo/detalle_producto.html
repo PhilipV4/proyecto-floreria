@@ -5,31 +5,21 @@
 
 <link rel="stylesheet" href="{% static 'CSS/productos/detalle_producto.css' %}">
 
-<!-- ======================================================
-     1. BREADCRUMB (recuadro verde)
-     ====================================================== -->
-<nav class="detalle-breadcrumb" aria-label="breadcrumb">
-    <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="#">Categorías</a></li>
-        <li class="breadcrumb-item"><a href="#">Ocasiones</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre }}</li>
-    </ol>
-</nav>
- 
-<div class="row g-4">
- 
-    <!-- Columna derecha: producto + pestañas -->
-    <div class="col-12 col-lg-10 order-1 order-lg-2">
- 
+<!--Body: mismo contenedor que el catálogo-->
+<div class="container-fluid my-4 px-xl-5">
+
+    <!--Contenedor principal-->
+    <div class="row g-4 flower-catalogo justify-content-center">
+
+    <div class="col-12 mt-5 mt-xl-0 col-xxl-9 col-xl-9">
+
         <!-- ==============================================
-             3. PRODUCTO (recuadro azul): imagen + información
+             PRODUCTO: imagen + información
              ============================================== -->
         <section class="detalle-producto">
             <div class="row g-4 align-items-center">
- 
+
                 <!-- Imagen -->
-                
                 <div class="col-12 col-md-6">
                 {% if producto.imagen %}
                     <div class="detalle-imagen">
@@ -41,27 +31,15 @@
                     </div>
                 {% endif %}
                 </div>
- 
+
                 <!-- Información -->
                 <div class="col-12 col-md-6">
                     <h1 class="detalle-titulo">{{ producto.nombre }}</h1>
- 
+
                     <div class="detalle-precio-fila">
                         <span class="detalle-precio">${{ producto.precio|floatformat:0 }}</span>
- 
-                        <!-- Colores (opcional) -->
-                        <div class="detalle-colores" role="radiogroup" aria-label="Color">
-                            <input type="radio" class="btn-check" name="color" id="color-1" checked>
-                            <label class="swatch" for="color-1" style="background:#ffffff"></label>
- 
-                            <input type="radio" class="btn-check" name="color" id="color-2">
-                            <label class="swatch" for="color-2" style="background:#e8b4b8"></label>
- 
-                            <input type="radio" class="btn-check" name="color" id="color-3">
-                            <label class="swatch" for="color-3" style="background:#ffffff"></label>
-                        </div>
                     </div>
- 
+
                     <!-- Cantidad + botón -->
                     <div class="detalle-compra">
                         <div class="detalle-cantidad">
@@ -69,11 +47,10 @@
                             <input type="number" id="cantidad" value="1" min="1" aria-label="Cantidad">
                             <button type="button" id="btn-mas" aria-label="Aumentar">+</button>
                         </div>
- 
-                        <!-- Botón actualizado con el ID del producto y la clase para AJAX -->
+
                         <button type="button" value="{{ producto.id }}" id="agregar-carrito-detalle" class="btn-carrito-detalle">Añadir al carrito</button>
                     </div>
- 
+
                     <!-- Datos del producto -->
                     <ul class="detalle-meta list-unstyled">
                         <li>ID: {{ producto.id }}</li>
@@ -83,9 +60,9 @@
                 </div>
             </div>
         </section>
- 
+
         <!-- ==============================================
-             4. PESTAÑAS (recuadro naranja)
+             PESTAÑAS
              ============================================== -->
         <section class="detalle-tabs">
             <ul class="nav nav-tabs nav-fill" id="tabsProducto" role="tablist">
@@ -93,220 +70,171 @@
                     <button class="nav-link active" id="tab-descripcion" data-bs-toggle="tab"
                             data-bs-target="#panel-descripcion" type="button" role="tab"
                             aria-controls="panel-descripcion" aria-selected="true">
-                        Descripción
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="tab-info" data-bs-toggle="tab"
-                            data-bs-target="#panel-info" type="button" role="tab"
-                            aria-controls="panel-info" aria-selected="false">
-                        Información adicional
+                        DESCRIPCIÓN
                     </button>
                 </li>
             </ul>
- 
+
             <div class="tab-content detalle-tab-contenido">
                 <div class="tab-pane fade show active" id="panel-descripcion" role="tabpanel"
                      aria-labelledby="tab-descripcion" tabindex="0">
                     <p>{{ producto.descripcion }}</p>
                 </div>
-                <div class="tab-pane fade" id="panel-info" role="tabpanel"
-                     aria-labelledby="tab-info" tabindex="0">
-                    <p>Aquí va la información adicional del producto.</p>
-                </div>
             </div>
         </section>
- 
+
+        <!-- ==============================================
+             PRODUCTOS RELACIONADOS
+             ============================================== -->
+        {% if paginas_relacionados %}
+        <section class="relacionados" aria-labelledby="titulo-relacionados">
+
+            <h2 class="relacionados-titulo" id="titulo-relacionados">Productos relacionados</h2>
+
+            <div id="carruselRelacionados" class="carousel slide" data-bs-ride="false">
+
+                <div class="carousel-inner">
+
+                    {% for pagina in paginas_relacionados %}
+                    <!-- ============ Página {{ forloop.counter }} ============ -->
+                    <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 px-5 justify-content-center">
+
+                            {% for r in pagina %}
+                            <div class="col">
+                                <div class="card h-100 border-0 text-center position-relative">
+                                    {% if r.ocasion %}
+                                    <span class="badge rel-badge position-absolute top-0 start-0 m-2">{{ r.ocasion.nombre }}</span>
+                                    {% endif %}
+                                    <a href="{% url 'detalle_producto' r.id %}">
+                                        {% if r.imagen %}
+                                        <img src="{{ r.imagen.url }}" class="card-img-top rel-img" alt="{{ r.nombre }}">
+                                        {% else %}
+                                        <img src="{% static 'Placeholder.jpg' %}" class="card-img-top rel-img" alt="{{ r.nombre }}">
+                                        {% endif %}
+                                    </a>
+                                    <div class="card-body d-flex flex-column p-2">
+                                        <h3 class="rel-nombre">{{ r.nombre }}</h3>
+                                        <div class="rel-precios"><span>${{ r.precio|floatformat:"0g" }}</span></div>
+                                        <button type="button" value="{{ r.id }}" class="btn btn-sm rel-btn mt-auto agregar-carrito-rel">Añadir al carrito</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if paginas_relacionados|length > 1 %}
+                <!-- Flechas -->
+                <button class="carousel-control-prev" type="button"
+                        data-bs-target="#carruselRelacionados" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                        data-bs-target="#carruselRelacionados" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+
+                <!-- Puntos indicadores (uno por página) -->
+                <div class="carousel-indicators rel-indicators">
+                    {% for pagina in paginas_relacionados %}
+                    <button type="button" data-bs-target="#carruselRelacionados" data-bs-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active" aria-current="true"{% endif %} aria-label="Página {{ forloop.counter }}"></button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+        </section>
+        {% endif %}
+
     </div>
 </div>
- 
-<!-- Script combinado para Selector de cantidad y AJAX al carrito -->
+</div>
+
+<!-- Script: selector de cantidad + AJAX al carrito -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const input = document.getElementById('cantidad');
-        
-        // 1. Funcionalidad de los botones + y -
+
+        // 1. Botones + y -
         document.getElementById('btn-mas').addEventListener('click', () => {
             input.value = parseInt(input.value || 1) + 1;
         });
-        
+
         document.getElementById('btn-menos').addEventListener('click', () => {
             input.value = Math.max(1, parseInt(input.value || 1) - 1);
         });
 
-        // 2. Funcionalidad AJAX para añadir al carrito enviando la cantidad seleccionada
-        $(document).on('click', '#agregar-carrito-detalle', function(e){
-            e.preventDefault();
-            
-            var productoId = $(this).val();
-            var cantidadSeleccionada = $('#cantidad').val();
-
+        // Función reutilizable para agregar al carrito
+        function agregarAlCarrito(productoId, cantidad) {
             $.ajax({
-               type: 'POST',
-               url: "{% url 'carrito_agregar' %}",
-               data: {
-                   producto_id: productoId,
-                   cantidad: cantidadSeleccionada, // Enviamos la cantidad elegida
-                   csrfmiddlewaretoken: '{{ csrf_token }}',
-                   action: 'post' 
-               },
-               success: function(json){
-                console.log("Producto agregado:", json);
-                
-                // 1. Actualiza el contador en la página actual
-                $('#cantidad_carrito').text(json.cantidad);
-                
-                // 2. NUEVO: Guarda el valor en el almacenamiento local del navegador
-                localStorage.setItem('cart_count', json.cantidad);
-            },
-               error: function(xhr, errmsg, err){
-                   console.log("Error al agregar al carrito");
-               }
+                type: 'POST',
+                url: "{% url 'carrito_agregar' %}",
+                data: {
+                    producto_id: productoId,
+                    cantidad: cantidad,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+                success: function (json) {
+                    console.log("Producto agregado:", json);
+
+                    // Actualiza el contador en la página actual
+                    $('#cantidad_carrito').text(json.cantidad);
+
+                    // Guarda el valor en el almacenamiento local del navegador
+                    localStorage.setItem('cart_count', json.cantidad);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log("Error al agregar al carrito");
+                }
             });
+        }
+
+        // 2. Botón principal (usa la cantidad seleccionada)
+        $(document).on('click', '#agregar-carrito-detalle', function (e) {
+            e.preventDefault();
+            agregarAlCarrito($(this).val(), $('#cantidad').val());
+        });
+
+        // 3. Botones de productos relacionados (cantidad = 1)
+        $(document).on('click', '.agregar-carrito-rel', function (e) {
+            e.preventDefault();
+            agregarAlCarrito($(this).val(), 1);
         });
     });
 </script>
 
-<!-- ======================================================
-     5. PRODUCTOS RELACIONADOS (Bootstrap carousel, solo diseño)
-     ====================================================== -->
-<section class="relacionados" aria-labelledby="titulo-relacionados">
 
-    <h2 class="relacionados-titulo" id="titulo-relacionados">Productos relacionados</h2>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Activa el estado :active (toque) en iPhone
+    document.addEventListener('touchstart', function () {}, { passive: true });
 
-    <div id="carruselRelacionados" class="carousel slide" data-bs-ride="false">
+    if (!('IntersectionObserver' in window)) return;
 
-        <div class="carousel-inner">
+    const secciones = document.querySelectorAll(
+        '.detalle-categoria, .detalle-producto, .detalle-tabs, .relacionados'
+    );
 
-            <!-- ============ Página 1 ============ -->
-            <div class="carousel-item active">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 px-5">
+    const observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (entrada, i) {
+            if (!entrada.isIntersecting) return;
+            entrada.target.style.transitionDelay = (i * 120) + 'ms';   // cascada
+            entrada.target.classList.add('visible');
+            observador.unobserve(entrada.target);                      // solo una vez
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-8%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 1"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$34.990</del> <span>$32.190</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-20%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 2"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$35.990</del> <span>$28.790</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 3"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><span>$28.790</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-8%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 4"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$27.990</del> <span>$25.690</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ============ Página 2 ============ -->
-            <div class="carousel-item">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 px-5">
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 5"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><span>$31.490</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-15%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 6"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$39.990</del> <span>$33.990</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 7"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><span>$24.990</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card h-100 border-0 text-center position-relative">
-                            <span class="badge rel-badge position-absolute top-0 start-0 m-2">-10%</span>
-                            <a href="#"><img src="{% static 'logos/logo-floreria4.png' %}" class="card-img-top rel-img" alt="Producto 8"></a>
-                            <div class="card-body d-flex flex-column p-2">
-                                <h3 class="rel-nombre">Nombre del producto</h3>
-                                <div class="rel-precios"><del>$29.990</del> <span>$26.990</span></div>
-                                <a href="#" class="btn btn-sm rel-btn mt-auto">Añadir al carrito</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Flechas -->
-        <button class="carousel-control-prev" type="button"
-                data-bs-target="#carruselRelacionados" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button"
-                data-bs-target="#carruselRelacionados" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
-
-        <!-- Puntos indicadores (uno por página) -->
-        <div class="carousel-indicators rel-indicators">
-            <button type="button" data-bs-target="#carruselRelacionados" data-bs-slide-to="0"
-                    class="active" aria-current="true" aria-label="Página 1"></button>
-            <button type="button" data-bs-target="#carruselRelacionados" data-bs-slide-to="1"
-                    aria-label="Página 2"></button>
-        </div>
-
-    </div>
-</section>
-
+    secciones.forEach(function (sec) {
+        sec.classList.add('reveal');
+        observador.observe(sec);
+    });
+});
+</script>
 {% endblock %}
