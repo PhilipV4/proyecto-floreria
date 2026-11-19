@@ -1,0 +1,74 @@
+{% extends 'global_componentes/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="py-5 bg-light min-vh-100">
+    <div class="container" style="max-width: 1000px;">
+        <h2 class="text-center fw-bold mb-1">Mis Pedidos</h2>
+        <p class="text-center text-muted small mb-4">Historial y estado de tus compras</p>
+
+        {% if ordenes %}
+            <div class="row g-3">
+                {% for orden in ordenes %}
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm border-0 rounded-3 h-100 d-flex flex-column">
+                        
+                        <!-- Cabecera compacta: Nº Pedido, Fecha y Estado -->
+                        <div class="card-header bg-white border-bottom py-2 px-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="fw-bold text-dark small me-1">Pedido #{{ orden.id }}</span>
+                                <span class="text-muted" style="font-size: 0.8rem;">
+                                    &bull; {{ orden.fecha_entrega|date:"d/m/Y" }}
+                                </span>
+                            </div>
+
+                            <div>
+                                {% if orden.estado_envio == 'entregado' %}
+                                    <span class="badge bg-success">Entregado</span>
+                                {% elif orden.estado_envio == 'en_camino' %}
+                                    <span class="badge bg-info text-dark">En Camino</span>
+                                {% elif orden.estado_envio == 'preparando' %}
+                                    <span class="badge bg-primary">Preparando</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Confirmado</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Cuerpo: Lista compacta de productos -->
+                        <div class="card-body py-2 px-3 flex-grow-1">
+                            <ul class="list-unstyled mb-0">
+                                {% for item in orden.items.all %}
+                                <li class="d-flex justify-content-between align-items-center py-1 {% if not forloop.last %}border-bottom{% endif %}">
+                                    <span class="text-dark small fw-semibold text-truncate pe-2">{{ item.producto_nombre }}</span>
+                                    <span class="text-muted small flex-shrink-0">x{{ item.cantidad }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Pie: Dirección en una línea y Total -->
+                        <div class="card-footer bg-white border-top py-2 px-3 d-flex justify-content-between align-items-center gap-2">
+                            <small class="text-muted text-truncate" title="{{ orden.direccion_envio }}, {{ orden.comuna }} ({{ orden.nombre_destinatario }})">
+                                <i class="bi bi-geo-alt text-success"></i> {{ orden.comuna }} &bull; {{ orden.nombre_destinatario }}
+                            </small>
+                            <div class="text-end flex-shrink-0">
+                                <strong class="text-success small">$ {{ orden.total|floatformat:"0g" }}</strong>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card border-0 shadow-sm text-center py-5">
+                <div class="card-body">
+                    <p class="text-muted mb-3">Aún no has realizado pedidos.</p>
+                    <a href="{% url 'catalogo' %}" class="btn btn-success btn-sm px-4">Ver Catálogo</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

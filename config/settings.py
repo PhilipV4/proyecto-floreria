@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-vp#kp*4h&i6m03h&=mc2mnwnc5c4zwd@)=#ny3tg6yq$0n%i9g
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://vessels-boundary-multiple-applying.trycloudflare.com']
+CSRF_TRUSTED_ORIGINS = ['https://burns-awards-morrison-vacancies.trycloudflare.com']
 
 
 # Application definition
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -141,7 +144,7 @@ ROLES = (
     ('cliente', 'Cliente'),
     ('admin', 'Administrador'),
 )
-
+SECURE_CONTENT_TYPE_NOSNIFF = True
 #configuración de correo electrónico
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -154,3 +157,8 @@ EMAIL_USE_TLS = True
 # Configuración de Correo para Desarrollo Local (Se imprime en la terminal)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'Florería <noreply@floreria.cl>'
+
+# Configuración de Transbank Webpay Plus
+TRANSBANK_AMBIENTE = 'TEST'  # Cambiar a 'LIVE' en producción
+TRANSBANK_COMMERCE_CODE = "597055555532"
+TRANSBANK_API_KEY = "579B532A7440BB0C9072DED5305E76fc2F62D8082F70757e490d181a1b8d810d"

@@ -1,0 +1,15 @@
+{% extends 'global_componentes/base.html' %}
+
+{% block content %}
+<div class="container my-5 text-center">
+    <div class="card shadow border-0 p-5 mx-auto" style="max-width: 600px;">
+        <i class="bi bi-x-circle-fill text-danger mb-3" style="font-size: 4rem;"></i>
+        <h2 class="text-danger fw-bold">No se pudo completar el pago</h2>
+        <p class="text-muted my-3">{{ motivo }}</p>
+        <div class="mt-4 d-flex justify-content-center gap-3">
+            <a href="{% url 'checkout' %}" class="btn btn-primary px-4">Volver a intentar</a>
+            <a href="{% url 'carrito_detalle' %}" class="btn btn-outline-secondary px-4">Revisar carrito</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

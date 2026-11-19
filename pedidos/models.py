@@ -82,7 +82,7 @@ class Orden(models.Model):
     email_cliente = models.EmailField(verbose_name="Correo electrónico de contacto")
     # Datos de envío y dedicatoria
     nombre_destinatario = models.CharField(max_length=100)
-    telefono_destinatario = models.CharField(max_length=20)
+    telefono_destinatario = models.CharField(max_length=20,blank=True,null=True,verbose_name="Teléfono del destinatario")
     direccion_envio = models.CharField(max_length=255)
     comuna = models.CharField(max_length=100)
     costo_envio = models.DecimalField(max_digits=10, decimal_places=0, default=0)

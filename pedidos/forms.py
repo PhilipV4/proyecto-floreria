@@ -2,11 +2,9 @@ from django import forms
 from .models import Orden
 from django.core.validators import RegexValidator
 from datetime import date
+import re
 
-validador_telefono_chile = RegexValidator(
-    regex=r'^(?:\+?56)?(?:9\d{8}|[2-9]\d{7,8})$',
-    message="Ingresa un número de teléfono chileno válido (ej: +56912345678 o 912345678)."
-)
+
 
 # Listado oficial de comunas de la Región Metropolitana
 COMUNAS_RM = [
@@ -70,11 +68,39 @@ COMUNAS_RM = [
 ]
 
 class CheckoutForm(forms.ModelForm):
-    # Aplicamos el validador directamente al campo de teléfono
     telefono_destinatario = forms.CharField(
-        validators=[validador_telefono_chile],
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+56912345678'}),
-        label='Teléfono de contacto'
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '9 1234 5678',
+            'maxlength': '11',
+            'inputmode': 'tel',
+            'pattern': r'^9\s\d{4}\s\d{4}$',
+            'title': 'Ingresa un celular chileno válido (ej: 9 1234 5678)'
+        }),
+        label='Teléfono de contacto (opcional)'
+    )
+
+    # Campos separados para la interfaz (no existen en models.py)
+    calle = forms.CharField(
+        max_length=180,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej. Av. Camino a Melipilla 1234',
+            'autocomplete': 'street-address'
+        }),
+        label='Calle y número'
+    )
+
+    numero_depto = forms.CharField(
+        required=False,  # El depto/casa interior suele ser opcional (si es casa sola con número no hace falta)
+        max_length=70,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej. Depto 502, Torre B, Casa 4',
+            'autocomplete': 'address-line2'
+        }),
+        label='Depto / Torre / Casa interior (opcional)'
     )
 
     comuna = forms.ChoiceField(
@@ -85,29 +111,27 @@ class CheckoutForm(forms.ModelForm):
 
     class Meta:
         model = Orden
+        # Quitamos 'direccion_envio' de fields porque la armaremos en clean()
         fields = [
             'email_cliente',
-            'nombre_destinatario', 
-            'telefono_destinatario', 
-            'direccion_envio', 
-            'comuna', 
-            'nota_tarjeta', 
+            'nombre_destinatario',
+            'telefono_destinatario',
+            'comuna',
+            'nota_tarjeta',
             'fecha_entrega'
         ]
         widgets = {
             'email_cliente': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@correo.cl'}),
             'nombre_destinatario': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. María Pérez'}),
-            'direccion_envio': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Av. Providencia 1234'}),
             'nota_tarjeta': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Ej. ¡Feliz cumpleaños, te queremos mucho!'}),
             'fecha_entrega': forms.TextInput(attrs={
-                'class': 'form-control', 
+                'class': 'form-control',
                 'placeholder': 'Selecciona una fecha...'
             }),
         }
         labels = {
             'email_cliente': 'Correo electrónico (para enviarte el comprobante)',
             'nombre_destinatario': 'Nombre de quien recibe',
-            'direccion_envio': 'Dirección de despacho',
             'nota_tarjeta': 'Mensaje para la tarjeta (opcional)',
             'fecha_entrega': 'Fecha de entrega',
         }
@@ -118,13 +142,24 @@ class CheckoutForm(forms.ModelForm):
             raise forms.ValidationError("No puedes programar un envío para una fecha en el pasado.")
         return fecha
 
-    def clean_telefono_destinatario(self):
-        telefono = self.cleaned_data.get('telefono_destinatario', '').strip()
-        # Elimina espacios o guiones accidentales ingresados por el usuario
-        telefono_limpio = telefono.replace(' ', '').replace('-', '')
-        
-        # Si el usuario ingresó 9 dígitos empezando por 9, le anteponemos el prefijo +56
-        if len(telefono_limpio) == 9 and telefono_limpio.startswith('9'):
-            telefono_limpio = f'+56{telefono_limpio}'
-            
-        return telefono_limpio
+    def clean(self):
+        cleaned_data = super().clean()
+        calle = cleaned_data.get('calle', '').strip()
+        numero_depto = cleaned_data.get('numero_depto', '').strip()
+
+        if calle:
+            if numero_depto:
+                # Resultado: "Av. Providencia 1234, Depto 502, Torre B"
+                cleaned_data['direccion_envio'] = f"{calle}, {numero_depto}"
+            else:
+                cleaned_data['direccion_envio'] = calle
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        # Asignamos la dirección combinada a la instancia antes de guardar en BD
+        orden = super().save(commit=False)
+        orden.direccion_envio = self.cleaned_data.get('direccion_envio', '')
+        if commit:
+            orden.save()
+        return orden
