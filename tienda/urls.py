@@ -3,6 +3,7 @@ from django.urls import path
 from tienda.forms import CustomAuthenticationForm
 from . import views
 from django.contrib.auth import views as auth_views
+from pedidos import views as pedidos_views
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
@@ -23,6 +24,9 @@ urlpatterns = [
     path('gestion/crear_categoria/', views.crear_categoria, name='crear_categoria'),
     path('gestion/crear_ocasion/', views.crear_ocasion, name='crear_ocasion'),
     path('gestion/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
+    path('gestion/pedidos/', pedidos_views.gestion_pedidos, name='gestion_pedidos'),
+    path('gestion/pedidos/<int:orden_id>/estado/', pedidos_views.actualizar_estado_envio, name='actualizar_estado_envio'),
 
     #PRUEBA
     

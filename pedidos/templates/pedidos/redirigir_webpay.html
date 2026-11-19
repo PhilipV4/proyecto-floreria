@@ -1,0 +1,14 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirigiendo a Webpay...</title>
+</head>
+<body onload="document.getElementById('webpay-form').submit();">
+    <p style="text-align:center; margin-top: 20%; font-family: 'Poppins', sans-serif;">
+        Conectando de forma segura con Webpay Plus...
+    </p>
+    <form id="webpay-form" action="{{ url_webpay }}" method="POST">
+        <input type="hidden" name="token_ws" value="{{ token_ws }}">
+    </form>
+</body>
+</html>

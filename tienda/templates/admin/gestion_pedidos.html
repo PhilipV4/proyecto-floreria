@@ -1,0 +1,295 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <!-- Encabezado -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Gestión de Pedidos y Despachos</h2>
+            <p class="text-muted mb-0">Toca cualquier orden para ver el ramo, dirección y dedicatoria.</p>
+        </div>
+        <div class="d-flex gap-2">
+            {% if fecha_filtro == 'hoy' %}
+            <a href="{% url 'gestion_pedidos' %}" class="btn bg-light">
+                <i class="bi bi-calendar-check me-1"></i> Entregas de hoy ({{ entregas_hoy }}) &times;
+            </a>
+            {% else %}
+            <a href="?fecha=hoy" class="btn bg-light">
+                <i class="bi bi-calendar-check me-1"></i> Ver entregas de hoy ({{ entregas_hoy }})
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tarjetas de resumen operativo -->
+    <div class="row g-3 mb-4">
+        <div class="col-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-4 border-warning">
+                <div class="card-body p-2 p-md-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold d-block mb-1"
+                            style="font-size: 0.72rem;">Preparar</span>
+                        <h3 class="fw-bold  mb-0 fs-4 fs-md-3">{{ total_pendientes }}</h3>
+                    </div>
+                    <div class="bg-warning bg-opacity-10 p-2 p-md-3 rounded-circle d-none d-sm-block">
+                        <i class="bi bi-flower1 text-warning fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-4 border-info">
+                <div class="card-body p-2 p-md-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold d-block mb-1"
+                            style="font-size: 0.72rem;">En Camino</span>
+                        <h3 class="fw-bold  mb-0 fs-4 fs-md-3">{{ total_en_camino }}</h3>
+                    </div>
+                    <div class="bg-info bg-opacity-10 p-2 p-md-3 rounded-circle d-none d-sm-block">
+                        <i class="bi bi-truck text-info fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-4 border-success">
+                <div class="card-body p-2 p-md-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold d-block mb-1"
+                            style="font-size: 0.72rem;">Hoy</span>
+                        <h3 class="fw-bold  mb-0 fs-4 fs-md-3">{{ entregas_hoy }}</h3>
+                    </div>
+                    <div class="bg-success bg-opacity-10 p-2 p-md-3 rounded-circle d-none d-sm-block">
+                        <i class="bi bi-calendar-event text-success fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de filtros y búsqueda -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-2 g-md-3 align-items-end">
+                <div class="col-6 col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Estado</label>
+                    <select name="estado" class="form-select">
+                        <option value="">Todos</option>
+                        {% for valor, etiqueta in estados_envio %}
+                        <option value="{{ valor }}" {% if estado_filtro == valor %}selected{% endif %}>{{ etiqueta }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label small fw-semibold text-muted">Fecha Entrega</label>
+                    <input type="date" name="fecha" class="form-control"
+                        value="{% if fecha_filtro != 'hoy' %}{{ fecha_filtro }}{% endif %}">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label small fw-semibold text-muted">Buscar</label>
+                    <input type="text" name="q" class="form-control" placeholder="N° orden, destinatario, comuna..."
+                        value="{{ busqueda }}">
+                </div>
+                <div class="col-12 col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-dark w-100">
+                        <i class="bi bi-funnel me-1"></i> Filtrar
+                    </button>
+                    {% if estado_filtro or fecha_filtro or busqueda %}
+                    <a href="{% url 'gestion_pedidos' %}" class="btn btn-outline-secondary" title="Limpiar filtros">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Tabla principal de órdenes (100% clickeable por fila) -->
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-3">Orden</th>
+                        <th class="d-none d-md-table-cell">Fecha Entrega</th>
+                        <th>Destinatario y Entrega</th>
+                        <th class="d-none d-sm-table-cell">Total</th>
+                        <th>Estado de Envío</th>
+                        <th class="text-end pe-3" style="width: 40px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orden in ordenes %}
+                    <tr role="button" onclick="abrirModalOrden(event, 'modalOrden{{ orden.id }}')"
+                        style="cursor: pointer;">
+                        <td class="ps-3 fw-bold text-nowrap">
+                            #{{ orden.id }}
+                            <div class="d-md-none mt-1">
+                                {% if orden.fecha_entrega == hoy %}
+                                <span class="badge bg-danger" style="font-size: 0.7rem;">Hoy</span>
+                                {% else %}
+                                <span class="badge bg-secondary" style="font-size: 0.7rem;">{{orden.fecha_entrega|date:"d/m" }}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="text-nowrap d-none d-md-table-cell">
+                            {% if orden.fecha_entrega == hoy %}
+                            <span class="badge bg-danger">Hoy &bull; {{ orden.fecha_entrega|date:"d/m/Y" }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ orden.fecha_entrega|date:"d/m/Y" }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="fw-semibold ">{{ orden.nombre_destinatario }}</div>
+                            <small class="text-muted d-block">{{ orden.comuna }} &bull; {{ orden.telefono_destinatario}}</small>
+                            <small class="fw-semibold text-success d-sm-none">${{ orden.total|floatformat:"0g" }}</small>
+                        </td>
+                        <td class="fw-semibold text-nowrap d-none d-sm-table-cell">${{ orden.total|floatformat:"0g" }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'actualizar_estado_envio' orden.id %}" class="m-0">
+                                {% csrf_token %}
+                                <select name="estado_envio" onchange="this.form.submit()"
+                                    class="form-select form-select-sm fw-semibold {% if orden.estado_envio == 'pendiente' %}border-warning text-warning-emphasis bg-warning bg-opacity-10{% elif orden.estado_envio == 'en_camino' %}border-info text-info-emphasis bg-info bg-opacity-10{% else %}border-success text-success-emphasis bg-success bg-opacity-10{% endif %}"
+                                    style="min-width: 155px; max-width: 210px;">
+                                    {% for valor, etiqueta in estados_envio %}
+                                    <option value="{{ valor }}" {% if orden.estado_envio == valor %}selected{% endif %}>{{etiqueta }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td class="text-end pe-3 text-muted">
+                            <i class="bi bi-chevron-right"></i>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                            No se encontraron pedidos pagados con los filtros seleccionados.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modales de detalle fuera de la tabla -->
+{% for orden in ordenes %}
+<div class="modal fade" id="modalOrden{{ orden.id }}" tabindex="-1" aria-labelledby="modalLabel{{ orden.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <div>
+                    <h5 class="modal-title fw-bold mb-0" id="modalLabel{{ orden.id }}">Orden #{{ orden.id }}</h5>
+                    <small class="text-muted">Entrega programada: {{ orden.fecha_entrega|date:"d/m/Y" }}</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-3 p-md-4">
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 bg-light rounded h-100">
+                            <h6 class="fw-bold text-uppercase text-muted small mb-2">Información de Despacho</h6>
+                            <p class="mb-1"><strong>Destinatario:</strong> {{ orden.nombre_destinatario }}</p>
+                            <p class="mb-1">
+                                <strong>Teléfono:</strong> 
+                                {% if orden.telefono_destinatario %}
+                                    <a href="tel:+56{{ orden.telefono_destinatario|cut:' ' }}" class="text-decoration-none">{{ orden.telefono_destinatario }}</a>
+                                {% else %}
+                                    <span class="text-muted">No especificado</span>
+                                {% endif %}
+                            </p>
+                            <p class="mb-1"><strong>Comuna:</strong> {{ orden.comuna }}</p>
+                            <p class="mb-0">
+                                <strong>Dirección:</strong> 
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ orden.direccion_envio|urlencode }},%20{{ orden.comuna|urlencode }},%20Chile" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                class="text-decoration-none fw-semibold">
+                                    {{ orden.direccion_envio }} <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 bg-light rounded h-100">
+                            <h6 class="fw-bold text-uppercase text-muted small mb-2">Comprador y Pago Webpay</h6>
+                            <p class="mb-1"><strong>Correo cliente:</strong> {{ orden.email_cliente }}</p>
+                            <p class="mb-1"><strong>Cód. Autorización:</strong> {{ orden.codigo_autorizacion|default:"-"}}</p>
+                            <p class="mb-1"><strong>Costo envío:</strong> ${{ orden.costo_envio|floatformat:"0g" }}</p>
+                            <p class="mb-0"><strong>Total pagado:</strong> <span class="fw-bold text-success">${{orden.total|floatformat:"0g" }}</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                {% if orden.nota_tarjeta %}
+                <div class="alert alert-warning bg-warning bg-opacity-10 border-warning border-opacity-25 mb-4">
+                    <strong class="d-block small text-uppercase text-muted mb-1">
+                        <i class="bi bi-card-text me-1"></i> Mensaje para la tarjeta:
+                    </strong>
+                    <p class="fst-italic mb-0 ">"{{ orden.nota_tarjeta }}"</p>
+                </div>
+                {% endif %}
+
+                <h6 class="fw-bold text-uppercase text-muted small mb-2">Arreglos Florales Comprados</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center" style="width: 80px;">Cant.</th>
+                                <th class="text-end" style="width: 110px;">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in orden.items.all %}
+                            <tr>
+                                <td>{{ item.producto_nombre }}</td>
+                                <td class="text-center">{{ item.cantidad }}</td>
+                                <td class="text-end">${{ item.precio_unitario|floatformat:"0g"}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer bg-light d-flex flex-wrap justify-content-between gap-2">
+                <div class="d-flex flex-wrap gap-2">
+                        {% if orden.telefono_destinatario %}
+                            <a href="tel:{{ orden.telefono_destinatario }}" class="btn btn-outline-success">
+                                <i class="bi bi-telephone-fill me-1"></i> Llamar
+                            </a>
+                        {% endif %}
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ orden.direccion_envio|urlencode }},%20{{ orden.comuna|urlencode }},%20Chile" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="btn btn-outline-primary">
+                        <i class="bi bi-sign-turn-right-fill me-1"></i> Cómo llegar (Maps)
+                    </a>
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+function abrirModalOrden(event, modalId) {
+    // Si el clic o toque fue dentro del select, form o un enlace, no abrimos el modal
+    if (event.target.closest('select, form, a, button')) {
+        return;
+    }
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+        modal.show();
+    }
+}
+</script>
+{% endblock %}

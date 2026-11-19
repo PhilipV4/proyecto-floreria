@@ -6,6 +6,8 @@
    2. Barra lateral
    3. Producto: imagen e información
    4. Pestañas
+   5. Productos relacionados
+   6. Responsive general
    ========================================================== */
 
 
@@ -19,6 +21,14 @@
 .detalle-producto   { outline: 3px solid #3f48cc; }
 .detalle-tabs       { outline: 3px solid #ff7f27; }
 */
+
+
+/* ----------------------------------------------------------
+   SOMBRA COMPARTIDA (se cambia en un solo lugar)
+   ---------------------------------------------------------- */
+:root {
+    --detalle-sombra: 2px 4px 10px rgba(0, 0, 0, .30);
+}
 
 
 /* ----------------------------------------------------------
@@ -52,9 +62,10 @@
 .detalle-sidebar {
     font-family: 'Poppins', sans-serif;
     padding: 1rem;
-    border: 1px solid rgba(0, 0, 0, .1);
-    border-radius: .5rem;
+    border: none;
+    border-radius: .75rem;
     background: #fff;
+    box-shadow: var(--detalle-sombra);
 }
 
 .detalle-sidebar-title {
@@ -88,8 +99,9 @@
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     background: #fff;
-    border: 1px solid rgba(0, 0, 0, .1);
-    border-radius: .5rem;
+    border: none;
+    border-radius: .75rem;
+    box-shadow: var(--detalle-sombra);
 }
 
 .detalle-imagen {
@@ -216,8 +228,9 @@
     font-family: 'Poppins', sans-serif;
     padding: 1rem 1.5rem 1.5rem;
     background: #fff;
-    border: 1px solid rgba(0, 0, 0, .1);
-    border-radius: .5rem;
+    border: none;
+    border-radius: .75rem;
+    box-shadow: var(--detalle-sombra);
 }
 
 .detalle-tabs .nav-tabs {
@@ -250,16 +263,17 @@
 
 /* ----------------------------------------------------------
    5. PRODUCTOS RELACIONADOS (Bootstrap carousel)
-   Reemplaza TODA la sección 5 anterior de detalle_producto.css.
    Bootstrap aporta la estructura; aquí solo van los detalles de estilo.
    ---------------------------------------------------------- */
 .relacionados {
     font-family: 'Poppins', sans-serif;
     margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
     padding: 1.5rem;
     background: #fff;
-    border: 1px solid rgba(0, 0, 0, .1);
-    border-radius: .5rem;
+    border: none;
+    border-radius: .75rem;
+    box-shadow: var(--detalle-sombra);
 }
 
 /* Título con subrayado rosa */
@@ -275,7 +289,7 @@
     word-spacing: 4px;
 }
 
-/* Etiqueta de descuento */
+/* Etiqueta de ocasión */
 .relacionados .rel-badge {
     z-index: 2;
     background: #FFC5D3;
@@ -284,6 +298,14 @@
     font-size: .7rem;
     border-radius: 50rem;
 }
+
+/* Tarjetas individuales (opcional):
+   descomenta si quieres que cada producto tenga su propia sombra
+.relacionados .card {
+    border-radius: .75rem;
+    box-shadow: var(--detalle-sombra);
+}
+*/
 
 /* Imagen */
 .relacionados .rel-img {
@@ -370,9 +392,6 @@
     background-color: #000;
 }
 
-@media (max-width: 575.98px) {
-    .relacionados { padding: 1rem; }
-}
 
 /* ----------------------------------------------------------
    6. RESPONSIVE GENERAL
@@ -392,3 +411,124 @@
         width: 100%;
     }
 }
+
+
+/* ----------------------------------------------------------
+   TÍTULO: CATEGORÍA DEL PRODUCTO
+   ---------------------------------------------------------- */
+.detalle-categoria {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: .75rem;
+    background: #fff;
+    box-shadow: var(--detalle-sombra);
+    font-family: 'Poppins', sans-serif;
+}
+
+.detalle-categoria-titulo {
+    margin: 0;
+    padding-bottom: .3rem;
+    border-bottom: 3px solid #f7a8bc;
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ----------------------------------------------------------
+   TIPOGRAFÍA Y COLOR ÚNICOS (todo el contenido de detalle)
+   ---------------------------------------------------------- */
+:root {
+    --detalle-fuente: 'Poppins', sans-serif;
+    --detalle-texto: #000;
+}
+
+.detalle-categoria,  .detalle-categoria *,
+.detalle-producto,   .detalle-producto *,
+.detalle-tabs,       .detalle-tabs *,
+.relacionados,       .relacionados * {
+    font-family: var(--detalle-fuente) !important;
+    color: var(--detalle-texto) !important;
+}
+
+.detalle-tabs .nav-link,
+.relacionados-titulo {
+    font-family: var(--detalle-fuente) !important;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    word-spacing: 4px;
+    line-height: 1.5;
+}
+/* ----------------------------------------------------------
+   EFECTOS
+   ---------------------------------------------------------- */
+
+/* Aparición al hacer scroll (la clase .reveal la agrega el JS) */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Imagen del producto: zoom */
+.detalle-imagen {
+    overflow: hidden;
+    border-radius: .75rem;
+}
+.detalle-imagen img {
+    transition: transform .5s ease;
+}
+@media (hover: hover) {
+    .detalle-imagen:hover img { transform: scale(1.06); }
+}
+.detalle-imagen:active img { transform: scale(1.06); }      /* toque en celular */
+
+/* Tarjetas de relacionados: se elevan */
+.relacionados .carousel-item { padding: 10px 0 18px; }      /* evita que se corte la sombra */
+.relacionados .card {
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+@media (hover: hover) {
+    .relacionados .card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--detalle-sombra);
+    }
+}
+.relacionados .card:active {
+    transform: translateY(-6px);
+    box-shadow: var(--detalle-sombra);
+}
+
+/* Botones: suben al pasar el mouse y se hunden al hacer clic */
+.btn-carrito-detalle,
+.relacionados .rel-btn {
+    transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+@media (hover: hover) {
+    .btn-carrito-detalle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, .2);
+    }
+}
+.btn-carrito-detalle:active,
+.relacionados .rel-btn:active {
+    transform: scale(.96);
+}
+
+/* Respeta a quien tiene desactivadas las animaciones */
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .detalle-imagen img,
+    .relacionados .card,
+    .btn-carrito-detalle,
+    .relacionados .rel-btn { transition: none; }
+}
+
