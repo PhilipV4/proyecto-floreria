@@ -1,0 +1,275 @@
+{% extends 'global_componentes/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'CSS/Inicio/general.css' %}">
+
+<div class="petalo">
+
+  <!-- 1. HERO con foto de fondo -->
+ <section class="hero bleed" style="--foto: url('/media/productos/hero.png')">
+  </section>
+
+    
+  <!-- 3. CÓMO FUNCIONA -->
+  <section class="how bleed py-5">
+    <div class="container px-3 px-md-5">
+      <h2 class="section-title">Cómo funciona</h2>
+      <p class="section-sub">Fácil. Compra local y regala con significado, todo en línea.</p>
+
+      <div class="row g-4 mb-5">
+        <div class="col-12 col-md-4">
+          <article class="card step h-100 border-0">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <span class="step-icon"><i class="bi bi-chat-heart"></i></span>
+              <h3>Cuéntanos qué necesitas</h3>
+              <p>¿Para quién son las flores? ¿Cuál es la ocasión? Elige tu arreglo y escribe tu tarjeta.</p>
+              <span class="step-num mt-auto">1</span>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-4">
+          <article class="card step h-100 border-0">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <span class="step-icon"><i class="bi bi-flower1"></i></span>
+              <h3>Nosotros nos encargamos</h3>
+              <p>Una florista de la zona prepara tu arreglo a mano con flores frescas, según lo que elegiste.</p>
+              <span class="step-num mt-auto">2</span>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-4">
+          <article class="card step h-100 border-0">
+            <div class="card-body d-flex flex-column align-items-center text-center p-4">
+              <span class="step-icon"><i class="bi bi-envelope-heart"></i></span>
+              <h3>Les va a encantar</h3>
+              <p>Entregamos en la puerta de quien quieras. Un regalo que se disfruta desde que llega.</p>
+              <span class="step-num mt-auto">3</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Comenzar</a>
+      </div>
+    </div>
+  </section>
+
+  {% if paginas_productos %}
+  <section class="productos bleed py-5">
+    <div class="container px-3 px-md-5">
+      <h2 class="section-title" id="titulo-destacados">Productos destacados</h2>
+      <p class="section-sub">Los favoritos de nuestros clientes, listos para regalar.</p>
+ 
+      <div id="carruselProductos" class="carousel slide" data-bs-ride="false" aria-labelledby="titulo-destacados">
+ 
+        <div class="carousel-inner">
+          {% for pagina in paginas_productos %}
+          <div class="carousel-item{% if forloop.first %} active{% endif %}">
+            <div class="row row-cols-2 row-cols-md-4 g-3 px-0 px-md-5">
+ 
+              {% for prod in pagina %}
+              <div class="col">
+                <div class="card h-100 border-0 text-center position-relative">
+                  {% if prod.categoria %}
+                  <span class="badge rel-badge position-absolute top-0 start-0 m-2">{{ prod.categoria.nombre }}</span>
+                  {% endif %}
+                  <a href="{% url 'detalle_producto' prod.id %}">
+                    {% if prod.imagen %}
+                    <img src="{{ prod.imagen.url }}" class="card-img-top rel-img" alt="{{ prod.nombre }}">
+                    {% else %}
+                    <img src="{% static 'Placeholder.jpg' %}" class="card-img-top rel-img" alt="{{ prod.nombre }}">
+                    {% endif %}
+                  </a>
+                  <div class="card-body d-flex flex-column p-2">
+                    <h3 class="rel-nombre">{{ prod.nombre }}</h3>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+ 
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+ 
+        {% if paginas_productos|length > 1 %}
+        <!-- Flechas (solo tablet y escritorio; en celular se desliza con el dedo) -->
+        <button class="carousel-control-prev rel-ctrl" type="button" data-bs-target="#carruselProductos" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next rel-ctrl" type="button" data-bs-target="#carruselProductos" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+ 
+        <!-- Puntos indicadores (uno por página) -->
+        <div class="carousel-indicators rel-indicators">
+          {% for pagina in paginas_productos %}
+          <button type="button" data-bs-target="#carruselProductos" data-bs-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active" aria-current="true"{% endif %} aria-label="Página {{ forloop.counter }}"></button>
+          {% endfor %}
+        </div>
+        {% endif %}
+ 
+      </div>
+ 
+      <div class="text-center mt-4">
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Ver todos los productos</a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+
+ <!-- ======================================================
+     Reemplaza tus dos <section class="split bleed"> por estas dos.
+     Van dentro de <div class="petalo"> en inicio.html
+     ====================================================== -->
+
+  <!-- 5. SOBRE NOSOTROS: foto + texto corto + 3 puntos clave -->
+  <section class="about bleed">
+    <div class="row g-0">
+
+      <div class="col-12 col-md-6 about-media">
+        <!-- Ideal: usa aquí una foto distinta a la del banner de arriba -->
+        <img src="/media/productos/ramo-flores-armado.webp"
+             alt="Florista atando un ramo de flores rosadas y blancas sobre una mesa de madera">
+        <span class="about-badge"><i class="bi bi-flower1"></i> Hechos a mano</span>
+      </div>
+
+      <div class="col-12 col-md-6 about-text p-4 p-md-5">
+  
+        <h2>Sobre nosotros</h2>
+
+        <p class="about-lead">
+          Flores para toda ocasión nació de una idea sencilla: que regalar flores sea una forma de decir lo que a veces las palabras no alcanzan. 
+        </p>
+
+        <p>
+          Trabajamos con floristas apasionados que conocen el lenguaje de las flores:
+          rosas rojas para declarar amor, girasoles para celebrar la alegría, flores blancas
+          para los nuevos comienzos. Sea un cumpleaños, una boda o simplemente un
+          “estoy pensando en ti”, te ayudamos a elegir el arreglo indicado.
+        </p>
+
+        <ul class="about-points list-unstyled">
+          <li>
+            <i class="bi bi-scissors"></i>
+            <div><strong>Uno por uno</strong><span>Escogemos las flores del día y cuidamos cada detalle del envoltorio.</span></div>
+          </li>
+          <li>
+            <i class="bi bi-heart"></i>
+            <div><strong>Con significado</strong><span>Cada arreglo está pensado para la ocasión y para quien lo recibe.</span></div>
+          </li>
+          <li>
+            <i class="bi bi-truck"></i>
+            <div><strong>Entrega con cuidado</strong><span>Llega fresco, bonito y a tiempo hasta la puerta de tu destinatario.</span></div>
+          </li>
+        </ul>
+
+        <a href="{% url 'catalogo_productos' %}" class="btn btn-lime">Ver productos</a>
+      </div>
+
+    </div>
+  </section>
+  <!-- 5. PREGUNTAS FRECUENTES (accordion de Bootstrap) -->
+  <section class="faq">
+    <h2 class="section-title">Preguntas frecuentes</h2>
+    <p class="section-sub">Fácil. Compra local y regala con significado, todo en línea.</p>
+
+    <div class="row g-3 g-md-4">
+
+      <div class="col-12 col-md-6">
+        <div class="accordion" id="faqIzq">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">¿Cuánto cuesta el despacho?</button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse">
+              <div class="accordion-body">El costo depende de la comuna de entrega y se muestra antes de pagar.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="true" aria-controls="faq2">¿Qué sucede si no hay nadie quien las reciba?</button>
+            </h3>
+           <div id="faq2" class="accordion-collapse collapse">
+              <div class="accordion-body">Coordinamos otra entrega contigo o con quien recibe.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">¿Hacen entregas el mismo día?</button>
+            </h3>
+            <div id="faq3" class="accordion-collapse collapse">
+              <div class="accordion-body">Sí, los pedidos hechos antes de las 14:00 llegan hoy.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="accordion" id="faqDer">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">¿Puedo añadir una tarjeta con mensaje?</button>
+            </h3>
+            <div id="faq4" class="accordion-collapse collapse">
+              <div class="accordion-body">Sí, escribe tu mensaje al hacer el pedido y lo incluimos sin costo.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">¿Cuánto duran las flores?</button>
+            </h3>
+            <div id="faq5" class="accordion-collapse collapse">
+              <div class="accordion-body">Con los cuidados que te indicamos, un ramo fresco dura entre 7 y 10 días.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">¿Puedo elegir los colores?</button>
+            </h3>
+            <div id="faq6" class="accordion-collapse collapse">
+              <div class="accordion-body">Sí, puedes indicar colores y flores favoritas al hacer tu pedido.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+ 
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const pasos = document.querySelectorAll('.petalo .step');
+    const esTactil = window.matchMedia('(hover: none)').matches;
+
+    if (!esTactil) return;   // en escritorio basta con el hover del CSS
+
+    // 1. Al hacer scroll: se activa la tarjeta que pasa por el centro de la pantalla
+    const observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (entrada) {
+            entrada.target.classList.toggle('activo', entrada.isIntersecting);
+        });
+    }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+
+    pasos.forEach(function (paso) { observador.observe(paso); });
+
+    // 2. Al tocar una tarjeta: se activa o se desactiva
+    pasos.forEach(function (paso) {
+        paso.addEventListener('click', function () {
+            paso.classList.toggle('activo');
+        });
+    });
+});
+</script>
+
+{% endblock %}

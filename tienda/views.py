@@ -20,7 +20,7 @@ from django.urls import reverse
 
 
 def inicio(request):
-    return render(request, 'inicio.html')
+    return render(request, 'index.html')
 
 #Barra de busqueda
 def barra_busqueda(request):
@@ -133,9 +133,15 @@ def detalle_producto(request, id):
     # Se agrupan de 4 en 4: cada grupo es una página del carrusel
     paginas_relacionados = [relacionados[i:i + 4] for i in range(0, len(relacionados), 4)]
 
+    # Filtros de la barra lateral (los mismos que usa el catálogo)
+    categorias = Categoria.objects.all()
+    ocasiones = Ocasion.objects.all()
+
     return render(request, 'catalogo/detalle_producto.html', {
         'producto': producto,
         'paginas_relacionados': paginas_relacionados,
+        'categorias': categorias,   # ← nuevo
+        'ocasiones': ocasiones,     # ← nuevo
     })
 #INICIO 
 def inicio(request):
@@ -143,7 +149,7 @@ def inicio(request):
         Producto.objects.select_related('categoria').order_by('-id')[:8]
     )
     paginas_productos = [destacados[i:i + 4] for i in range(0, len(destacados), 4)]
-    return render(request, 'inicio.html', {'paginas_productos': paginas_productos})
+    return render(request, 'index.html', {'paginas_productos': paginas_productos})
 
 def lista_productos(request):
     #falta agregar no mostrar productos que no esten disponibles, quizas se pueda hacer en el html con un if,
